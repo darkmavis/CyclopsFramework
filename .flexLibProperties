@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<flexLibProperties includeAllClasses="true" version="3">
+  <includeClasses>
+    <classEntry path="cyclopsframework.core.CCEngine"/>
+    <classEntry path="cyclopsframework.core.CCAction"/>
+    <classEntry path="cyclopsframework.core.CCMessage"/>
+    <classEntry path="cyclopsframework.core.ICCDisposable"/>
+    <classEntry path="cyclopsframework.core.ICCMessageInterceptor"/>
+    <classEntry path="cyclopsframework.core.ICCPausable"/>
+    <classEntry path="cyclopsframework.core.ICCTaggable"/>
+    <classEntry path="cyclopsframework.core.easing1.CCBias"/>
+    <classEntry path="cyclopsframework.utils.collections.CCRegistry"/>
+    <classEntry path="cyclopsframework.utils.collections.CCStringHashSet"/>
+    <classEntry path="cyclopsframework.core.CCStopActionRequest"/>
+    <classEntry path="cyclopsframework.actions.flow.CCFunction"/>
+    <classEntry path="cyclopsframework.actions.flow.CCSleep"/>
+    <classEntry path="cyclopsframework.actions.flow.CCWaitForMessage"/>
+    <classEntry path="cyclopsframework.actions.flow.CCWaitUntil"/>
+    <classEntry path="cyclopsframework.utils.math.CCMath"/>
+    <classEntry path="cyclopsframework.actions.interpolation.CCFrameFunction"/>
+    <classEntry path="cyclopsframework.actions.interpolation.CCInterpolate"/>
+    <classEntry path="cyclopsframework.actions.messaging.CCInterceptMessage"/>
+    <classEntry path="cyclopsframework.game.CCGame"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTranslate"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTranslateTo"/>
+    <classEntry path="cyclopsframework.actions.animation.CCFade"/>
+    <classEntry path="cyclopsframework.actions.animation.CCFadeTo"/>
+    <classEntry path="cyclopsframework.actions.animation.CCRotate"/>
+    <classEntry path="cyclopsframework.actions.animation.CCRotateTo"/>
+    <classEntry path="cyclopsframework.actions.animation.CCScale"/>
+    <classEntry path="cyclopsframework.actions.animation.CCScaleTo"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTint"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTintTo"/>
+    <classEntry path="cyclopsframework.utils.color.CCColor"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTranslateToObject"/>
+    <classEntry path="cyclopsframework.utils.primitives.CCPrimitives"/>
+    <classEntry path="cyclopsframework.actions.flow.CCWaitForEvent"/>
+    <classEntry path="cyclopsframework.utils.collections.CCDataStore"/>
+    <classEntry path="cyclopsframework.utils.collections.CCDataStoreRemoteItem"/>
+    <classEntry path="cyclopsframework.utils.collections.CCHashSet"/>
+    <classEntry path="cyclopsframework.utils.collections.CCBoolOp"/>
+    <classEntry path="cyclopsframework.utils.collections.CCDataStoreProxy"/>
+    <classEntry path="cyclopsframework.utils.misc.CCUtils"/>
+  </includeClasses>
+  <includeResources/>
+  <namespaceManifests/>
+</flexLibProperties>
