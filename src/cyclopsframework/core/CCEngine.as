@@ -4,6 +4,7 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.utils.collections.CCDataStore;
 	import cyclopsframework.utils.collections.CCDataStoreProxy;
+	import cyclopsframework.utils.collections.CCMessageProxy;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	
@@ -62,12 +63,100 @@ package cyclopsframework.core
 		
 		// Sequencing Additions
 		
-		public function add(action:CCAction, tags:Array=null):CCAction
+		public function add(...actions):CCAction
 		{
-			applyAutotags(action);
-			action.addTags(tags);
-			_additions.push(action);
-			return action;
+			var currTags:Array = [];
+			var currAction:CCAction;
+			
+			for each (var o:Object in actions)
+			{
+				if (o is CCAction)
+				{
+					currAction = o as CCAction;
+					applyAutotags(currAction);
+					if (currTags.length > 0)
+					{
+						currAction.addTags(currTags);
+						currTags = [];
+					}
+					_additions.push(o);
+				}
+				else if (o is Function)
+				{
+					currAction = new CCFunction(0, 1, null, null, o as Function);
+					applyAutotags(currAction);
+					if (currTags.length > 0)
+					{
+						currAction.addTags(currTags);
+						currTags = [];
+					}
+					_additions.push(currAction);
+				}
+				else if (o is Array)
+				{
+					for each (var ao:Object in (o as Array))
+					{
+						if (ao is String)
+						{
+							currTags.push(ao);
+						}
+						else
+						{
+							currAction = add(ao);
+							applyAutotags(currAction);
+							if (currTags.length > 0)
+							{
+								currAction.addTags(currTags);
+								currTags = [];
+							}
+							_additions.push(currAction);
+						}
+					}
+				}
+				else if (o is String)
+				{
+					currTags.push(o);
+				}
+			}
+			
+			return currAction;
+		}
+		
+		private function addSequence(actions:Array, returnHead:Boolean):CCAction
+		{
+			var currTags:Array = [];
+			var head:CCAction;
+			var tail:CCAction;
+			
+			for each (var o:Object in actions)
+			{
+				if (o is String)
+				{
+					currTags.push(o);
+				}
+				else if (head == null)
+				{
+					head = tail = add(currTags, o);
+					currTags = [];
+				}
+				else
+				{
+					tail = tail.add(currTags, o);
+					currTags = [];
+				}
+			}
+			
+			return (returnHead ? head : tail);
+		}
+		
+		public function addSequenceReturnHead(...actions):CCAction
+		{
+			return addSequence(actions, true);
+		}
+		
+		public function addSequenceReturnTail(...actions):CCAction
+		{
+			return addSequence(actions, false);
 		}
 		
 		public function addf(f:Function, thisObject:Object=null, data:Array=null):CCAction
@@ -177,6 +266,11 @@ package cyclopsframework.core
 				
 		// Messaging
 		
+		public function sendByProxy(tag:String=TAG_ALL, sender:Object=null, receiverType:Class=null):CCMessageProxy
+		{
+			return new CCMessageProxy(this, tag, sender, receiverType);
+		}
+		
 		public function send(receiverTag:String, name:String, data:Array=null, sender:Object=null, receiverType:Class=null):void
 		{
 			_messages.push(new CCMessage(receiverTag, name, data, sender, receiverType));
@@ -262,10 +356,10 @@ package cyclopsframework.core
 				
 				if(_registry.has(msg.receiverTag))
 				{
-					for each (var o:ICCTaggable in _registry.getObjects(msg.receiverTag))
+					query(msg.receiverTag).forEach(function(o:ICCTaggable):void
 					{
 						deliverMessage(msg, o);
-					}
+					});
 				}
 			}
 		}
@@ -339,7 +433,7 @@ package cyclopsframework.core
 							
 							if(!childBlocked)
 							{
-								add(child, action.tags.toArray());
+								add(action.tags.toArray(), child);
 								for each (var cco:Object in action.dataPipe)
 								{
 									child.dataPipe.push(cco);
@@ -351,7 +445,7 @@ package cyclopsframework.core
 					{
 						for each (child in action.children)
 						{
-							add(child, action.tags.toArray());
+							add(action.tags.toArray(), child);
 							for each (cco in action.dataPipe)
 							{
 								child.dataPipe.push(cco);

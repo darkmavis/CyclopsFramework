@@ -67,19 +67,105 @@ package cyclopsframework.core
 			_children = [];
 		}
 		
-		public function add(child:CCAction, tags:Array=null):CCAction
+		//public function add(child:CCAction, tags:Array=null):CCAction
+		public function add(...actions):CCAction
 		{
-			child.addTags(tags);
-			_children.push(child);
+			var currTags:Array = [];
+			var currAction:CCAction;
 			
-			return child;
+			for each (var o:Object in actions)
+			{
+				if (o is CCAction)
+				{
+					currAction = o as CCAction;
+					if (currTags.length > 0)
+					{
+						currAction.addTags(currTags);
+						currTags = [];
+					}
+					_children.push(o);
+				}
+				else if (o is Function)
+				{
+					currAction = new CCFunction(0, 1, null, null, o as Function);
+					if (currTags.length > 0)
+					{
+						currAction.addTags(currTags);
+						currTags = [];
+					}
+					_children.push(currAction);
+				}
+				else if (o is Array)
+				{
+					for each (var ao:Object in (o as Array))
+					{
+						if (ao is String)
+						{
+							currTags.push(ao);
+						}
+						else
+						{
+							currAction = add(ao);
+							if (currTags.length > 0)
+							{
+								currAction.addTags(currTags);
+								currTags = [];
+							}
+							_children.push(currAction);
+						}
+					}
+				}
+				else if (o is String)
+				{
+					currTags.push(o);
+				}
+			}
+			
+			return currAction;
+		}
+		
+		private function addSequence(actions:Array, returnHead:Boolean):CCAction
+		{
+			var currTags:Array = [];
+			var head:CCAction;
+			var tail:CCAction;
+			
+			for each (var o:Object in actions)
+			{
+				if (o is String)
+				{
+					currTags.push(o);
+				}
+				else if (head == null)
+				{
+					head = tail = add(currTags, o);
+					currTags = [];
+				}
+				else
+				{
+					tail = tail.add(currTags, o);
+					currTags = [];
+				}
+			}
+			
+			return (returnHead ? head : tail);
+		}
+		
+		public function addSequenceReturnHead(...actions):CCAction
+		{
+			return addSequence(actions, true);
+		}
+		
+		public function addSequenceReturnTail(...actions):CCAction
+		{
+			return addSequence(actions, false);
 		}
 		
 		public function addf(f:Function, thisObject:Object=null, data:Array=null):CCAction
 		{
 			return add(new CCFunction(0, 1, thisObject, data, f));
 		}
-		
+				
 		public function loop(f:Function):CCAction
 		{
 			return add(new CCFunction(0, Number.MAX_VALUE, null, null, f));
@@ -116,9 +202,10 @@ package cyclopsframework.core
 			}
 		}
 		
-		public function addTag(tag:String):void
+		public function addTag(tag:String):ICCTaggable
 		{
 			_tags.addItem(tag);
+			return this;
 		}
 		
 		public function addTags(tags:Array):ICCTaggable

@@ -41,6 +41,7 @@
     <classEntry path="cyclopsframework.utils.collections.CCBoolOp"/>
     <classEntry path="cyclopsframework.utils.collections.CCDataStoreProxy"/>
     <classEntry path="cyclopsframework.utils.misc.CCUtils"/>
+    <classEntry path="cyclopsframework.utils.collections.CCMessageProxy"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
