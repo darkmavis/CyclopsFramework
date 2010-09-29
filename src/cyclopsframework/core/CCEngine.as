@@ -3,8 +3,8 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.utils.collections.CCDataStore;
-	import cyclopsframework.utils.collections.CCDataStoreProxy;
-	import cyclopsframework.utils.collections.CCMessageProxy;
+	import cyclopsframework.utils.proxies.CCDataStoreProxy;
+	import cyclopsframework.utils.proxies.CCMessageProxy;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	

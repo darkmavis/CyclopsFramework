@@ -39,9 +39,11 @@
     <classEntry path="cyclopsframework.utils.collections.CCDataStoreRemoteItem"/>
     <classEntry path="cyclopsframework.utils.collections.CCHashSet"/>
     <classEntry path="cyclopsframework.utils.collections.CCBoolOp"/>
-    <classEntry path="cyclopsframework.utils.collections.CCDataStoreProxy"/>
+    <classEntry path="cyclopsframework.utils.proxies.CCDataStoreProxy"/>
     <classEntry path="cyclopsframework.utils.misc.CCUtils"/>
-    <classEntry path="cyclopsframework.utils.collections.CCMessageProxy"/>
+    <classEntry path="cyclopsframework.utils.proxies.CCMessageProxy"/>
+    <classEntry path="cyclopsframework.game.CCScene"/>
+    <classEntry path="cyclopsframework.utils.proxies.CCFunctionProxy"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

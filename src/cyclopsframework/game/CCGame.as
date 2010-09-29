@@ -10,8 +10,8 @@ package cyclopsframework.game
 	
 	public class CCGame extends Sprite
 	{
-		private var _engine:CCEngine = new CCEngine();
-		public function get engine():CCEngine { return _engine; }
+		private var _scene:CCScene = new CCScene();
+		public function get scene():CCScene { return _scene; }
 		
 		private var _lastTime:Number = flash.utils.getTimer();
 		
@@ -25,6 +25,8 @@ package cyclopsframework.game
 		{
 			this.removeEventListener(Event.ENTER_FRAME, onReady);
 			
+			this.addChild(scene.bg);
+			
 			bootstrap();
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -36,7 +38,7 @@ package cyclopsframework.game
 			var delta:Number = CCMath.clamp((currentTime - _lastTime) / 1000, Number.MIN_VALUE, .5);
 			_lastTime = currentTime;
 			
-			engine.update(delta);
+			scene.update(delta);
 		}
 		
 		public function bootstrap():void

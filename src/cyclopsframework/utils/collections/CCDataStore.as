@@ -5,6 +5,7 @@ package cyclopsframework.utils.collections
 	import flash.utils.Dictionary;
 	
 	import mx.utils.object_proxy;
+	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	
 	public class CCDataStore
 	{

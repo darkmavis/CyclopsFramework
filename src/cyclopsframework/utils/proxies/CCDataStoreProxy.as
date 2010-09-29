@@ -1,7 +1,8 @@
-package cyclopsframework.utils.collections
+package cyclopsframework.utils.proxies
 {
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
+	import cyclopsframework.utils.collections.CCDataStore;
 	
 	public dynamic class CCDataStoreProxy extends Proxy
 	{

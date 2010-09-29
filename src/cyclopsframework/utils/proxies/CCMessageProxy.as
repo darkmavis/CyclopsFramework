@@ -1,4 +1,4 @@
-package cyclopsframework.utils.collections
+package cyclopsframework.utils.proxies
 {
 	import cyclopsframework.core.CCEngine;
 	import cyclopsframework.core.CCMessage;
