@@ -9,7 +9,7 @@ package cyclopsframework.utils.misc
 		{
 			
 		}
-		
+				
 		public static function setProperties(item:Object, kvObject:Object, deep:Boolean=false):void
 		{
 			for (var key:String in kvObject)
@@ -88,7 +88,49 @@ package cyclopsframework.utils.misc
 			path.pop();
 		}
 		
+		public static function hasProperties(o:Object, requiredProperties:Array):Boolean
+		{	
+			for each (var prop:String in requiredProperties)
+			{
+				var target:Object = o;
+				var path:Array = prop.split(".");
+				var seg:String;
+				
+				for (var i:int = 0; i < path.length; ++i)
+				{
+					seg = path[i] as String;
+					trace ("seg: " + seg);
+					if (target.hasOwnProperty(seg))
+					{
+						target = target[seg];
+					}
+					else
+					{
+						return false;
+					}
+				}
+			}
+			
+			return true;
+		}
 		
+		public static function validate(o:Object, name:String, requiredProperties:Array=null, tagStringNotAllowed:Boolean=false):void
+		{
+			if (o == null)
+			{
+				throw new TypeError(name + " must not be null.");
+			}
+			
+			if ((requiredProperties != null) && (!CCUtils.hasProperties(o, requiredProperties)))
+			{
+				throw new TypeError(name + " must have the following properties: " + requiredProperties);
+			}
+			
+			if (tagStringNotAllowed && (o is String))
+			{
+				throw new TypeError(name + " can't be a tag.  Perhaps another class that supports grouping by tags would work better.");
+			}
+		}
 		
 	}
 }

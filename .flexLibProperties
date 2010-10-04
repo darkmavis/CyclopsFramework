@@ -44,6 +44,12 @@
     <classEntry path="cyclopsframework.utils.proxies.CCMessageProxy"/>
     <classEntry path="cyclopsframework.game.CCScene"/>
     <classEntry path="cyclopsframework.utils.proxies.CCFunctionProxy"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTranslateBy"/>
+    <classEntry path="cyclopsframework.actions.animation.CCTintBy"/>
+    <classEntry path="cyclopsframework.actions.animation.CCScaleBy"/>
+    <classEntry path="cyclopsframework.actions.animation.CCRotateBy"/>
+    <classEntry path="cyclopsframework.actions.animation.CCFadeBy"/>
+    <classEntry path="cyclopsframework.actions.audio.CCSound"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

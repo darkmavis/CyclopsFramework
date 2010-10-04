@@ -6,31 +6,39 @@ package cyclopsframework.actions.animation
 	
 	import flash.display.DisplayObject;
 	
-	public class CCRotate extends CCAction
+	public class CCRotateBy extends CCAction
 	{
-		public static const TAG:String = "@CCRotate";
+		public static const TAG:String = "@CCRotateBy";
 		
 		private var _target:DisplayObject = null;
 		private var _dynamicTarget:Object = null;
 		private var _value1:Number;
 		private var _value2:Number;
 		
-		public function CCRotate(
+		public function CCRotateBy(
 			target:Object,
-			degrees1:Number,
-			degrees2:Number,
+			relDegrees:Number,
 			period:Number=0,
 			cycles:Number=1,
 			bias:Function=null)
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			CCUtils.validate(target, "CCRotate target");
+			CCUtils.validate(target, "CCRotateBy target", null, true);
 			
 			_target = target as DisplayObject;
 			_dynamicTarget = target;
-			_value1 = degrees1;
-			_value2 = degrees2;
+			_value2 = relDegrees;
+		}
+		
+		protected override function onEnter():void
+		{
+			if (_dynamicTarget.hasOwnProperty("rotation"))
+			{
+				_value1 = _dynamicTarget["rotation"];
+			}
+			
+			_value2 += _value1;
 		}
 		
 		protected override function onFrame(t:Number):void

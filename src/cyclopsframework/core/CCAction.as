@@ -12,7 +12,7 @@ package cyclopsframework.core
 		private var _bias:Function;
 		private var _cycle:Number = 0;
 		private var _cycles:Number = 1;
-		
+				
 		private var _period:Number = 0;
 		public function get period():Number { return _period; }
 		
@@ -26,6 +26,10 @@ package cyclopsframework.core
 		
 		public function get speed():Number { return _speed; }
 		public function set speed(value:Number):void { _speed = value; }
+		
+		private var _maxDelta:Number = 1;
+		public function get maxDelta():Number { return _maxDelta; }
+		public function set maxDelta(value:Number):void { _maxDelta = value; }
 		
 		private var _dataPipe:Array = [];
 		public function get dataPipe():Array { return _dataPipe; }
@@ -67,7 +71,6 @@ package cyclopsframework.core
 			_children = [];
 		}
 		
-		//public function add(child:CCAction, tags:Array=null):CCAction
 		public function add(...actions):CCAction
 		{
 			var currTags:Array = [];
@@ -180,14 +183,11 @@ package cyclopsframework.core
 		{
 			return add(new CCSleep(period));
 		}
-		
-		// todo: add syntactic sugar... heaps of it.
-		
+				
 		protected function safeset(target:Object, propertyName:String, value:Object):void
 		{
 			if (target is String)
 			{
-				//for each (var o:Object in engine.query(target as String).)
 				engine.query(target as String).forEach(function(o:Object):void
 				{
 					if (o.hasOwnProperty(propertyName))
@@ -202,18 +202,24 @@ package cyclopsframework.core
 			}
 		}
 		
-		public function addTag(tag:String):ICCTaggable
+		public function addTag(tag:String):CCAction
 		{
 			_tags.addItem(tag);
 			return this;
 		}
 		
-		public function addTags(tags:Array):ICCTaggable
+		public function addTags(tags:Array):CCAction
 		{
 			if (tags != null)
 			{
 				_tags.addItems(tags);			
 			}
+			return this;
+		}
+		
+		public function setMaxDelta(value:Number):CCAction
+		{
+			maxDelta = value;
 			return this;
 		}
 		
@@ -236,56 +242,60 @@ package cyclopsframework.core
 		
 		public function update(delta:Number):Boolean
 		{
-			if (!_active) return false;
+			var remainingDelta:Number = delta;
 			
-			if (_position == 0)
+			//do
 			{
-				if(_cycle == 0)
+				if (!_active) return false;
+				
+				if (_position == 0)
 				{
-					onEnter();
-				}
-				onFirstFrame();
-			}
-			
-			//if (_cycle >= _cycles)
-			if (_position >= _cycles)
-			{
-				stop();
-				return _active;
-			}
-						
-			if(_period > 0)
-			{
-				_position += (delta * _speed) / _period;
-			}
-			else
-			{
-				++_position;
-			}
-			
-			// unlike _position, position is always normalized.
-			onFrame(_bias(position));
-			
-			if ((_position - _cycle) >= 1)
-			{
-				if (_cycle < (_cycles - 1))
-				{
-					onLastFrame();
-					++_cycle;
-					
-					if (_cycle >= _cycles)
+					if(_cycle == 0)
 					{
-						stop(false, true);
-						return _active;
+						onEnter();
 					}
-					
 					onFirstFrame();
+				}
+												
+				if (_position >= _cycles)
+				{
+					stop();
+					return _active;
+				}
+								
+				if(_period > 0)
+				{
+					_position += (remainingDelta * _speed) / _period;
+					//remainingDelta -= _maxDelta;
 				}
 				else
 				{
-					stop();
+					++_position;
 				}
-			}
+								
+				onFrame(_bias(position));
+				
+				if ((_position - _cycle) >= 1)
+				{
+					if (_cycle < (_cycles - 1))
+					{
+						onLastFrame();
+						++_cycle;
+						
+						if (_cycle >= _cycles)
+						{
+							stop(false, true);
+							return _active;
+						}
+						
+						onFirstFrame();
+					}
+					else
+					{
+						stop();
+					}
+				}
+			} //while (remainingDelta > 0)
 			
 			return _active;
 		}

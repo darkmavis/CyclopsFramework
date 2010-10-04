@@ -2,6 +2,7 @@ package cyclopsframework.actions.animation
 {
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
 	
@@ -26,8 +27,7 @@ package cyclopsframework.actions.animation
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCScaleTo target must not be null.");
-			if (target is String) throw new TypeError("CCScaleTo can't accept a tag as a target. Use CCScale instead.");
+			CCUtils.validate(target, "CCScaleTo target", null, true);
 			
 			_target = target as DisplayObject;
 			_dynamicTarget = target;

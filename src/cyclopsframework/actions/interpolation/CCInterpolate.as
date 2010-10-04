@@ -40,7 +40,6 @@ package cyclopsframework.actions.interpolation
 			}
 			else
 			{
-				//for each (var o:ICCTaggable in this.engine.filter(_target as String))
 				engine.query(_target as String).forEach(function(o:ICCTaggable):void
 				{
 					processFrame(o, t);

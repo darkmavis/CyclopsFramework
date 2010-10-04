@@ -2,6 +2,7 @@ package cyclopsframework.actions.animation
 {
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
 	
@@ -16,19 +17,18 @@ package cyclopsframework.actions.animation
 		
 		public function CCRotateTo(
 			target:Object,
-			value2:Number,
+			degrees:Number,
 			period:Number=0,
 			cycles:Number=1,
 			bias:Function=null)
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCRotateTo target must not be null.");
-			if (target is String) throw new TypeError("CCRotateTo can't accept a tag as a target. Use CCRotate instead.");
+			CCUtils.validate(target, "CCRotateTo target", null, true);
 			
 			_target = target as DisplayObject;
 			_dynamicTarget = target;
-			_value2 = value2;
+			_value2 = degrees;
 		}
 		
 		protected override function onEnter():void

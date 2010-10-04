@@ -35,6 +35,11 @@ package cyclopsframework.utils.color
 			return new ColorTransform(r, g, b, a);
 		}
 		
+		public function toUint():uint
+		{
+			return uint(r * 16711680 + g * 65280 + b * 255);
+		}
+		
 		public static function fromColorTransform(ct:ColorTransform):CCColor
 		{
 			return new CCColor(ct.redMultiplier, ct.greenMultiplier, ct.blueMultiplier, ct.alphaMultiplier);
@@ -49,7 +54,7 @@ package cyclopsframework.utils.color
 			return target;
 		}
 		
-		public static function add(target:CCColor, c1:CCColor, c2:CCColor, t:Number):CCColor
+		public static function add(target:CCColor, c1:CCColor, c2:CCColor):CCColor
 		{
 			target.r = c1.r * c1.a + c2.r * c2.a;
 			target.g = c1.g * c1.a + c2.g * c2.a;
@@ -57,7 +62,7 @@ package cyclopsframework.utils.color
 			return target;
 		}
 		
-		public static function subtract(target:CCColor, c1:CCColor, c2:CCColor, t:Number):CCColor
+		public static function subtract(target:CCColor, c1:CCColor, c2:CCColor):CCColor
 		{
 			target.r = c1.r * c1.a - c2.r * c2.a;
 			target.g = c1.g * c1.a - c2.g * c2.a;
@@ -65,7 +70,7 @@ package cyclopsframework.utils.color
 			return target;
 		}
 		
-		public static function multiply(target:CCColor, c1:CCColor, c2:CCColor, t:Number):CCColor
+		public static function multiply(target:CCColor, c1:CCColor, c2:CCColor):CCColor
 		{
 			target.r = c1.r * c1.a * c2.r * c2.a;
 			target.g = c1.g * c1.a * c2.g * c2.a;

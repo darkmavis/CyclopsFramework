@@ -6,9 +6,9 @@ package cyclopsframework.actions.animation
 	
 	import flash.display.DisplayObject;
 	
-	public class CCScale extends CCAction
+	public class CCScaleBy extends CCAction
 	{
-		public static const TAG:String = "@CCScale";
+		public static const TAG:String = "@CCScaleTo";
 		
 		private var _target:DisplayObject = null;
 		private var _dynamicTarget:Object = null;
@@ -16,27 +16,39 @@ package cyclopsframework.actions.animation
 		private var _width2:Number;
 		private var _height1:Number;
 		private var _height2:Number;
-				
-		public function CCScale(
+		
+		public function CCScaleBy(
 			target:Object,
-			width1:Number,
-			height1:Number,
-			width2:Number,
-			height2:Number,
+			relWidth:Number,
+			relHeight:Number,
 			period:Number=0,
 			cycles:Number=1,
 			bias:Function=null)
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			CCUtils.validate(target, "CCScale target");
+			CCUtils.validate(target, "CCScaleBy target", null, true);
 			
 			_target = target as DisplayObject;
 			_dynamicTarget = target;
-			_width1 = width1;
-			_height1 = height1;
-			_width2 = width2;
-			_height2 = height2;
+			_width2 = relWidth;
+			_height2 = relHeight;
+		}
+		
+		protected override function onEnter():void
+		{
+			if (_dynamicTarget.hasOwnProperty("scaleX"))
+			{
+				_width1 = _dynamicTarget["scaleX"];
+			}
+			
+			if (_dynamicTarget.hasOwnProperty("scaleY"))
+			{
+				_height1 = _dynamicTarget["scaleY"];
+			}
+			
+			_width2 += _width1;
+			_height2 += _height1;
 		}
 		
 		protected override function onFrame(t:Number):void
@@ -44,7 +56,7 @@ package cyclopsframework.actions.animation
 			if (_target != null)
 			{
 				_target.scaleX = CCMath.lerp(_width1, _width2, t);
-				_target.scaleY = CCMath.lerp(_height1, _height2, t);	
+				_target.scaleY = CCMath.lerp(_height1, _height2, t);
 			}
 			else if (_dynamicTarget != null)
 			{

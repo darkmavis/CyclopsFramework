@@ -2,6 +2,7 @@ package cyclopsframework.actions.animation
 {
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.Point;
@@ -26,13 +27,8 @@ package cyclopsframework.actions.animation
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCTranslate target must not be null.");
-			if (target is String) throw new TypeError("CCTranslate can't accept a tag as a target.");
-			if (!(target.hasOwnProperty("x") && target.hasOwnProperty("y")))
-			{
-				throw new TypeError("CCTranslate target must have x and y properties.");
-			}
-			
+			CCUtils.validate(target, "CCTranslate target", ["x", "y"]);
+						
 			_dynamicTarget = target;
 			_p1 = new Point(x1, y1);
 			_p2 = new Point(x2, y2);

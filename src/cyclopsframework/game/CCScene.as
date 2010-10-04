@@ -11,6 +11,7 @@ package cyclopsframework.game
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	import cyclopsframework.utils.proxies.CCFunctionProxy;
 	
+	import flash.display.DisplayObject;
 	import flash.display.Sprite;
 	
 	public class CCScene implements ICCDisposable, ICCTaggable
@@ -54,6 +55,22 @@ package cyclopsframework.game
 			scene.parent = null;
 			children.splice(children.indexOf(scene), 1);
 			engine.removeObject(scene);
+		}
+		
+		public function addDisplayObject(x:Number, y:Number, displayObject:DisplayObject):DisplayObject
+		{
+			displayObject.x = x;
+			displayObject.y = y;
+			bg.addChild(displayObject);
+			return displayObject;
+		}
+		
+		public function addSprite(x:Number, y:Number, sprite:Sprite):Sprite
+		{
+			sprite.x = x;
+			sprite.y = y;
+			bg.addChild(sprite);
+			return sprite;
 		}
 		
 		public function update(delta:Number):void

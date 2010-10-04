@@ -3,6 +3,7 @@ package cyclopsframework.actions.animation
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.core.ICCTaggable;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
 	
@@ -25,7 +26,7 @@ package cyclopsframework.actions.animation
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCFade target must not be null.");
+			CCUtils.validate(target, "CCFade target");
 			
 			_target = target as DisplayObject;
 			_dynamicTarget = target;

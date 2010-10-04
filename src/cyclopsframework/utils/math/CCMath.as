@@ -7,6 +7,8 @@ package cyclopsframework.utils.math
 
 	public class CCMath
 	{
+		public static const PHI:Number = 1.61803399;
+		
 		public function CCMath()
 		{
 			

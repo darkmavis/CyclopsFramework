@@ -2,6 +2,7 @@ package cyclopsframework.actions.animation
 {
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.utils.color.CCColor;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
 	import flash.geom.ColorTransform;
@@ -24,7 +25,7 @@ package cyclopsframework.actions.animation
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCTintTo target must not be null.");
+			CCUtils.validate(target, "CCTintTo target");
 			
 			_target = target;
 			_c2 = c2;

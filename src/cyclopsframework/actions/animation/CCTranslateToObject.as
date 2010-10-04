@@ -2,6 +2,7 @@ package cyclopsframework.actions.animation
 {
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.geom.Point;
 	
@@ -22,18 +23,9 @@ package cyclopsframework.actions.animation
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			if (target == null) throw new TypeError("CCTranslateToObject target must not be null.");
-			if (!(target.hasOwnProperty("x") && target.hasOwnProperty("y")))
-			{
-				throw new TypeError("CCTranslateToObject target must have x and y properties.");
-			}
-			
-			if (destination == null) throw new TypeError("CCTranslateToObject destination must not be null.");
-			if (!(destination.hasOwnProperty("x") && destination.hasOwnProperty("y")))
-			{
-				throw new TypeError("CCTranslateToObject destination must have x and y properties.");
-			}
-			
+			CCUtils.validate(target, "CCTranslateToObject target", ["x", "y"]);
+			CCUtils.validate(destination, "CCTranslateToObject destination", ["x", "y"]);
+						
 			_target = target;
 			_destination = destination;
 		}
