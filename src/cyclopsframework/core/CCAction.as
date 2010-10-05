@@ -169,9 +169,9 @@ package cyclopsframework.core
 			return add(new CCFunction(0, 1, thisObject, data, f));
 		}
 				
-		public function loop(f:Function):CCAction
+		public function loop(f:Function, period:Number=0, cycles:Number=Number.MAX_VALUE):CCAction
 		{
-			return add(new CCFunction(0, Number.MAX_VALUE, null, null, f));
+			return add(new CCFunction(period, cycles, null, null, f));
 		}
 		
 		public function nop():CCAction

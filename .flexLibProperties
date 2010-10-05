@@ -50,6 +50,10 @@
     <classEntry path="cyclopsframework.actions.animation.CCRotateBy"/>
     <classEntry path="cyclopsframework.actions.animation.CCFadeBy"/>
     <classEntry path="cyclopsframework.actions.audio.CCSound"/>
+    <classEntry path="cyclopsframework.game.tiles.CCTileset"/>
+    <classEntry path="cyclopsframework.game.tiles.CCTileLayer"/>
+    <classEntry path="cyclopsframework.game.tiles.ICCTileData"/>
+    <classEntry path="cyclopsframework.game.tiles.CCTileData"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

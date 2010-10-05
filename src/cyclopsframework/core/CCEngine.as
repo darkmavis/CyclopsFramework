@@ -3,10 +3,10 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.utils.collections.CCDataStore;
-	import cyclopsframework.utils.proxies.CCDataStoreProxy;
-	import cyclopsframework.utils.proxies.CCMessageProxy;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
+	import cyclopsframework.utils.proxies.CCDataStoreProxy;
+	import cyclopsframework.utils.proxies.CCMessageProxy;
 	
 	import flash.utils.Dictionary;
 		
@@ -164,11 +164,11 @@ package cyclopsframework.core
 			return add(new CCFunction(0, 1, null, null, f));
 		}
 		
-		public function loop(f:Function):CCAction
+		public function loop(f:Function, period:Number=0, cycles:Number=Number.MAX_VALUE):CCAction
 		{
-			return add(new CCFunction(0, Number.MAX_VALUE, null, null, f));
+			return add(new CCFunction(period, cycles, null, null, f));
 		}
-		
+				
 		public function nop():CCAction
 		{
 			return add(new CCAction());

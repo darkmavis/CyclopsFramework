@@ -1,5 +1,6 @@
 package cyclopsframework.game
 {
+	import cyclopsframework.actions.audio.CCSound;
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.core.CCEngine;
 	import cyclopsframework.core.CCMessage;
@@ -13,6 +14,7 @@ package cyclopsframework.game
 	
 	import flash.display.DisplayObject;
 	import flash.display.Sprite;
+	import flash.media.Sound;
 	
 	public class CCScene implements ICCDisposable, ICCTaggable
 	{
@@ -63,6 +65,11 @@ package cyclopsframework.game
 			displayObject.y = y;
 			bg.addChild(displayObject);
 			return displayObject;
+		}
+		
+		public function playSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1):CCSound
+		{
+			return engine.add(new CCSound(source, speed, pan, volume)) as CCSound;
 		}
 		
 		public function addSprite(x:Number, y:Number, sprite:Sprite):Sprite
