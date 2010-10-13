@@ -11,7 +11,7 @@ package cyclopsframework.game.tiles
 		public function get atlas():BitmapData { return _atlas; }
 		
 		private var _tileRect:Rectangle;
-				
+		
 		public function get tileWidth():int { return _tileRect.width; }
 		public function get tileHeight():int { return _tileRect.height; }
 		

@@ -2,6 +2,27 @@ package cyclopsframework.core.easing
 {
 	public class CCBias
 	{
+		public static const LINEAR:Function = linear;
+		public static const REVERSE:Function = reverse;
+		public static const EASE_IN:Function = easeIn;
+		public static const EASE_OUT:Function = easeOut;
+		public static const EASE_IN_OUT:Function = easeInOut;
+		public static const EASE_SINE_WAVE_IN:Function = easeSineWaveIn;
+		public static const EASE_SINE_WAVE_OUT:Function = easeSineWaveOut;
+		public static const EASE_SINE_WAVE_IN_OUT:Function = easeSineWaveInOut;
+		public static const EASE_EXP_IN:Function = easeExpIn;
+		public static const EASE_EXP_OUT:Function = easeExpOut;
+		public static const EASE_EXP_IN_OUT:Function = easeExpInOut;
+		public static const EASE_ELASTIC_IN:Function = easeElasticIn;
+		public static const EASE_ELASTIC_OUT:Function = easeElasticOut;
+		public static const FLAT_TOP:Function = flatTop;
+		public static const FLAT_MIDDLE:Function = flatMiddle;
+		public static const FLAT_BOTTOM:Function = flatBottom;
+		public static const NOISE:Function = noise;
+		public static const SAWTOOTH_WAVE:Function = sawtoothWave;
+		public static const SQUARE_WAVE:Function = squareWave;
+		public static const SINE_WAVE:Function = sineWave;
+		
 		public function CCBias()
 		{
 			

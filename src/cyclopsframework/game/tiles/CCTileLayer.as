@@ -79,7 +79,6 @@ package cyclopsframework.game.tiles
 				for (var x:int = -1; x <= vw; ++x)
 				{
 					p.x = (x - (viewRect.x % 1)) * tw;
-					
 					srect = tileset.getTileRect(getTile(vx + x, vy + y).tileIndex, srect);
 					
 					target.copyPixels(tileset.atlas, srect, p);
@@ -89,6 +88,10 @@ package cyclopsframework.game.tiles
 			return target;
 		}
 		
+		public static function fromTMX(tileset:CCTileset):void
+		{
+			
+		}
 		
 	}
 }

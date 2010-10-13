@@ -99,7 +99,6 @@ package cyclopsframework.utils.misc
 				for (var i:int = 0; i < path.length; ++i)
 				{
 					seg = path[i] as String;
-					trace ("seg: " + seg);
 					if (target.hasOwnProperty(seg))
 					{
 						target = target[seg];

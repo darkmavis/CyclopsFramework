@@ -2,12 +2,14 @@ package cyclopsframework.core
 {
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
+	import cyclopsframework.actions.flow.CCWaitForEvent;
 	import cyclopsframework.utils.collections.CCDataStore;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	import cyclopsframework.utils.proxies.CCMessageProxy;
 	
+	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
 		
 	public class CCEngine
@@ -178,7 +180,12 @@ package cyclopsframework.core
 		{
 			return add(new CCSleep(period));
 		}
-				
+		
+		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CCAction
+		{
+			return add(new CCWaitForEvent(target, eventType, timeout, cycles, listener));
+		}
+		
 		public function runNextFrame(f:Function):void
 		{
 			_delayedFunctions.push(f);

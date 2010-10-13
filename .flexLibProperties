@@ -54,6 +54,14 @@
     <classEntry path="cyclopsframework.game.tiles.CCTileLayer"/>
     <classEntry path="cyclopsframework.game.tiles.ICCTileData"/>
     <classEntry path="cyclopsframework.game.tiles.CCTileData"/>
+    <classEntry path="cyclopsframework.utils.misc.CCBase64"/>
+    <classEntry path="cyclopsframework.actions.physics.CCPhysics"/>
+    <classEntry path="cyclopsframework.actions.physics.listeners.CCContactListener"/>
+    <classEntry path="cyclopsframework.actions.physics.CCPhysicsActor"/>
+    <classEntry path="cyclopsframework.game.cc3d.CCScene3D"/>
+    <classEntry path="cyclopsframework.game.cc3d.CCTiledPlane3D"/>
+    <classEntry path="cyclopsframework.game.bindings.CCKeyboardBindings"/>
+    <classEntry path="cyclopsframework.game.bindings.CCKeyboardBindingsGroup"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -2,8 +2,11 @@ package cyclopsframework.core
 {
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
+	import cyclopsframework.actions.flow.CCWaitForEvent;
 	import cyclopsframework.core.easing.CCBias;
 	import cyclopsframework.utils.collections.CCStringHashSet;
+	
+	import flash.events.IEventDispatcher;
 
 	public class CCAction implements ICCPausable, ICCTaggable
 	{
@@ -26,6 +29,12 @@ package cyclopsframework.core
 		
 		public function get speed():Number { return _speed; }
 		public function set speed(value:Number):void { _speed = value; }
+		
+		private var _accDelta:Number = 0;
+		
+		private var _minDelta:Number = Number.MIN_VALUE;
+		public function get minDelta():Number { return _minDelta; }
+		public function set minDelta(value:Number):void { _minDelta = value; }
 		
 		private var _maxDelta:Number = 1;
 		public function get maxDelta():Number { return _maxDelta; }
@@ -183,6 +192,11 @@ package cyclopsframework.core
 		{
 			return add(new CCSleep(period));
 		}
+		
+		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CCAction
+		{
+			return add(new CCWaitForEvent(target, eventType, timeout, cycles, listener));
+		}
 				
 		protected function safeset(target:Object, propertyName:String, value:Object):void
 		{
@@ -223,6 +237,12 @@ package cyclopsframework.core
 			return this;
 		}
 		
+		public function setMinDelta(value:Number):CCAction
+		{
+			minDelta = value;
+			return this;
+		}
+		
 		public function stop(callLastFrame:Boolean=true, callExit:Boolean=true):void
 		{
 			if (_active)
@@ -242,9 +262,17 @@ package cyclopsframework.core
 		
 		public function update(delta:Number):Boolean
 		{
-			var remainingDelta:Number = delta;
+			var remainingDelta:Number = delta + _accDelta;
 			
-			//do
+			if (remainingDelta < minDelta)
+			{
+				_accDelta += delta;
+				return _active;
+			}
+			
+			_accDelta = (_accDelta > 0) ? (_accDelta - remainingDelta) : 0;
+			
+			do
 			{
 				if (!_active) return false;
 				
@@ -266,12 +294,13 @@ package cyclopsframework.core
 				if(_period > 0)
 				{
 					_position += (remainingDelta * _speed) / _period;
-					//remainingDelta -= _maxDelta;
 				}
 				else
 				{
 					++_position;
 				}
+				
+				remainingDelta -= _maxDelta;
 								
 				onFrame(_bias(position));
 				
@@ -295,7 +324,7 @@ package cyclopsframework.core
 						stop();
 					}
 				}
-			} //while (remainingDelta > 0)
+			} while (remainingDelta > 0)
 			
 			return _active;
 		}
