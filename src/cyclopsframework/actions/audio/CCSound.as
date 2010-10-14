@@ -1,3 +1,24 @@
+/**
+ * Cyclops Framework - CCSound.as
+ * 
+ * All code is the copyright of the respective owners. (1a)
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ * 
+ * http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ * 
+ * (1a) Some of this code was borrowed from an example provided by: Andre Michelle (andre.michelle@gmail.com)
+ * http://blog.andre-michelle.com/upload/mp3pitch/MP3Pitch.as
+ * 
+ */
+
 /* 
  * Some of this code was borrowed from an example provided by: Andre Michelle (andre.michelle@gmail.com)
  * http://blog.andre-michelle.com/upload/mp3pitch/MP3Pitch.as

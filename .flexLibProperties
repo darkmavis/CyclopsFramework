@@ -62,6 +62,9 @@
     <classEntry path="cyclopsframework.game.cc3d.CCTiledPlane3D"/>
     <classEntry path="cyclopsframework.game.bindings.CCKeyboardBindings"/>
     <classEntry path="cyclopsframework.game.bindings.CCKeyboardBindingsGroup"/>
+    <classEntry path="cyclopsframework.actions.animation.cc3d.CC3DTranslate"/>
+    <classEntry path="cyclopsframework.actions.animation.cc3d.CC3DTranslateTo"/>
+    <classEntry path="cyclopsframework.game.cc3d.CCSpriteActor3D"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

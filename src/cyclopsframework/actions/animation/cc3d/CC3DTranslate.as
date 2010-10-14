@@ -14,50 +14,44 @@
  * limitations under the License.
  */
 
-package cyclopsframework.actions.animation
+package cyclopsframework.actions.animation.cc3d
 {
 	import cyclopsframework.core.CCAction;
-	import cyclopsframework.utils.color.CCColor;
+	import cyclopsframework.utils.math.CCMath;
 	import cyclopsframework.utils.misc.CCUtils;
 	
 	import flash.display.DisplayObject;
-	import flash.geom.ColorTransform;
+	import flash.geom.Point;
+	import flash.geom.Vector3D;
 	
-	public class CCTintBy extends CCAction
+	public class CC3DTranslate extends CCAction
 	{
-		public static const TAG:String = "@CCTintBy";
+		public static const TAG:String = "@CC3DTranslate";
 		
-		private var _target:DisplayObject = null;
-		private var _tc:CCColor = new CCColor(1,1,1,1);
-		private var _c1:CCColor;
-		private var _c2:CCColor;
+		private var _dynamicTarget:Object = null;
+		private var _v1:Object;
+		private var _v2:Object;
 		
-		public function CCTintBy(
-			target:DisplayObject,
-			relColor:CCColor,
+		public function CC3DTranslate(
+			target:Object,
+			v1:Object,
+			v2:Object,
 			period:Number=0,
 			cycles:Number=1,
 			bias:Function=null)
 		{
 			super(period, cycles, bias, [TAG]);
 			
-			CCUtils.validate(target, "CCTintBy target");
+			CCUtils.validate(target, "CC3DTranslate target", ["x", "y", "z"]);
 			
-			_target = target;
-			_c2 = relColor;
-		}
-		
-		protected override function onEnter():void
-		{
-			_c1 = CCColor.fromColorTransform(_target.transform.colorTransform);
-			CCColor.add(_c2, _c1, _c2);
+			_dynamicTarget = target;
+			_v1 = v1;
+			_v2 = v2;
 		}
 		
 		protected override function onFrame(t:Number):void
 		{
-			var ct:ColorTransform = CCColor.lerp(_tc, _c1, _c2, t).toColorTransform();
-			ct.alphaMultiplier = _target.transform.colorTransform.alphaMultiplier;
-			_target.transform.colorTransform = ct;
+			CCMath.lerpTarget3(_dynamicTarget, _v1, _v2, t);
 		}
 	}
 }
