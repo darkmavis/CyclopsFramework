@@ -16,30 +16,35 @@
 
 package cyclopsframework.utils.collections
 {
+	import cyclopsframework.utils.proxies.CCHashSetProxy;
+	
 	import flash.utils.Dictionary;
 
 	public class CCHashSet
 	{
 		private var _table:Dictionary = new Dictionary();
-		public function get items():Object { return _table; }
+		public function get items():Dictionary { return _table; }
 		
 		private var _numItems:int = 0;
 		public function get length():int { return _numItems; }
 		
+		private var _proxy:CCHashSetProxy;
+		public function get proxy():CCHashSetProxy { return _proxy; }
+		
 		public function CCHashSet()
 		{
-			
+			_proxy = new CCHashSetProxy(this);
 		}
 				
 		public function add(item:Object):void
 		{
-			_table[item] = item;
+			_table[item] = true;
 			++_numItems;
 		}
 		
 		public function remove(item:Object):void
 		{
-			if (_table.hasOwnProperty(item))
+			if (has(item))
 			{
 				delete _table[item];
 				--_numItems;
@@ -48,22 +53,22 @@ package cyclopsframework.utils.collections
 		
 		public function has(item:Object):Boolean
 		{
-			return _table.hasOwnProperty(item);
+			return (_table[item] == true);
 		}
 		
 		public function forEach(f:Function):void 
 		{
-			for each (var item:Object in _table)
+			for (var item:Object in _table)
 			{
 				f(item);
 			}
 		}
-		
+				
 		public function toArray():Array
 		{
 			var a:Array = [];
 			
-			for each (var item:Object in items)
+			for (var item:Object in _table)
 			{
 				a.push(item);
 			}

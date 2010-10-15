@@ -48,7 +48,8 @@ package cyclopsframework.actions.flow
 			{
 				_timedOut = false;
 				if (_messageListener != null) _messageListener(msg);
-				this.stop();
+				//this.stop();
+				this.jumpTo((this.cycle + 1));
 			}
 		}
 		

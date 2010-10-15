@@ -394,9 +394,10 @@ package cyclopsframework.core
 				var request:CCStopActionRequest = _stopsRequested.shift();
 				if (_registry.has(request.actionTag))
 				{
-					for each (var action:CCAction in _registry.getObjects(request.actionTag))
+					//for each (var action:CCAction in _registry.getObjects(request.actionTag))
+					_registry.getObjects(request.actionTag).forEach(function(action:CCAction):void
 					{
-						if(action is CCAction)
+						if(action != null) //(action is CCAction)
 						{
 							if (request.stopChildren)
 							{
@@ -404,7 +405,7 @@ package cyclopsframework.core
 							}
 							action.stop();
 						}
-					}
+					});
 				}
 			}
 		}
@@ -525,13 +526,15 @@ package cyclopsframework.core
 			{
 				if (_registry.has(tag))
 				{
-					for each (var obj:ICCTaggable in _registry.getObjects(tag))
+					//for each (var obj:ICCTaggable in _registry.getObjects(tag))
+					_registry.getObjects(tag).forEach(function(obj:ICCPausable):void
 					{
-						if(obj is ICCPausable)
+						if(obj != null) //is ICCPausable)
 						{
-							(obj as ICCPausable).paused = false;
+							obj.paused = false;
+							//(obj as ICCPausable).paused = false;
 						}
-					}
+					});
 				}
 			}
 			
@@ -544,13 +547,14 @@ package cyclopsframework.core
 			{
 				if (_registry.has(tag))
 				{
-					for each (var obj:ICCTaggable in _registry.getObjects(tag))
+					//for each (var obj:ICCTaggable in _registry.getObjects(tag))
+					_registry.getObjects(tag).forEach(function(obj:ICCPausable):void
 					{
-						if(obj is ICCPausable)
+						if(obj != null) // is ICCPausable)
 						{
 							(obj as ICCPausable).paused = true;
 						}
-					}
+					});
 				}
 			}
 			

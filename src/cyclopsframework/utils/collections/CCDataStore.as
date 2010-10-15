@@ -17,11 +17,11 @@
 package cyclopsframework.utils.collections
 {
 	import cyclopsframework.utils.misc.CCUtils;
+	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	
 	import flash.utils.Dictionary;
 	
 	import mx.utils.object_proxy;
-	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	
 	public class CCDataStore
 	{
@@ -42,13 +42,14 @@ package cyclopsframework.utils.collections
 		public function sync():void
 		{
 			_remoteData.clear();
-			for each (var ritem:CCDataStoreRemoteItem in _remoteItems.items)
+			//for (var ritem:CCDataStoreRemoteItem in _remoteItems.items)
+			_remoteItems.forEach(function(ritem:CCDataStoreRemoteItem):void
 			{
 				var item:Object = ritem.value;
 				_remoteData.add(item);
-			}
+			});
 		}
-				
+		
 		public function add(item:Object):CCDataStore
 		{
 			if (item is CCDataStoreRemoteItem)
@@ -76,7 +77,7 @@ package cyclopsframework.utils.collections
 			
 			return this;
 		}
-				
+		
 		public function has(item:Object):Boolean
 		{
 			return (_data.has(item) || _remoteData.has(item));
@@ -84,16 +85,8 @@ package cyclopsframework.utils.collections
 		
 		public function forEach(f:Function):CCDataStore 
 		{
-			for each (var item:Object in _data.items)
-			{
-				f(item);
-			}
-			
-			for each (item in _remoteData.items)
-			{
-				f(item);
-			}
-			
+			_data.forEach(f);
+			_remoteData.forEach(f);
 			return this;
 		}
 				

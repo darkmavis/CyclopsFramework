@@ -18,23 +18,23 @@ package cyclopsframework.utils.proxies
 {
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	import cyclopsframework.utils.collections.CCDataStore;
+	import cyclopsframework.utils.collections.CCHashSet;
 	
-	public dynamic class CCDataStoreProxy extends Proxy
+	public dynamic class CCHashSetProxy extends Proxy
 	{
-		private var _datastore:CCDataStore;
+		private var _hashset:CCHashSet;
 		
-		public function CCDataStoreProxy(datastore:CCDataStore)
+		public function CCHashSetProxy(hashset:CCHashSet)
 		{
 			super();
-			_datastore = datastore;
+			_hashset = hashset;
 		}
 		
 		override flash_proxy function callProperty(methodName:*, ... args):*
 		{
 			var results:Array = [];
 			
-			_datastore.forEach(function(item:Object):void
+			_hashset.forEach(function(item:Object):void
 			{
 				if (item.hasOwnProperty(methodName) && (item[methodName] is Function))
 				{
@@ -49,7 +49,7 @@ package cyclopsframework.utils.proxies
 		{
 			var results:Array = [];
 			
-			_datastore.forEach(function(item:Object):void
+			_hashset.forEach(function(item:Object):void
 			{
 				if (item.hasOwnProperty(name) && !(item[name] is Function))
 				{
@@ -62,7 +62,7 @@ package cyclopsframework.utils.proxies
 		
 		override flash_proxy function setProperty(name:*, value:*):void
 		{
-			_datastore.forEach(function(item:Object):void
+			_hashset.forEach(function(item:Object):void
 			{
 				if (item.hasOwnProperty(name) && !(item[name] is Function))
 				{
@@ -70,7 +70,7 @@ package cyclopsframework.utils.proxies
 				}
 			});
 		}
-
-
+		
+		
 	}
 }

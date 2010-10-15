@@ -20,6 +20,7 @@ package cyclopsframework.utils.math
 	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	import flash.geom.Vector3D;
 
 	public class CCMath
 	{
@@ -95,5 +96,14 @@ package cyclopsframework.utils.math
 				return (result != div) ? result : 0;
 			}
 		}
+		
+		public static function objectWithinRadiusOfTarget(o:Object, radius:Number, target:Object):Boolean
+		{
+			var dx:Number = target.x - o.x;
+			var dy:Number = target.y - o.y;
+			var dz:Number = target.z - o.z;
+			return  (radius * radius) >= (dx * dx + dy * dy + dz * dz);
+		}
+		
 	}
 }

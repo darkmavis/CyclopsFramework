@@ -96,7 +96,7 @@ package cyclopsframework.utils.misc
 			{
 				for (var i:int = 0; i < (o as DisplayObjectContainer).numChildren; ++i)
 				{
-					walk(o, f, path);
+					walkDisplayObject(o, f, path);
 				}
 			}
 			
