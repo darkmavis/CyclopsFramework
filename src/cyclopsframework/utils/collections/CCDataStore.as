@@ -21,6 +21,7 @@ package cyclopsframework.utils.collections
 	
 	import flash.utils.Dictionary;
 	
+	import mx.utils.ArrayUtil;
 	import mx.utils.object_proxy;
 	
 	public class CCDataStore
@@ -118,6 +119,55 @@ package cyclopsframework.utils.collections
 			});
 			
 			return results;
+		}
+		
+		public function sort(comparator:Function):Array
+		{
+			var results:Array = toArray();
+			quicksort(results, 0, results.length - 1, comparator);
+			return results;
+		}
+		
+		private function quicksort(source:Array, left:int, right:int, comparator:Function):void
+		{
+			var i:int = left;
+			var j:int = right;
+			
+			var pivotPoint:Object = source[int((left + right) * .5 + .5)]; //   Math.round((left + right) * .5)];
+			
+			while (i <= j)
+			{
+				while (comparator(source[i], pivotPoint) < 0) // (source[i] < pivotPoint)
+				{
+					++i;
+				}
+				
+				while (comparator(source[i], pivotPoint) > 0) // (source[j] > pivotPoint)
+				{
+					--j;
+				}
+				
+				if (i <= j)
+				{
+					var tmp:Object = source[i];
+					source[i] = source[j];
+					++i;
+					source[j] = tmp;
+					--j;
+				}
+			}
+			
+			if (left < j)
+			{
+				quicksort(source, left, j, comparator);
+			}
+			
+			if (i < right)
+			{
+				quicksort(source, i, right, comparator);
+			}
+			
+			return;
 		}
 		
 		public function extract(... rest):Array

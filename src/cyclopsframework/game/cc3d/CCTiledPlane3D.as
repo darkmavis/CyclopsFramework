@@ -72,6 +72,8 @@ package cyclopsframework.game.cc3d
 			_terrain.segmentsW = 1;
 			_terrain.segmentsH = 1;
 			
+			_terrain.pitch(-90);
+			
 			scene3d.addChild(_terrain);
 		}
 		

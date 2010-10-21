@@ -86,7 +86,7 @@ package cyclopsframework.game
 			bg.addChild(scene.bg);
 			scene.parent = this;
 			children.push(scene);
-			engine.addObject(scene);
+			engine.add(scene);
 		}
 		
 		public function removeScene(scene:CCScene):void

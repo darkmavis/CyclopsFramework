@@ -41,6 +41,7 @@ package cyclopsframework.game.pathfinding.waypoints
 				
 		public function CCWaypoint(x:Number=0, y:Number=0, z:Number=0, radius:Number=0)
 		{
+			tags.addItem(TAG);
 			_v = new Vector3D(x, y, z);
 			_radius = radius;
 		}
@@ -65,12 +66,19 @@ package cyclopsframework.game.pathfinding.waypoints
 			return waypoint;
 		}
 		
-		public function withinRange(o:Object):Boolean
+		public function withinRange2(o:Object):Boolean
+		{
+			_tmpV.x = o.x;
+			_tmpV.y = o.y;
+			return CCMath.objectWithinRadiusOfTarget2(o, _radius, this);
+		}
+		
+		public function withinRange3(o:Object):Boolean
 		{
 			_tmpV.x = o.x;
 			_tmpV.y = o.y;
 			_tmpV.z = o.hasOwnProperty("z") ? o.z : _v.z; 
-			return CCMath.objectWithinRadiusOfTarget(o, _radius, this);
+			return CCMath.objectWithinRadiusOfTarget3(o, _radius, this);
 		}
 		
 		public function walk(f:Function, visitedLinks:CCHashSet=null):void

@@ -25,6 +25,7 @@ package cyclopsframework.utils.math
 	public class CCMath
 	{
 		public static const PHI:Number = 1.61803399;
+		public static const PI_OVER_180:Number = (180 / Math.PI);
 		
 		public function CCMath()
 		{
@@ -97,12 +98,59 @@ package cyclopsframework.utils.math
 			}
 		}
 		
-		public static function objectWithinRadiusOfTarget(o:Object, radius:Number, target:Object):Boolean
+		public static function objectWithinRadiusOfTarget2(o:Object, radius:Number, target:Object):Boolean
+		{
+			var dx:Number = target.x - o.x;
+			var dy:Number = target.y - o.y;
+			return  (radius * radius) >= (dx * dx + dy * dy);
+		}
+		
+		public static function objectWithinRadiusOfTarget3(o:Object, radius:Number, target:Object):Boolean
 		{
 			var dx:Number = target.x - o.x;
 			var dy:Number = target.y - o.y;
 			var dz:Number = target.z - o.z;
 			return  (radius * radius) >= (dx * dx + dy * dy + dz * dz);
+		}
+		
+		public static function distanceSquared2(o1:Object, o2:Object):Number
+		{
+			var dx:Number = o1.x - o2.x;
+			var dy:Number = o1.y - o2.y;
+			return (dx * dx + dy * dy);
+		}
+		
+		public static function distanceSquared3(o1:Object, o2:Object):Number
+		{
+			var dx:Number = o1.x - o2.x;
+			var dy:Number = o1.y - o2.y;
+			var dz:Number = o1.z - o2.z;
+			return (dx * dx + dy * dy + dz * dz);
+		}
+		
+		public static function closest2(target:Object, points:Array):Object
+		{
+			var weightedList:Array = [];
+			for each (var p:Object in points)
+			{
+				weightedList.push({w:(distanceSquared2(target, {x:p.x, y:p.y})), o:p});
+			};
+			weightedList = weightedList.sortOn("w", Array.NUMERIC);
+			return weightedList[0].o;
+		}
+		
+		public static function distanceToAngleInRadians2(o1:Object, o2:Object):Number
+		{
+			var dx:Number = o1.x - o2.x;
+			var dy:Number = o1.y - o2.y;
+			return Math.atan2(dx, dy);
+		}
+		
+		public static function distanceToAngleInDegrees2(o1:Object, o2:Object):Number
+		{
+			var dx:Number = o1.x - o2.x;
+			var dy:Number = o1.y - o2.y;
+			return Math.atan2(dx, dy) * PI_OVER_180;
 		}
 		
 	}

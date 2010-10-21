@@ -65,9 +65,9 @@
     <classEntry path="cyclopsframework.actions.animation.cc3d.CC3DTranslate"/>
     <classEntry path="cyclopsframework.actions.animation.cc3d.CC3DTranslateTo"/>
     <classEntry path="cyclopsframework.game.cc3d.CCSpriteActor3D"/>
-    <classEntry path="cyclopsframework.game.pathfinding.waypoints.CCWaypointManager"/>
     <classEntry path="cyclopsframework.game.pathfinding.waypoints.CCWaypoint"/>
     <classEntry path="cyclopsframework.utils.proxies.CCHashSetProxy"/>
+    <classEntry path="cyclopsframework.game.goals.CCGoalEngine"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

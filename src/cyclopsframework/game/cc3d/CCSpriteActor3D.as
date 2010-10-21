@@ -99,7 +99,7 @@ package cyclopsframework.game.cc3d
 			_numFrames = numFrames;
 			_rect = _tileset.getTileRect(0);
 			
-			_physicsActor = _physics.createSimpleActor(_sprite3d, _radius, 1, CCPhysicsActor.ORIENTATION_XZ);
+			_physicsActor = _physics.createSimpleActor(_sprite3d, _radius, 1);
 			_physicsActor.body.SetActive(false);
 		}
 		
@@ -115,7 +115,7 @@ package cyclopsframework.game.cc3d
 			_rotation = body.GetAngle() * (180 / Math.PI);
 			
 			var angleIndex:int = (_frameOffset + int((CCMath.wrap(_rotation, 360) / 360) * _numFrames) + _numFrames
-				- ((Math.atan2(_sprite3d.x - _scene.camera.x, _sprite3d.z - _scene.camera.z) / (Math.PI * 2)) * _numFrames + (_numFrames * .5))) % _numFrames;
+				- ((Math.atan2(_sprite3d.x - _scene.camera.x, _sprite3d.y - _scene.camera.y) / (Math.PI * 2)) * _numFrames + (_numFrames * .5))) % _numFrames;
 			
 			if (angleIndex != _lastAngleIndex)
 			{

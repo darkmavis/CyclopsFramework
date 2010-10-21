@@ -79,14 +79,14 @@ package cyclopsframework.core
 			}
 		}
 		
-		// Sequencing Additions
+		// Sequencing + TaggedObject Additions/Registration
 		
-		public function add(...actions):CCAction
+		public function add(...taggedObjects):CCAction
 		{
 			var currTags:Array = [];
-			var currAction:CCAction;
+			var currAction:CCAction = null;
 			
-			for each (var o:Object in actions)
+			for each (var o:Object in taggedObjects)
 			{
 				if (o is CCAction)
 				{
@@ -98,6 +98,17 @@ package cyclopsframework.core
 						currTags = [];
 					}
 					_additions.push(o);
+				}
+				else if (o is ICCTaggable)
+				{
+					var taggedObject:ICCTaggable = o as ICCTaggable;
+					applyAutotags(taggedObject);
+					if (currTags.length > 0)
+					{
+						taggedObject.tags.addItems(currTags);
+						currTags = [];
+					}
+					_additions.push(taggedObject);
 				}
 				else if (o is Function)
 				{
@@ -179,7 +190,7 @@ package cyclopsframework.core
 		
 		public function addf(f:Function, thisObject:Object=null, data:Array=null):CCAction
 		{
-			return add(new CCFunction(0, 1, null, null, f));
+			return add(new CCFunction(0, 1, thisObject, data, f));
 		}
 		
 		public function loop(f:Function, period:Number=0, cycles:Number=Number.MAX_VALUE):CCAction
@@ -263,13 +274,7 @@ package cyclopsframework.core
 				(taggedObject as ICCDisposable).dispose();
 			}
 		}
-		
-		public function addObject(taggedObject:ICCTaggable):void
-		{
-			applyAutotags(taggedObject);
-			_additions.push(taggedObject);
-		}
-				
+			
 		// Querying
 		
 		public function count(tag:String=TAG_ALL):int
