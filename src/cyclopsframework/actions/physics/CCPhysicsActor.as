@@ -46,6 +46,10 @@ package cyclopsframework.actions.physics
 		public function get scale():Number { return _scale; }
 		public function set scale(value:Number):void { _scale = value; }
 		
+		private var _offset:Point = new Point(0, 0);
+		public function get offset():Point { return _offset; }
+		public function set offset(value:Point):void { _offset = value; }
+		
 		public function CCPhysicsActor(
 			target:Object,
 			body:b2Body,
@@ -67,13 +71,13 @@ package cyclopsframework.actions.physics
 			
 			if (_orientation == ORIENTATION_XY)
 			{
-				target.x = position.x * _scale;
-				target.y = position.y * _scale;
+				target.x = position.x / _scale + _offset.x;
+				target.y = position.y / _scale + _offset.y;
 			}
 			else if(_orientation == ORIENTATION_XZ)
 			{
-				target.x = position.x * _scale;
-				target.z = position.y * _scale;
+				target.x = position.x / _scale + _offset.x;
+				target.z = position.y / _scale + _offset.y;
 			}
 			else
 			{

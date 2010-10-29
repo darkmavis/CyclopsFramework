@@ -36,6 +36,7 @@ package cyclopsframework.game.pathfinding.waypoints
 		
 		private var _data:Object = {};
 		public function get data():Object { return _data; }
+		public function set data(value:Object):void { _data = value; }
 		
 		private var _tmpV:Vector3D = new Vector3D();
 				

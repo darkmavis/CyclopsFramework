@@ -55,7 +55,7 @@ package cyclopsframework.game.tiles
 			_destPoint.x = 0;
 			_destPoint.y = 0;
 			
-			var _result:BitmapData = new BitmapData(tileWidth, tileHeight);
+			var _result:BitmapData = new BitmapData(tileWidth, tileHeight, true, 0);
 			_result.copyPixels(_atlas, _tileRect, _destPoint);
 			
 			return _result;
@@ -65,7 +65,7 @@ package cyclopsframework.game.tiles
 		{
 			if (rectOut == null) rectOut = new Rectangle();
 			
-			rectOut.x = (index % _columns) * tileWidth;
+			rectOut.x = int(index % _columns) * tileWidth;
 			rectOut.y = int(index / _rows) * tileHeight;
 			rectOut.width = tileWidth;
 			rectOut.height = tileHeight;

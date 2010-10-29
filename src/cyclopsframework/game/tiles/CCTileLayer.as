@@ -90,14 +90,15 @@ package cyclopsframework.game.tiles
 			
 			for (var y:int = -1; y <= vh; ++y)
 			{
-				p.y = (y - (viewRect.y % 1)) * th;
+				p.y = int((y - (viewRect.y % 1)) * th);
 				
 				for (var x:int = -1; x <= vw; ++x)
 				{
-					p.x = (x - (viewRect.x % 1)) * tw;
+					p.x = int((x - (viewRect.x % 1)) * tw);
 					srect = tileset.getTileRect(getTile(vx + x, vy + y).tileIndex, srect);
 					
-					target.copyPixels(tileset.atlas, srect, p);
+					target.copyPixels(tileset.atlas, srect, p, null, null, true);
+					
 				}
 			}
 			

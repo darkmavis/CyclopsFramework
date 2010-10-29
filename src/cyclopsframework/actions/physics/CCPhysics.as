@@ -17,6 +17,8 @@
 package cyclopsframework.actions.physics
 {
 	import Box2D.Collision.Shapes.b2CircleShape;
+	import Box2D.Collision.Shapes.b2PolygonShape;
+	import Box2D.Collision.Shapes.b2Shape;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2BodyDef;
@@ -32,7 +34,7 @@ package cyclopsframework.actions.physics
 	{
 		public static const TAG:String = "@CCPhysics";
 		
-		private const DEFAULT_FIXED_DELTA:Number = 1 / 60;
+		private const DEFAULT_FIXED_DELTA:Number = 1 / 50; // not 1/60 bec
 				
 		private var _world:b2World;
 		public function get world():b2World { return _world; }
@@ -82,7 +84,7 @@ package cyclopsframework.actions.physics
 			
 			_gravity = (gravity == null) ? new b2Vec2(0, 0) : gravity;
 			_world = new b2World(_gravity, sleepingEnabled);
-			
+						
 			maxDelta = DEFAULT_FIXED_DELTA;
 			//minDelta = DEFAULT_FIXED_DELTA;
 			//fixedDelta = DEFAULT_FIXED_DELTA;
@@ -99,6 +101,45 @@ package cyclopsframework.actions.physics
 			_world.ClearForces();
 		}
 		
+		public function createBoxBody(x:Number, y:Number, width:Number, height:Number, bodyType:uint, density:Number):b2Body
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = bodyType;
+			bodydef.position = new b2Vec2(x, y);
+			var body:b2Body = world.CreateBody(bodydef);
+			var shape:b2Shape = b2PolygonShape.AsBox(width, height);
+			var fixture:b2Fixture = body.CreateFixture2(shape, density);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			return body;
+		}
+		
+		public function createEdgeBody(originX:Number, originY:Number, edgeX1:Number, edgeY1:Number, edgeX2:Number, edgeY2:Number, bodyType:uint):b2Body
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = bodyType;
+			bodydef.position = new b2Vec2(originX, originY);
+			var body:b2Body = world.CreateBody(bodydef);
+			var shape:b2Shape = b2PolygonShape.AsEdge(new b2Vec2(edgeX1, edgeY1), new b2Vec2(edgeX2, edgeY2));
+			var fixture:b2Fixture = body.CreateFixture2(shape);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			return body;
+		}
+				
+		public function createCircleBody(x:Number, y:Number, radius:Number, bodyType:uint, density:Number):b2Body
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = bodyType;
+			bodydef.position = new b2Vec2(x, y);
+			var body:b2Body = world.CreateBody(bodydef);
+			var shape:b2CircleShape = new b2CircleShape(radius);
+			var fixture:b2Fixture = body.CreateFixture2(shape, density);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			return body;
+		}
+		
 		public function createSimpleActor(target:Object, radius:Number=0, density:Number=1, orientation:int=0, period:Number=Number.MAX_VALUE):CCPhysicsActor
 		{
 			var bodydef:b2BodyDef = new b2BodyDef();
@@ -107,13 +148,13 @@ package cyclopsframework.actions.physics
 			
 			if (orientation == CCPhysicsActor.ORIENTATION_XY)
 			{
-				bodydef.position.x = target.x / scale;
-				bodydef.position.y = target.y / scale;
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.y * scale;
 			}
 			else if(orientation == CCPhysicsActor.ORIENTATION_XZ)
 			{
-				bodydef.position.x = target.x / scale;
-				bodydef.position.y = target.z / scale;
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.z * scale;
 			}
 			
 			var body:b2Body = world.CreateBody(bodydef);			
