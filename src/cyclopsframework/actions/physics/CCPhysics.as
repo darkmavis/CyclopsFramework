@@ -84,7 +84,8 @@ package cyclopsframework.actions.physics
 			
 			_gravity = (gravity == null) ? new b2Vec2(0, 0) : gravity;
 			_world = new b2World(_gravity, sleepingEnabled);
-						
+			_world.SetContinuousPhysics(true);
+			
 			maxDelta = DEFAULT_FIXED_DELTA;
 			//minDelta = DEFAULT_FIXED_DELTA;
 			//fixedDelta = DEFAULT_FIXED_DELTA;
@@ -157,7 +158,7 @@ package cyclopsframework.actions.physics
 				bodydef.position.y = target.z * scale;
 			}
 			
-			var body:b2Body = world.CreateBody(bodydef);			
+			var body:b2Body = world.CreateBody(bodydef);
 			var actor:CCPhysicsActor = new CCPhysicsActor(target, body, scale, orientation, period);
 			
 			var shape:b2CircleShape = new b2CircleShape(radius);

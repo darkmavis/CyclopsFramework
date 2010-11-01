@@ -276,6 +276,11 @@ package cyclopsframework.core
 			_position = pos;
 		}
 		
+		public function simulateFrame(t:Number):void
+		{
+			onFrame(t);
+		}
+		
 		public function update(delta:Number):Boolean
 		{
 			var remainingDelta:Number = delta + _accDelta;
