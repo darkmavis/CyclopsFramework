@@ -19,6 +19,7 @@ package cyclopsframework.actions.physics
 	import Box2D.Collision.Shapes.b2CircleShape;
 	import Box2D.Collision.Shapes.b2PolygonShape;
 	import Box2D.Collision.Shapes.b2Shape;
+	import Box2D.Common.Math.b2Math;
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
 	import Box2D.Dynamics.b2BodyDef;
@@ -34,35 +35,25 @@ package cyclopsframework.actions.physics
 	{
 		public static const TAG:String = "@CCPhysics";
 		
-		private const DEFAULT_FIXED_DELTA:Number = 1 / 50; // not 1/60 bec
-				
+		private var _targetDelta:Number;
+		
 		private var _world:b2World;
 		public function get world():b2World { return _world; }
 		
 		private var _gravity:b2Vec2;
 		public function get gravity():b2Vec2 { return _gravity; }
 		
-		private var _velocityIterations:int = 10;
+		private var _velocityIterations:int = 4;
 		public function get velocityIterations():int { return _velocityIterations; }
 		public function set velocityIterations(value:int):void { _velocityIterations = value; }
 		
-		private var _positionIterations:int = 10;
+		private var _positionIterations:int = 4;
 		public function get positionIterations():int { return _positionIterations; }
 		public function set positionIterations(value:int):void { _positionIterations = value; }
 		
 		private var _scale:Number = 1;
 		public function get scale():Number { return _scale; }
 		public function set scale(value:Number):void { _scale = (value != 0) ? value : Number.MIN_VALUE; }
-		
-		// force min and max deltas to the same value.
-		private var _fixedDelta:Number = DEFAULT_FIXED_DELTA;
-		public function get fixedDelta():Number { return _fixedDelta; }
-		public function set fixedDelta(value:Number):void
-		{
-			_fixedDelta = value;
-			maxDelta = value;
-			minDelta = value;
-		}
 		
 		private var _contactListener:CCContactListener = new CCContactListener();
 				
@@ -78,17 +69,14 @@ package cyclopsframework.actions.physics
 		public function get onPostSolve():Function { return _contactListener.onPostSolve; }
 		public function set onPostSolve(value:Function):void { _contactListener.onPostSolve = value; }
 		
-		public function CCPhysics(gravity:b2Vec2=null, sleepingEnabled:Boolean=true)
+		public function CCPhysics(gravity:b2Vec2=null, targetDelta:Number=1/30, sleepingEnabled:Boolean=true)
 		{
 			super(0, Number.MAX_VALUE, null, [TAG]);
 			
 			_gravity = (gravity == null) ? new b2Vec2(0, 0) : gravity;
+			_targetDelta = targetDelta;
 			_world = new b2World(_gravity, sleepingEnabled);
 			_world.SetContinuousPhysics(true);
-			
-			maxDelta = DEFAULT_FIXED_DELTA;
-			//minDelta = DEFAULT_FIXED_DELTA;
-			//fixedDelta = DEFAULT_FIXED_DELTA;
 		}
 		
 		protected override function onEnter():void
@@ -98,7 +86,7 @@ package cyclopsframework.actions.physics
 		
 		protected override function onFrame(t:Number):void
 		{
-			_world.Step(fixedDelta, velocityIterations, positionIterations);
+			_world.Step(_targetDelta, velocityIterations, positionIterations);
 			_world.ClearForces();
 		}
 		
@@ -122,6 +110,19 @@ package cyclopsframework.actions.physics
 			bodydef.position = new b2Vec2(originX, originY);
 			var body:b2Body = world.CreateBody(bodydef);
 			var shape:b2Shape = b2PolygonShape.AsEdge(new b2Vec2(edgeX1, edgeY1), new b2Vec2(edgeX2, edgeY2));
+			var fixture:b2Fixture = body.CreateFixture2(shape);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			return body;
+		}
+		
+		public function createPolygonBody(originX:Number, originY:Number, vertices:Array, bodyType:uint):b2Body
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = bodyType;
+			bodydef.position = new b2Vec2(originX, originY);
+			var body:b2Body = world.CreateBody(bodydef);
+			var shape:b2Shape = b2PolygonShape.AsArray(vertices, vertices.length);
 			var fixture:b2Fixture = body.CreateFixture2(shape);
 			body.SetLinearDamping(.25);
 			body.SetAngularDamping(.25);

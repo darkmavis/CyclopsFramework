@@ -16,6 +16,7 @@
 
 package cyclopsframework.game
 {
+	import cyclopsframework.actions.audio.CCDynamicSound;
 	import cyclopsframework.actions.audio.CCSound;
 	import cyclopsframework.core.CCAction;
 	import cyclopsframework.core.CCEngine;
@@ -39,9 +40,13 @@ package cyclopsframework.game
 	{
 		public static const TAG:String = "@CCScene";
 		
+		public static const TAG_KEYBOARD_INPUT:String = "@CCSceneKeyboardInput";
+		public static const TAG_KEY_DOWN:String = "@CCSceneKeyDown";
+		public static const TAG_KEY_UP:String = "@CCSceneKeyUp";
+		
 		private var _tags:CCStringHashSet = new CCStringHashSet();
 		public function get tags():CCStringHashSet { return _tags; }
-		
+				
 		private var _parent:CCScene;
 		public function get parent():CCScene { return _parent; }
 		public function set parent(value:CCScene):void { _parent = value; }
@@ -66,6 +71,24 @@ package cyclopsframework.game
 		private var _bindings:CCKeyboardBindings = new CCKeyboardBindings();
 		public function get bindings():CCKeyboardBindings { return _bindings; }
 		
+		private var _keyboardEnabled:Boolean = true;
+		public function get keyboardEnabled():Boolean { return _keyboardEnabled; }
+		public function set keyboardEnabled(value:Boolean):void
+		{
+			_keyboardEnabled = value;
+			if (keyboardEnabled == false)
+			{
+				engine.pause(TAG_KEYBOARD_INPUT);
+			}
+			else
+			{
+				engine.resume(TAG_KEYBOARD_INPUT);
+			}
+		}
+		
+		private static var _sceneContext:CCScene;
+		public static function get sceneContext():CCScene { return _sceneContext; }
+				
 		public function CCScene()
 		{
 			super();
@@ -77,10 +100,10 @@ package cyclopsframework.game
 		private function onAddedToStage(e:Event):void
 		{
 			bg.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTag("key_down");
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTag("key_up");	
+			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
+			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);	
 		}
-				
+		
 		public function addScene(scene:CCScene):void
 		{
 			bg.addChild(scene.bg);
@@ -105,9 +128,14 @@ package cyclopsframework.game
 			return displayObject;
 		}
 		
-		public function playSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1):CCSound
+		public function playSound(source:Sound, cycles:int=1, pan:Number=0, volume:Number=1):CCSound
 		{
-			return engine.add(new CCSound(source, speed, pan, volume)) as CCSound;
+			return engine.add(new CCSound(source, cycles, pan, volume)) as CCSound;
+		}
+		
+		public function playDynamicSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1):CCDynamicSound
+		{
+			return engine.add(new CCDynamicSound(source, speed, pan, volume)) as CCDynamicSound;
 		}
 		
 		public function addSprite(sprite:Sprite, x:Number=0, y:Number=0):Sprite
@@ -120,6 +148,7 @@ package cyclopsframework.game
 		
 		public function update(delta:Number):void
 		{
+			_sceneContext = this;
 			engine.update(delta);			
 			for each (var scene:CCScene in children)
 			{
@@ -164,6 +193,8 @@ package cyclopsframework.game
 		
 		private function onKeyDown(e:KeyboardEvent):void
 		{
+			_sceneContext = this;
+			
 			if (onKeyDownListener != null)
 			{
 				onKeyDownListener(e);
@@ -186,6 +217,8 @@ package cyclopsframework.game
 		
 		private function onKeyUp(e:KeyboardEvent):void
 		{
+			_sceneContext = this;
+			
 			if (onKeyUpListener != null)
 			{
 				onKeyUpListener(e);
@@ -210,6 +243,8 @@ package cyclopsframework.game
 				
 		public function dispose():void
 		{
+			_sceneContext = this;
+			
 			for each (var child:CCScene in children)
 			{
 				child.dispose();

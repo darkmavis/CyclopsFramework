@@ -19,12 +19,13 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.actions.flow.CCWaitForEvent;
+	import cyclopsframework.actions.flow.CCWaitForMessage;
 	import cyclopsframework.core.easing.CCBias;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	
 	import flash.events.IEventDispatcher;
 
-	public class CCAction implements ICCPausable, ICCTaggable
+	public class CCAction implements ICCPausable, ICCTaggable, ICCHasEngine
 	{
 		public static const TAGS_UNDEFINED:String = "@__undefined__";
 		
@@ -213,6 +214,17 @@ package cyclopsframework.core
 		{
 			return add(new CCWaitForEvent(target, eventType, timeout, cycles, listener));
 		}
+		
+		public function waitForMessage(receiverTag:String, messageName:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1,
+									   messageListener:Function=null, timeoutListener:Function=null):CCAction
+		{
+			return add(receiverTag, new CCWaitForMessage(messageName, timeout, cycles, messageListener, timeoutListener));
+		}
+		
+		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CCAction
+		{
+			return add(receiverTag, new CCWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
+		}
 				
 		protected function safeset(target:Object, propertyName:String, value:Object):void
 		{
@@ -322,7 +334,9 @@ package cyclopsframework.core
 				}
 				
 				remainingDelta -= _maxDelta;
-								
+				
+				if (_position > _cycles) _position = _cycles;
+				
 				onFrame(_bias(position));
 				
 				if ((_position - _cycle) >= 1)

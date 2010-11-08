@@ -49,7 +49,7 @@
     <classEntry path="cyclopsframework.actions.animation.CCScaleBy"/>
     <classEntry path="cyclopsframework.actions.animation.CCRotateBy"/>
     <classEntry path="cyclopsframework.actions.animation.CCFadeBy"/>
-    <classEntry path="cyclopsframework.actions.audio.CCSound"/>
+    <classEntry path="cyclopsframework.actions.audio.CCDynamicSound"/>
     <classEntry path="cyclopsframework.game.tiles.CCTileset"/>
     <classEntry path="cyclopsframework.game.tiles.CCTileLayer"/>
     <classEntry path="cyclopsframework.game.tiles.ICCTileData"/>
@@ -69,6 +69,11 @@
     <classEntry path="cyclopsframework.utils.proxies.CCHashSetProxy"/>
     <classEntry path="cyclopsframework.game.goals.CCGoalEngine"/>
     <classEntry path="cyclopsframework.actions.animation.CCAnimateSprite"/>
+    <classEntry path="cyclopsframework.utils.collections.CCRange"/>
+    <classEntry path="cyclopsframework.core.CCTaggable"/>
+    <classEntry path="cyclopsframework.game.CCSceneObject"/>
+    <classEntry path="cyclopsframework.core.ICCHasEngine"/>
+    <classEntry path="cyclopsframework.actions.audio.CCSound"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

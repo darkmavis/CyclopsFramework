@@ -19,6 +19,7 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCFunction;
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.actions.flow.CCWaitForEvent;
+	import cyclopsframework.actions.flow.CCWaitForMessage;
 	import cyclopsframework.utils.collections.CCDataStore;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
@@ -211,6 +212,17 @@ package cyclopsframework.core
 		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CCAction
 		{
 			return add(new CCWaitForEvent(target, eventType, timeout, cycles, listener));
+		}
+		
+		public function waitForMessage(receiverTag:String, messageName:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1,
+			messageListener:Function=null, timeoutListener:Function=null):CCAction
+		{
+			return add(receiverTag, new CCWaitForMessage(messageName, timeout, cycles, messageListener, timeoutListener));
+		}
+		
+		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CCAction
+		{
+			return add(receiverTag, new CCWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
 		}
 		
 		public function runNextFrame(f:Function):void
@@ -517,8 +529,11 @@ package cyclopsframework.core
 				if(obj is CCAction)
 				{
 					_actions.push(obj as CCAction);
-					// good and bad could come from this coupling.
-					(obj as CCAction).engine = this;
+				}
+				
+				if(obj is ICCHasEngine)
+				{
+					(obj as ICCHasEngine).engine = this;
 				}
 				
 				register(obj);

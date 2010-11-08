@@ -16,6 +16,8 @@
 
 package cyclopsframework.utils.collections
 {
+	import away3d.loaders.Obj;
+	
 	import cyclopsframework.utils.misc.CCUtils;
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	
@@ -51,15 +53,18 @@ package cyclopsframework.utils.collections
 			});
 		}
 		
-		public function add(item:Object):CCDataStore
+		public function add(...items):CCDataStore
 		{
-			if (item is CCDataStoreRemoteItem)
+			for each (var item:Object in items)
 			{
-				_remoteItems.add(item);
-			}
-			else
-			{
-				_data.add(item);
+				if (item is CCDataStoreRemoteItem)
+				{
+					_remoteItems.add(item);
+				}
+				else
+				{
+					_data.add(item);
+				}
 			}
 			
 			return this;
@@ -250,6 +255,18 @@ package cyclopsframework.utils.collections
 			var ds:CCDataStore = find(query, 1);
 			var result:Object;
 			ds.forEach(function(item:Object):void { result = item; });
+			return result;
+		}
+		
+		public function first():Object
+		{
+			var result:Object;
+			
+			forEach(function(item:Object):void
+			{
+				result = item;
+			});
+			
 			return result;
 		}
 		
