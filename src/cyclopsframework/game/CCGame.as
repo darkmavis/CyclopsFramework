@@ -17,8 +17,10 @@
 package cyclopsframework.game
 {
 	import cyclopsframework.core.CCEngine;
+	import cyclopsframework.utils.console.CCConsole;
 	import cyclopsframework.utils.math.CCMath;
 	
+	import flash.display.Graphics;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.system.System;
@@ -29,12 +31,27 @@ package cyclopsframework.game
 		private var _scene:CCScene = new CCScene();
 		public function get scene():CCScene { return _scene; }
 		
+		private var _console:CCConsole;
+		public function get console():CCConsole { return _console; }
+		
+		private var _width:Number;
+		private var _height:Number;
+		
 		private var _lastTime:Number = flash.utils.getTimer();
 		
-		public function CCGame()
+		public function CCGame(width:Number=800, height:Number=600, fillBackground:Boolean=false)
 		{
 			super();
+			_width = width;
+			_height = height;
 			this.addEventListener(Event.ENTER_FRAME, onReady);
+			if (fillBackground)
+			{
+				var g:Graphics = _scene.bg.graphics;
+				g.beginFill(0);
+				g.drawRect(0, 0, width, height);
+				g.endFill();
+			}
 		}
 		
 		private function onReady(e:Event):void
@@ -43,6 +60,13 @@ package cyclopsframework.game
 			
 			this.addChild(scene.bg);
 			
+			_console = new CCConsole(_width, _height);
+			console.scriptingContext["game"] = this;
+			this.addChild(console.bg);
+			console.hide();
+			
+			console.scriptingContext["find"] = scene.find;
+									
 			bootstrap();
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);
@@ -55,11 +79,13 @@ package cyclopsframework.game
 			_lastTime = currentTime;
 			
 			scene.update(delta);
+			console.update(delta);
 		}
 		
 		public function bootstrap():void
 		{
-			
+			console.println("Override bootstrap in CCGame to begin writing your game.");
+			console.show();
 		}
 	}
 }

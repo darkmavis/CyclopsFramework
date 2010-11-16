@@ -225,6 +225,18 @@ package cyclopsframework.core
 			return add(receiverTag, new CCWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
 		}
 		
+		// improve this later.
+		public function when(trigger:Function, response:Function=null):CCAction
+		{
+			return loop(function():void
+			{
+				if ((trigger != null) && trigger())
+				{
+					if (response != null) response();
+				}
+			});
+		}
+		
 		public function runNextFrame(f:Function):void
 		{
 			_delayedFunctions.push(f);
@@ -302,6 +314,31 @@ package cyclopsframework.core
 		public function proxy(tag:String=TAG_ALL):CCDataStoreProxy
 		{
 			return query(tag).proxy;
+		}
+		
+		public function status(tag:String=CCEngine.TAG_ALL):String
+		{
+			var actions:Array = [];
+			
+			query(tag).forEach(function(o:ICCTaggable):void
+			{
+				if (o is CCAction) actions.push(o);
+			});
+			
+			actions = actions.sortOn(["cycles", "period", "position"], Array.DESCENDING);
+			
+			var result:String = "";
+			
+			for each (var action:CCAction in actions)
+			{
+				result += ("pos: " + int(action.position * 100)
+					+ "%\t\tcycle: " + action.cycle + "/" + ((action.cycles == Number.MAX_VALUE) ? "MAX" : ("" + action.cycles)) 
+					+ "\t\t" + action.tags.toArray().join(", ")) + "\n";
+			}
+			
+			result += "Total actions: " + actions.length + "\n" + "Total objects: " + count(tag);
+			
+			return result;
 		}
 				
 		// Messaging
@@ -547,12 +584,11 @@ package cyclopsframework.core
 				if (_registry.has(tag))
 				{
 					//for each (var obj:ICCTaggable in _registry.getObjects(tag))
-					_registry.getObjects(tag).forEach(function(obj:ICCPausable):void
+					_registry.getObjects(tag).forEach(function(obj:Object):void
 					{
-						if(obj != null) //is ICCPausable)
+						if((obj != null) && (obj is ICCPausable))
 						{
-							obj.paused = false;
-							//(obj as ICCPausable).paused = false;
+							(obj as ICCPausable).paused = false;
 						}
 					});
 				}
@@ -568,9 +604,9 @@ package cyclopsframework.core
 				if (_registry.has(tag))
 				{
 					//for each (var obj:ICCTaggable in _registry.getObjects(tag))
-					_registry.getObjects(tag).forEach(function(obj:ICCPausable):void
+					_registry.getObjects(tag).forEach(function(obj:Object):void
 					{
-						if(obj != null) // is ICCPausable)
+						if((obj != null) && (obj is ICCPausable))
 						{
 							(obj as ICCPausable).paused = true;
 						}

@@ -1,0 +1,7 @@
+Licensing
+D.eval API is freeware. You can use the library freely in any projects without any charges, either linked in statically or deployed as a runtime-shared-library (RSL).
+Warranty
+THIS SOFTWARE IS DISTRIBUTED ON AN "AS IS" BASIS WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, EITHER EXPRESSED OR IMPLIED.
+
+For more information regarding D.eval, see RiaOne Company's website:
+www.riaone.com

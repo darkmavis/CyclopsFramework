@@ -225,6 +225,11 @@ package cyclopsframework.core
 		{
 			return add(receiverTag, new CCWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
 		}
+		
+		public function send(receiverTag:String, messageName:String, ...data):CCAction
+		{
+			return addf(function():void { engine.send(receiverTag, messageName, data); });
+		}
 				
 		protected function safeset(target:Object, propertyName:String, value:Object):void
 		{

@@ -42,6 +42,33 @@ package cyclopsframework.actions.audio
 		private var _position:Number = 0;
 		private var _lastChannelPosition:Number = Number.MAX_VALUE;
 		
+		private var _lastPosition:Number = 0;
+		
+		private var _paused:Boolean = false;
+		
+		public override function set paused(value:Boolean):void
+		{
+			if (((!_paused) && (value)) || ((_paused) && (!value)))
+			{
+				if (_channel != null)
+				{
+					_paused = !_paused;
+					
+					if (_paused)
+					{
+						_lastPosition = _channel.position;
+						_channel.stop();
+					}
+					else
+					{
+						_channel = _source.play(_lastPosition, _numCycles, _transform);
+					}
+				}
+				
+				super.paused = value;
+			}
+		}
+		
 		public function get pan():Number { return _transform.pan; }
 		public function set pan(value:Number):void
 		{
@@ -80,12 +107,21 @@ package cyclopsframework.actions.audio
 		
 		protected override function onExit():void
 		{
-			_channel.stop();
+			if (_channel != null)
+			{
+				_channel.stop();
+			}
 		}
 		
 		protected override function onFrame(t:Number):void
 		{
-			
+			if (paused && (_paused != paused))
+			{
+				if (_channel != null)
+				{
+					_channel.stop();
+				}
+			}
 		}
 		
 		private function onSoundComplete(e:Event):void

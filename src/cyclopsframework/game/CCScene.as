@@ -27,22 +27,33 @@ package cyclopsframework.game
 	import cyclopsframework.core.ICCTaggable;
 	import cyclopsframework.game.bindings.CCKeyboardBindings;
 	import cyclopsframework.utils.collections.CCStringHashSet;
+	import cyclopsframework.utils.math.CCMath;
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	import cyclopsframework.utils.proxies.CCFunctionProxy;
 	
 	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
 	import flash.media.Sound;
+	import flash.utils.getTimer;
 	
-	public class CCScene implements ICCDisposable, ICCTaggable
+	public class CCScene implements ICCDisposable, ICCTaggable, IEventDispatcher
 	{
 		public static const TAG:String = "@CCScene";
 		
 		public static const TAG_KEYBOARD_INPUT:String = "@CCSceneKeyboardInput";
 		public static const TAG_KEY_DOWN:String = "@CCSceneKeyDown";
 		public static const TAG_KEY_UP:String = "@CCSceneKeyUp";
+		
+		public static const EVENT_SCENE_READY:String = "ready";
+		
+		private var _dispatcher:EventDispatcher;
+		private var _manualStart:Boolean = false;
+		private var _lastTime:Number = flash.utils.getTimer();
 		
 		private var _tags:CCStringHashSet = new CCStringHashSet();
 		public function get tags():CCStringHashSet { return _tags; }
@@ -58,7 +69,7 @@ package cyclopsframework.game
 		public function get bg():Sprite { return _bg; }
 		
 		private var _children:Vector.<CCScene> = new Vector.<CCScene>();
-		private function get children():Vector.<CCScene> { return _children; }
+		public function get children():Vector.<CCScene> { return _children; }
 		
 		private var _onKeyDownListener:Function;
 		public function get onKeyDownListener():Function { return _onKeyDownListener; }
@@ -89,25 +100,53 @@ package cyclopsframework.game
 		private static var _sceneContext:CCScene;
 		public static function get sceneContext():CCScene { return _sceneContext; }
 				
-		public function CCScene()
+		public function CCScene(...tags)
 		{
 			super();
-			tags.addItem(TAG);
+			this.tags.addItem(TAG);
+			if (tags != null)
+			{
+				this.tags.addItems(tags);
+			}
 			engine.runNextFrame(onEnter);
+			
+			_dispatcher = new EventDispatcher(this);
+			
+			engine.runNextFrame(function():void
+			{
+				dispatchEvent(new Event(EVENT_SCENE_READY));
+			});
+			
 			bg.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
 		}
 		
 		private function onAddedToStage(e:Event):void
 		{
 			bg.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);	
+			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);
+		}
+		
+		public function manualStart(container:DisplayObjectContainer):void
+		{
+			_manualStart = true;
+			container.addChild(bg);
+			container.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		}
+		
+		private function onEnterFrame(e:Event):void
+		{
+			var currentTime:Number = flash.utils.getTimer();
+			var delta:Number = CCMath.clamp((currentTime - _lastTime) / 1000, Number.MIN_VALUE, .5);
+			_lastTime = currentTime;
+			update(delta);
 		}
 		
 		public function addScene(scene:CCScene):void
 		{
-			bg.addChild(scene.bg);
 			scene.parent = this;
+			bg.addChild(scene.bg);
 			children.push(scene);
 			engine.add(scene);
 		}
@@ -118,6 +157,16 @@ package cyclopsframework.game
 			bg.removeChild(scene.bg);
 			scene.parent = null;
 			children.splice(children.indexOf(scene), 1);
+		}
+		
+		public function removeFromParent():void
+		{
+			parent.removeScene(this);
+		}
+		
+		public function getSceneByTag(tag:String):CCScene
+		{
+			return engine.query(tag).first() as CCScene;
 		}
 		
 		public function addDisplayObject(displayObject:DisplayObject, x:Number=0, y:Number=0):DisplayObject
@@ -191,6 +240,27 @@ package cyclopsframework.game
 			}
 		}
 		
+		public function find(tag:String):Object
+		{
+			var result:Object = engine.query(tag).first();
+			if (result != null) return result;
+			
+			for each (var scene:CCScene in children)
+			{
+				result = scene.find(tag);
+				if (result != null) return result;
+			}
+			
+			return null;
+		}
+		
+		public function status():String
+		{
+			var result:String = engine.status();
+			result += "\nChild scenes: " + _children.toString() + "\nTotal local display objects: " + bg.numChildren;
+			return result;
+		}
+		
 		private function onKeyDown(e:KeyboardEvent):void
 		{
 			_sceneContext = this;
@@ -250,6 +320,41 @@ package cyclopsframework.game
 				child.dispose();
 			}
 			engine.proxy(CCEngine.TAG_ALL).stop();
+			
+			if (bg.parent != null)
+			{
+				if (_manualStart)
+				{
+					bg.parent.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+				}
+				bg.parent.removeChild(bg);
+			}
+			
+		}
+						
+		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void
+		{
+			_dispatcher.addEventListener(type, listener, useCapture, priority, useWeakReference);
+		}
+		
+		public function dispatchEvent(event:Event):Boolean
+		{
+			return _dispatcher.dispatchEvent(event);
+		}
+		
+		public function hasEventListener(type:String):Boolean
+		{
+			return _dispatcher.hasEventListener(type);
+		}
+		
+		public function removeEventListener(type:String, listener:Function, useCapture:Boolean=false):void
+		{
+			_dispatcher.removeEventListener(type, listener, useCapture);
+		}
+		
+		public function willTrigger(type:String):Boolean
+		{
+			return _dispatcher.willTrigger(type);
 		}
 		
 	}
