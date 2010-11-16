@@ -16,15 +16,8 @@
 
 package cyclopsframework.utils.collections
 {
-	import away3d.loaders.Obj;
-	
 	import cyclopsframework.utils.misc.CCUtils;
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
-	
-	import flash.utils.Dictionary;
-	
-	import mx.utils.ArrayUtil;
-	import mx.utils.object_proxy;
 	
 	public class CCDataStore
 	{

@@ -14,14 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  * 
- * (1a) Some of this code was borrowed from an example provided by: Andre Michelle (andre.michelle@gmail.com)
+ * (1a) Some of this code was borrowed from an example provided by: Andre Michelle (andre.michelle at gmail dot com)
  * http://blog.andre-michelle.com/upload/mp3pitch/MP3Pitch.as
  * 
- */
-
-/* 
- * Some of this code was borrowed from an example provided by: Andre Michelle (andre.michelle@gmail.com)
- * http://blog.andre-michelle.com/upload/mp3pitch/MP3Pitch.as
  */
 
 package cyclopsframework.actions.audio
