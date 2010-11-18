@@ -20,6 +20,7 @@ package cyclopsframework.utils.console
 	import cyclopsframework.game.CCScene;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	import cyclopsframework.utils.math.CCMath;
+	import cyclopsframework.utils.misc.CCUtils;
 	import cyclopsframework.utils.primitives.CCPrimitives;
 	
 	import flash.display.Sprite;
@@ -77,6 +78,9 @@ package cyclopsframework.utils.console
 		private var _bottomV:int = 0;
 		
 		private var _prompt:String = ">";
+		
+		private var _controlStack:Vector.<CCConsoleControlMode> = new Vector.<CCConsoleControlMode>();
+		protected function get activeControlMode():CCConsoleControlMode { return _controlStack.slice(-1)[0]; }
 		
 		/**
 		 * Current command prompt.
@@ -161,6 +165,9 @@ package cyclopsframework.utils.console
 			_tf.cacheAsBitmap = true;
 		
 			_channels.addItems([CHANNEL_DEFAULT, CHANNEL_ERRORS, CHANNEL_WARNINGS]);
+			
+			enterControlMode(new CCConsoleControlMode(">", "_", processCommand));
+			
 		}
 				
 		/**
@@ -210,6 +217,15 @@ package cyclopsframework.utils.console
 			
 			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
 			{
+				if (e.ctrlKey)
+				{
+					if (e.charCode == "z".charCodeAt(0))
+					{
+						exitControlMode();
+					}
+					return;
+				}
+				
 				if ((e.charCode >= 32) && (e.charCode <= 255))
 				{
 					_input += (String.fromCharCode(e.charCode));
@@ -217,7 +233,7 @@ package cyclopsframework.utils.console
 				}
 				else if (e.keyCode == Keyboard.ENTER)
 				{
-					processCommand(_input);
+					activeControlMode.controlFunction(_input);
 					if (_input.length > 0)
 					{
 						if (_history.length > 0)
@@ -293,6 +309,23 @@ package cyclopsframework.utils.console
 			}};
 									
 		}
+		
+		public function enterControlMode(controlMode:CCConsoleControlMode):void
+		{
+			_controlStack.push(controlMode);
+			prompt = activeControlMode.defaultPrompt;
+			cursor = activeControlMode.defaultCursor;
+		}
+		
+		public function exitControlMode():void
+		{
+			if (_controlStack.length > 1)
+			{
+				_controlStack.pop();
+				prompt = activeControlMode.defaultPrompt;
+				cursor = activeControlMode.defaultCursor;
+			}
+		}
 						
 		/**
 		 * Force the console to process a command, script or expression.<br/>
@@ -321,6 +354,13 @@ package cyclopsframework.utils.console
 					var cmdo:Object = commands[cmd];
 					if (cmdo.hasOwnProperty("method") && (cmdo.method is Function))
 					{
+						// if exactly 1 arg is expected, then ignore spaces for functions that may want to accept a string with spaces.
+						var argc:int = (cmdo.method as Function).length;
+						if (argc == 1)
+						{
+							args = [args.join(" ")];
+						}
+						
 						println(prompt + command);
 						(cmdo.method as Function).apply(null, args);
 					}
@@ -419,7 +459,7 @@ package cyclopsframework.utils.console
 				var helpText:String = "" + methodData.metadata.arg.(@key=="help").@value;
 				var syntaxText:String = "" + methodData.metadata.arg.(@key=="syntax").@value;
 				
-				_commands[methodName] = {method:this[methodName]};
+				_commands[methodName] = {method:source[methodName]};
 				
 				if (helpText.length > 0)
 				{
@@ -461,7 +501,7 @@ package cyclopsframework.utils.console
 				}
 			}
 			
-			println();
+			println("\n");
 		}
 		
 		[ConsoleCommand(help="enable channels", syntax="enable <channel1 [channel2 ...]>")]

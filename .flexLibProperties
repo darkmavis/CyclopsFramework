@@ -75,6 +75,7 @@
     <classEntry path="cyclopsframework.core.ICCHasEngine"/>
     <classEntry path="cyclopsframework.actions.audio.CCSound"/>
     <classEntry path="cyclopsframework.utils.console.CCConsole"/>
+    <classEntry path="cyclopsframework.utils.console.CCConsoleControlMode"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

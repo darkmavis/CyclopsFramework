@@ -63,7 +63,6 @@ package cyclopsframework.game
 			_console = new CCConsole(_width, _height);
 			console.scriptingContext["game"] = this;
 			this.addChild(console.bg);
-			console.hide();
 			
 			console.scriptingContext["find"] = scene.find;
 									
@@ -85,7 +84,6 @@ package cyclopsframework.game
 		public function bootstrap():void
 		{
 			console.println("Override bootstrap in CCGame to begin writing your game.");
-			console.show();
 		}
 	}
 }
