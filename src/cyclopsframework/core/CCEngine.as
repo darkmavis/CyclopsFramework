@@ -50,6 +50,7 @@ package cyclopsframework.core
 		
 		private var _context:CCAction;
 		public function get context():CCAction { return _context; }
+		public function set context(value:CCAction):void { _context = value; }
 		
 		private var _delta:Number = 1 / 60;
 		public function get delta():Number { return _delta; }

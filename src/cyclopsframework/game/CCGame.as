@@ -34,6 +34,8 @@ package cyclopsframework.game
 		private var _console:CCConsole;
 		public function get console():CCConsole { return _console; }
 		
+		public function get self():CCGame { return this; }
+		
 		private var _width:Number;
 		private var _height:Number;
 		

@@ -76,6 +76,10 @@
     <classEntry path="cyclopsframework.actions.audio.CCSound"/>
     <classEntry path="cyclopsframework.utils.console.CCConsole"/>
     <classEntry path="cyclopsframework.utils.console.CCConsoleControlMode"/>
+    <classEntry path="cyclopsframework.utils.proxies.CCSharedObjectProxy"/>
+    <classEntry path="cyclopsframework.actions.messaging.CCRemoteObject"/>
+    <classEntry path="cyclopsframework.utils.logging.CCLog"/>
+    <classEntry path="cyclopsframework.utils.logging.ICCLogger"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

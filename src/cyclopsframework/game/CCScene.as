@@ -99,7 +99,9 @@ package cyclopsframework.game
 		
 		private static var _sceneContext:CCScene;
 		public static function get sceneContext():CCScene { return _sceneContext; }
-				
+		
+		public function get self():CCScene { return this; }
+		
 		public function CCScene(...tags)
 		{
 			super();

@@ -76,7 +76,7 @@ package cyclopsframework.core
 		private var _engine:CCEngine;
 		public function get engine():CCEngine { return _engine; }
 		public function set engine(value:CCEngine):void { _engine = value; }
-		
+				
 		public function CCAction(period:Number=0, cycles:Number=1, bias:Function=null, tags:Array=null)
 		{
 			_cycles = cycles;

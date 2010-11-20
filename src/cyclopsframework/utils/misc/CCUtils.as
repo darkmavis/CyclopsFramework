@@ -69,7 +69,15 @@ package cyclopsframework.utils.misc
 				walk(item, f, path);
 			}
 			
-			f(path);			
+			if (f.length == 1)
+			{
+				f(path);
+			}
+			else if (f.length == 2)
+			{
+				f(path, o);
+			}
+			
 			path.pop();	
 		}
 		

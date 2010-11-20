@@ -19,6 +19,8 @@ package cyclopsframework.utils.console
 	import cyclopsframework.core.CCEngine;
 	import cyclopsframework.game.CCScene;
 	import cyclopsframework.utils.collections.CCStringHashSet;
+	import cyclopsframework.utils.logging.CCLog;
+	import cyclopsframework.utils.logging.ICCLogger;
 	import cyclopsframework.utils.math.CCMath;
 	import cyclopsframework.utils.misc.CCUtils;
 	import cyclopsframework.utils.primitives.CCPrimitives;
@@ -60,13 +62,14 @@ package cyclopsframework.utils.console
 	 * @author Mark Davis
 	 * 
 	 */
-	public class CCConsole extends CCScene
+	public class CCConsole extends CCScene implements ICCLogger
 	{
 		public static const TAG:String = "@CCConsole";
 		
-		public static const CHANNEL_DEFAULT:String = "default";
-		public static const CHANNEL_ERRORS:String = "errors";
-		public static const CHANNEL_WARNINGS:String = "warnings";
+		public static const CHANNEL_DEFAULT:String = CCLog.CHANNEL_DEFAULT;
+		public static const CHANNEL_INFO:String = CCLog.CHANNEL_INFO;
+		public static const CHANNEL_WARNINGS:String = CCLog.CHANNEL_WARNINGS;
+		public static const CHANNEL_ERRORS:String = CCLog.CHANNEL_ERRORS;
 						
 		private var _tf:TextField;
 		private var _buffer:String = "";
@@ -164,7 +167,7 @@ package cyclopsframework.utils.console
 			_tf.multiline = true;
 			_tf.cacheAsBitmap = true;
 		
-			_channels.addItems([CHANNEL_DEFAULT, CHANNEL_ERRORS, CHANNEL_WARNINGS]);
+			_channels.addItems([CHANNEL_DEFAULT, CHANNEL_INFO, CHANNEL_WARNINGS, CHANNEL_ERRORS]);
 			
 			enterControlMode(new CCConsoleControlMode(">", "_", processCommand));
 			
