@@ -116,6 +116,27 @@ package cyclopsframework.actions.physics
 			return body;
 		}
 		
+		public function createEdgeLoopBody(originX:Number, originY:Number, sourceVertices:Array, bodyType:uint):b2Body
+		{
+			var vertices:Array = [].concat(sourceVertices);
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = bodyType;
+			bodydef.position = new b2Vec2(originX, originY);
+			var body:b2Body = world.CreateBody(bodydef);
+			var headv:b2Vec2 = vertices.shift();
+			var tailv:b2Vec2 = headv;
+			while(vertices.length > 0)
+			{
+				var v:b2Vec2 = vertices.shift();
+				body.CreateFixture2(b2PolygonShape.AsEdge(tailv, v));
+				tailv = v;
+			}
+			body.CreateFixture2(b2PolygonShape.AsEdge(tailv, headv));
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			return body;
+		}
+		
 		public function createPolygonBody(originX:Number, originY:Number, vertices:Array, bodyType:uint):b2Body
 		{
 			var bodydef:b2BodyDef = new b2BodyDef();

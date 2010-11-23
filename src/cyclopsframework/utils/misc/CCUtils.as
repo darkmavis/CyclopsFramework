@@ -16,8 +16,11 @@
 
 package cyclopsframework.utils.misc
 {
+	import cyclopsframework.utils.collections.CCArray;
+	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.text.TextField;
 
 	public class CCUtils
 	{
@@ -55,11 +58,11 @@ package cyclopsframework.utils.misc
 			}
 		}
 		
-		public static function walk(o:Object, f:Function, path:Array=null):void
+		public static function walk(o:Object, f:Function, path:CCArray=null):void
 		{
 			if (path == null)
 			{
-				path = [];
+				path = new CCArray();
 			}
 			
 			path.push(o);
@@ -91,25 +94,38 @@ package cyclopsframework.utils.misc
 			return result;
 		}
 		
-		public static function walkDisplayObject(o:DisplayObject, f:Function, path:Array=null):void
+		public static function walkDisplayObject(o:DisplayObject, f:Function, path:CCArray=null):void
 		{
 			if (path == null)
 			{
-				path = [];
+				path = new CCArray();
 			}
 						
 			path.push(o);
 			
 			if (o is DisplayObjectContainer)
 			{
-				for (var i:int = 0; i < (o as DisplayObjectContainer).numChildren; ++i)
+				var container:DisplayObjectContainer = o as DisplayObjectContainer;
+				for (var i:int = 0; i < container.numChildren; ++i)
 				{
-					walkDisplayObject(o, f, path);
+					walkDisplayObject(container.getChildAt(i), f, path);
 				}
 			}
-			
+						
 			f(path);
 			path.pop();
+		}
+		
+		public static function disableTextInput(target:DisplayObject):void
+		{
+			CCUtils.walkDisplayObject(target, function(path:CCArray):void
+			{
+				var o:Object = path.last;
+				if (o is TextField)
+				{
+					(path.last as TextField).mouseEnabled = false;
+				}
+			});
 		}
 		
 		public static function hasProperties(o:Object, requiredProperties:Array):Boolean

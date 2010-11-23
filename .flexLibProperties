@@ -80,6 +80,7 @@
     <classEntry path="cyclopsframework.actions.messaging.CCRemoteObject"/>
     <classEntry path="cyclopsframework.utils.logging.CCLog"/>
     <classEntry path="cyclopsframework.utils.logging.ICCLogger"/>
+    <classEntry path="cyclopsframework.utils.collections.CCArray"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

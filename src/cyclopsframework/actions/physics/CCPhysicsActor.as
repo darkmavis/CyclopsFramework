@@ -68,7 +68,7 @@ package cyclopsframework.actions.physics
 		protected override function onFrame(t:Number):void
 		{
 			var position:b2Vec2 = body.GetPosition();
-			
+						
 			if (_orientation == ORIENTATION_XY)
 			{
 				target.x = position.x / _scale + _offset.x;
