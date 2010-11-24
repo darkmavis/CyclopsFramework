@@ -44,6 +44,9 @@ package cyclopsframework.actions.flow
 		
 		public function interceptMessage(msg:CCMessage):void
 		{
+			var oldContext:CCAction = engine.context;
+			engine.context = this;
+			
 			if ((_messageName == null) || (_messageName == msg.name))
 			{
 				_timedOut = false;
@@ -51,6 +54,8 @@ package cyclopsframework.actions.flow
 				//this.stop();
 				this.jumpTo((this.cycle + 1));
 			}
+			
+			engine.context = oldContext;
 		}
 		
 		protected override function onLastFrame():void

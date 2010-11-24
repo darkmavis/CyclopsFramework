@@ -1,6 +1,7 @@
 package cyclopsframework.actions.messaging
 {
 	import cyclopsframework.core.CCAction;
+	import cyclopsframework.core.CCMessage;
 	import cyclopsframework.utils.logging.CCLog;
 	import cyclopsframework.utils.proxies.CCSharedObjectProxy;
 	
@@ -25,6 +26,8 @@ package cyclopsframework.actions.messaging
 		private var _objectId:String;
 		private var _statusListener:Function;
 		
+		private var _messageListeners:Object = {};
+		
 		public function get connected():Boolean { return (_nc != null) ? _nc.connected : false; }
 		
 		public function CCRemoteObject(hostAddress:String, objectId:String, statusListener:Function)
@@ -34,7 +37,7 @@ package cyclopsframework.actions.messaging
 			_objectId = objectId;
 			_statusListener = statusListener;
 		}
-		
+				
 		protected override function onEnter():void
 		{
 			_nc = new NetConnection();
@@ -64,7 +67,7 @@ package cyclopsframework.actions.messaging
 				CCLog.println("Connected to: " + _hostAddress, CCLog.CHANNEL_INFO);
 				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, true);
 				engine.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
-				so.client = this;
+				so.client = _messageListeners;
 				so.connect(_nc);
 				_so = new CCSharedObjectProxy(so);
 				_statusListener(connected);
@@ -87,5 +90,15 @@ package cyclopsframework.actions.messaging
 			}
 		}
 		
+		public function addMessageListener(name:String, listener:Function):void
+		{
+			_messageListeners[name] = listener;
+		}
+		
+		public function removeMessageListener(name:String):void
+		{
+			delete _messageListeners[name];
+		}
+				
 	}
 }
