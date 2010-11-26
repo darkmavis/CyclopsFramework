@@ -65,7 +65,7 @@ package cyclopsframework.actions.messaging
 			if (connected)
 			{
 				CCLog.println("Connected to: " + _hostAddress, CCLog.CHANNEL_INFO);
-				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, true);
+				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, false);
 				engine.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
 				so.client = _messageListeners;
 				so.connect(_nc);
