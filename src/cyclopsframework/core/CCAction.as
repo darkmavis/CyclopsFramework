@@ -126,21 +126,22 @@ package cyclopsframework.core
 				}
 				else if (o is Array)
 				{
+					var contextualTags:Array = [].concat(currTags);
+					currTags = [];
 					for each (var ao:Object in (o as Array))
 					{
 						if (ao is String)
 						{
-							currTags.push(ao);
+							currTags.push(o);
+						}
+						else if (ao is Array)
+						{
+							add(currTags, contextualTags, ao);
 						}
 						else
 						{
-							currAction = add(ao);
-							if (currTags.length > 0)
-							{
-								currAction.addTags(currTags);
-								currTags = [];
-							}
-							_children.push(currAction);
+							add(currTags, contextualTags, ao);
+							currTags = [];
 						}
 					}
 				}

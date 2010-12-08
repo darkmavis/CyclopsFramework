@@ -102,6 +102,13 @@ package cyclopsframework.actions.audio
 		protected override function onEnter():void
 		{
 			_channel = _source.play(0, _numCycles, _transform);
+			
+			if (_channel == null)
+			{
+				stop();
+				return;
+			}
+			
 			_channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 		}
 		

@@ -35,6 +35,9 @@ package cyclopsframework.actions.physics
 	{
 		public static const TAG:String = "@CCPhysics";
 		
+		private static var _instance:CCPhysics;
+		public static function get instance():CCPhysics { return _instance; }
+		
 		private var _targetDelta:Number;
 		
 		private var _world:b2World;
@@ -43,11 +46,11 @@ package cyclopsframework.actions.physics
 		private var _gravity:b2Vec2;
 		public function get gravity():b2Vec2 { return _gravity; }
 		
-		private var _velocityIterations:int = 4;
+		private var _velocityIterations:int = 10;
 		public function get velocityIterations():int { return _velocityIterations; }
 		public function set velocityIterations(value:int):void { _velocityIterations = value; }
 		
-		private var _positionIterations:int = 4;
+		private var _positionIterations:int = 10;
 		public function get positionIterations():int { return _positionIterations; }
 		public function set positionIterations(value:int):void { _positionIterations = value; }
 		
@@ -71,10 +74,11 @@ package cyclopsframework.actions.physics
 		
 		public function CCPhysics(gravity:b2Vec2=null, targetDelta:Number=1/30, sleepingEnabled:Boolean=true)
 		{
-			super(0, Number.MAX_VALUE, null, [TAG]);
-			
+			super(targetDelta, Number.MAX_VALUE, null, [TAG]);
 			_gravity = (gravity == null) ? new b2Vec2(0, 0) : gravity;
 			_targetDelta = targetDelta;
+			//minDelta = targetDelta;
+			//maxDelta = targetDelta;
 			_world = new b2World(_gravity, sleepingEnabled);
 			_world.SetContinuousPhysics(true);
 		}
@@ -84,12 +88,12 @@ package cyclopsframework.actions.physics
 			_world.SetContactListener(_contactListener);
 		}
 		
-		protected override function onFrame(t:Number):void
+		protected override function onFirstFrame():void
 		{
 			_world.Step(_targetDelta, velocityIterations, positionIterations);
 			_world.ClearForces();
 		}
-		
+				
 		public function createBoxBody(x:Number, y:Number, width:Number, height:Number, bodyType:uint, density:Number):b2Body
 		{
 			var bodydef:b2BodyDef = new b2BodyDef();

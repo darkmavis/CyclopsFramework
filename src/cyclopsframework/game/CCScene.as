@@ -26,6 +26,7 @@ package cyclopsframework.game
 	import cyclopsframework.core.ICCPausable;
 	import cyclopsframework.core.ICCTaggable;
 	import cyclopsframework.game.bindings.CCKeyboardBindings;
+	import cyclopsframework.utils.collections.CCDataStore;
 	import cyclopsframework.utils.collections.CCStringHashSet;
 	import cyclopsframework.utils.math.CCMath;
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
@@ -41,6 +42,8 @@ package cyclopsframework.game
 	import flash.media.Sound;
 	import flash.utils.getTimer;
 	
+	import r1.deval.D;
+	
 	public class CCScene implements ICCDisposable, ICCTaggable, IEventDispatcher
 	{
 		public static const TAG:String = "@CCScene";
@@ -54,6 +57,8 @@ package cyclopsframework.game
 		private var _dispatcher:EventDispatcher;
 		private var _manualStart:Boolean = false;
 		private var _lastTime:Number = flash.utils.getTimer();
+		
+		private var _stageReady:Boolean = false;
 		
 		private var _tags:CCStringHashSet = new CCStringHashSet();
 		public function get tags():CCStringHashSet { return _tags; }
@@ -128,6 +133,7 @@ package cyclopsframework.game
 			bg.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
 			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
 			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);
+			_stageReady = true;
 		}
 		
 		public function manualStart(container:DisplayObjectContainer):void
@@ -139,6 +145,8 @@ package cyclopsframework.game
 		
 		private function onEnterFrame(e:Event):void
 		{
+			if (!_stageReady) return;
+			
 			var currentTime:Number = flash.utils.getTimer();
 			var delta:Number = CCMath.clamp((currentTime - _lastTime) / 1000, Number.MIN_VALUE, .5);
 			_lastTime = currentTime;
@@ -179,14 +187,28 @@ package cyclopsframework.game
 			return displayObject;
 		}
 		
-		public function playSound(source:Sound, cycles:int=1, pan:Number=0, volume:Number=1):CCSound
+		public function playSound(source:Sound, cycles:int=1, pan:Number=0, volume:Number=1, channelTag:String=null):CCSound
 		{
-			return engine.add(new CCSound(source, cycles, pan, volume)) as CCSound;
+			if (engine.count(channelTag) == 0)
+			{
+				return engine.add(channelTag, new CCSound(source, cycles, pan, volume)) as CCSound;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
-		public function playDynamicSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1):CCDynamicSound
+		public function playDynamicSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1, channelTag:String=null):CCDynamicSound
 		{
-			return engine.add(new CCDynamicSound(source, speed, pan, volume)) as CCDynamicSound;
+			if (engine.count(channelTag) == 0)
+			{
+				return engine.add(channelTag, new CCDynamicSound(source, speed, pan, volume)) as CCDynamicSound;
+			}
+			else
+			{
+				return null;
+			}
 		}
 		
 		public function addSprite(sprite:Sprite, x:Number=0, y:Number=0):Sprite
@@ -207,19 +229,19 @@ package cyclopsframework.game
 			}
 		}
 		
-		/*
-		public function proxy(tag:String=CCEngine.TAG_ALL):CCFunctionProxy
+		public function $f(expression:String):Function
 		{
-			return new CCFunctionProxy(function(name:String, args:Array):void
+			return function(o:Object):Boolean
 			{
-				(engine.proxy(tag)[name] as Function).apply(null, args)
-				for each (var scene:CCScene in children)
-				{
-					(scene.proxy(tag)[name] as Function).apply(null, args);
-				}
-			});
+				var container:Object = {"o":o};
+				return D.evalToBoolean(expression, container, this);
+			}
 		}
-		*/
+		
+		public function $(...args):CCDataStoreProxy
+		{	
+			return engine.proxy.apply(null, args);
+		}
 		
 		public function sendByProxy(tag:String=CCEngine.TAG_ALL, sender:Object=null, receiverType:Class=null):CCFunctionProxy
 		{

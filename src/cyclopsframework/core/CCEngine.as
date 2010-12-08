@@ -28,7 +28,7 @@ package cyclopsframework.core
 	
 	import flash.events.IEventDispatcher;
 	import flash.utils.Dictionary;
-		
+	
 	public class CCEngine
 	{
 		public static const TAG_ALL:String = "*";
@@ -125,22 +125,22 @@ package cyclopsframework.core
 				}
 				else if (o is Array)
 				{
+					var contextualTags:Array = [].concat(currTags);
+					currTags = [];
 					for each (var ao:Object in (o as Array))
 					{
 						if (ao is String)
 						{
-							currTags.push(ao);
+							currTags.push(o);
+						}
+						else if (ao is Array)
+						{
+							add(currTags, contextualTags, ao);
 						}
 						else
 						{
-							currAction = add(ao);
-							applyAutotags(currAction);
-							if (currTags.length > 0)
-							{
-								currAction.addTags(currTags);
-								currTags = [];
-							}
-							_additions.push(currAction);
+							add(currTags, contextualTags, ao);
+							currTags = [];
 						}
 					}
 				}
@@ -302,19 +302,66 @@ package cyclopsframework.core
 			
 		// Querying
 		
-		public function count(tag:String=TAG_ALL):int
+		public function count(...args):int
 		{
-			return _registry.count(tag);
+			return query.apply(null, args).numItems;
 		}
 				
-		public function query(tag:String=TAG_ALL):CCDataStore
-		{
-			return _registry.getObjects(tag);
+		public function query(...args):CCDataStore
+		{	
+			if ((args.length == 1) && (args[0] is String))
+			{
+				return _registry.getObjects(args[0] as String);
+			}
+			else
+			{
+				var tagz:Vector.<String> = new Vector.<String>();
+				var filterz:Vector.<Function> = new Vector.<Function>();
+				
+				for each (var arg:Object in args)
+				{
+					if (arg is String)
+					{
+						tagz.push(arg as String);
+					}
+					else if (arg.hasOwnProperty("TAG") && (arg["TAG"] is String))
+					{
+						tagz.push(arg["TAG"]);
+					}
+					else if (arg is Function)
+					{
+						filterz.push(arg as Function);
+					}
+					else
+					{
+						throw(new TypeError("Query argument type not recognized. Valid types are: strings, functions and classes with a public static const TAG:String member"));
+					}
+				}
+				
+				if (tagz.length == 0)
+				{
+					tagz.push(CCEngine.TAG_ALL);
+				}
+				
+				var results:CCDataStore = query(tagz.shift());
+				
+				for each (var tag:String in tagz)
+				{
+					results = results.filter(function(o:ICCTaggable):Boolean { return o.tags.has(tag); });
+				}
+				
+				for each (var f:Function in filterz)
+				{
+					results = results.filter(f);
+				}
+				
+				return results;
+			}
 		}
 		
-		public function proxy(tag:String=TAG_ALL):CCDataStoreProxy
+		public function proxy(...args):CCDataStoreProxy
 		{
-			return query(tag).proxy;
+			return query.apply(null, args).proxy;
 		}
 		
 		public function status(tag:String=CCEngine.TAG_ALL):String
@@ -450,15 +497,22 @@ package cyclopsframework.core
 				if (_registry.has(request.actionTag))
 				{
 					//for each (var action:CCAction in _registry.getObjects(request.actionTag))
-					_registry.getObjects(request.actionTag).forEach(function(action:CCAction):void
+					_registry.getObjects(request.actionTag).forEach(function(item:ICCTaggable):void
 					{
-						if(action != null) //(action is CCAction)
+						if(item != null)
 						{
-							if (request.stopChildren)
+							if (item is CCAction)
 							{
-								action.removeChildren();
+								if (request.stopChildren)
+								{
+									(item as CCAction).removeChildren();
+								}
+								(item as CCAction).stop();
 							}
-							action.stop();
+							else
+							{
+								_removals.push(item);
+							}
 						}
 					});
 				}

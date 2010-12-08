@@ -21,12 +21,26 @@ package cyclopsframework.utils.misc
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.text.TextField;
+	import flash.utils.Dictionary;
+	import flash.utils.describeType;
 
 	public class CCUtils
 	{
+		private static var _typeCache:Dictionary = new Dictionary(true);
+		
 		public function CCUtils()
 		{
 			
+		}
+		
+		public static function isDynamic(o:Object):Boolean
+		{
+			if (!_typeCache.hasOwnProperty(o))
+			{
+				var type:XML = describeType(o);
+				_typeCache[o] = (type.@isDynamic.toString() == "true");
+			}
+			return _typeCache[o] as Boolean;
 		}
 				
 		public static function setProperties(item:Object, kvObject:Object, deep:Boolean=false):void

@@ -16,9 +16,12 @@
 
 package cyclopsframework.utils.proxies
 {
+	import cyclopsframework.utils.collections.CCDataStore;
+	import cyclopsframework.utils.misc.CCUtils;
+	
+	import flash.utils.Dictionary;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
-	import cyclopsframework.utils.collections.CCDataStore;
 	
 	public dynamic class CCDataStoreProxy extends Proxy
 	{
@@ -64,7 +67,7 @@ package cyclopsframework.utils.proxies
 		{
 			_datastore.forEach(function(item:Object):void
 			{
-				if (item.hasOwnProperty(name) && !(item[name] is Function))
+				if (item.hasOwnProperty(name) || CCUtils.isDynamic(item))// && !(item[name] is Function))
 				{
 					item[name] = value;
 				}

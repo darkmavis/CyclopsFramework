@@ -18,6 +18,7 @@ package cyclopsframework.game
 {
 	import cyclopsframework.core.CCEngine;
 	import cyclopsframework.utils.console.CCConsole;
+	import cyclopsframework.utils.logging.CCLog;
 	import cyclopsframework.utils.math.CCMath;
 	
 	import flash.display.Graphics;
@@ -46,7 +47,7 @@ package cyclopsframework.game
 			super();
 			_width = width;
 			_height = height;
-			this.addEventListener(Event.ENTER_FRAME, onReady);
+			this.addEventListener(Event.ADDED_TO_STAGE, onReady);
 			if (fillBackground)
 			{
 				var g:Graphics = _scene.bg.graphics;
@@ -58,7 +59,7 @@ package cyclopsframework.game
 		
 		private function onReady(e:Event):void
 		{
-			this.removeEventListener(Event.ENTER_FRAME, onReady);
+			this.removeEventListener(Event.ADDED_TO_STAGE, onReady);
 			
 			this.addChild(scene.bg);
 			
@@ -67,7 +68,9 @@ package cyclopsframework.game
 			this.addChild(console.bg);
 			
 			console.scriptingContext["find"] = scene.find;
-									
+			
+			CCLog.logger = console;
+			
 			bootstrap();
 			
 			this.addEventListener(Event.ENTER_FRAME, onEnterFrame);

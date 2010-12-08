@@ -37,7 +37,7 @@ package cyclopsframework.actions.messaging
 			_objectId = objectId;
 			_statusListener = statusListener;
 		}
-				
+						
 		protected override function onEnter():void
 		{
 			_nc = new NetConnection();
@@ -68,9 +68,11 @@ package cyclopsframework.actions.messaging
 				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, false);
 				engine.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
 				so.client = _messageListeners;
+				//so.addEventListener(NetStatusEvent.NET_STATUS, onSOConnect);
 				so.connect(_nc);
 				_so = new CCSharedObjectProxy(so);
-				_statusListener(connected);
+				
+				engine.add(function():void { _statusListener(connected); });
 			}
 			else
 			{
@@ -80,6 +82,13 @@ package cyclopsframework.actions.messaging
 			}
 			
 			engine.context = null;
+		}
+		
+		private function onSOConnect(e:NetStatusEvent):void
+		{
+			CCLog.println("SharedObject connected.");
+			_so.$so.removeEventListener(NetStatusEvent.NET_STATUS, onSOConnect);
+			_statusListener(connected);
 		}
 		
 		private function onSharedObjectUpdate(e:SyncEvent):void
@@ -99,6 +108,16 @@ package cyclopsframework.actions.messaging
 		{
 			delete _messageListeners[name];
 		}
-				
+		
+		public function close():void
+		{
+			_nc.close();
+		}
+		
+		protected override function onExit():void
+		{
+			close();
+		}
+		
 	}
 }

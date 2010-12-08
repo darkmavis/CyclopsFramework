@@ -310,6 +310,8 @@ package cyclopsframework.utils.console
 			{
 				println("" + int(engine.fps));
 			}};
+			
+			scriptingContext.print = println;
 									
 		}
 		
