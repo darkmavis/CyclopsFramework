@@ -171,6 +171,17 @@ package cyclopsframework.utils.console
 			
 			enterControlMode(new CCConsoleControlMode(">", "_", processCommand));
 			
+			// setup console commands and functions
+			
+			importConsoleCommands(this);
+			
+			commands["fps"] = { help:"display frame rate", method:function():void
+			{
+				println("" + int(engine.fps));
+			}};
+			
+			scriptingContext.print = println;
+			
 		}
 				
 		/**
@@ -301,18 +312,7 @@ package cyclopsframework.utils.console
 					_dirty = true;
 				}
 			}, .5, Number.MAX_VALUE);
-			
-			// setup console commands and functions
-			
-			importConsoleCommands(this);
-			
-			commands["fps"] = { help:"display frame rate", method:function():void
-			{
-				println("" + int(engine.fps));
-			}};
-			
-			scriptingContext.print = println;
-									
+												
 		}
 		
 		public function enterControlMode(controlMode:CCConsoleControlMode):void
@@ -442,6 +442,29 @@ package cyclopsframework.utils.console
 		public function lock():void
 		{
 			_locked = true;
+		}
+		
+		public function eval(...args):*
+		{
+			var head:Object = args[0];
+			var tail:Array = (args.length < 2) ? null : args.slice(1);
+			
+			if (commands.hasOwnProperty(head))
+			{
+				return (commands[head].method as Function).apply(scriptingContext, tail);
+			}
+			else
+			{
+				try
+				{
+					var result:* = D.eval(args, scriptingContext, scriptingContext);
+					if (result != null) return result;
+				}
+				catch(e:Error)
+				{
+					println(e.toString(), CCConsole.CHANNEL_ERRORS);
+				}
+			}
 		}
 		
 		/**

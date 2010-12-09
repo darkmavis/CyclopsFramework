@@ -76,7 +76,7 @@ package cyclopsframework.actions.messaging
 			}
 			else
 			{
-				CCLog.println("Couldn't connect to: " + _hostAddress);
+				CCLog.println("Couldn't connect to: " + _hostAddress, CCLog.CHANNEL_WARNINGS);
 				_statusListener(connected);
 				stop();
 			}
@@ -86,7 +86,7 @@ package cyclopsframework.actions.messaging
 		
 		private function onSOConnect(e:NetStatusEvent):void
 		{
-			CCLog.println("SharedObject connected.");
+			CCLog.println("SharedObject connected.", CCLog.CHANNEL_INFO);
 			_so.$so.removeEventListener(NetStatusEvent.NET_STATUS, onSOConnect);
 			_statusListener(connected);
 		}
