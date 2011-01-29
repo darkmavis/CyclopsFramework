@@ -63,6 +63,30 @@ package cyclopsframework.utils.collections
 			return this;
 		}
 		
+		public function addEach(collection:Object, mapFunc:Function=null):CCDataStore
+		{
+			for each (var item:Object in collection)
+			{
+				if (item is CCDataStoreRemoteItem)
+				{
+					_remoteItems.add(item);
+				}
+				else
+				{
+					if (mapFunc != null)
+					{
+						_data.add(mapFunc(item));
+					}
+					else
+					{
+						_data.add(item);
+					}
+				}
+			}
+			
+			return this;
+		}
+		
 		public function remove(item:Object):CCDataStore
 		{
 			if (item is CCDataStoreRemoteItem)

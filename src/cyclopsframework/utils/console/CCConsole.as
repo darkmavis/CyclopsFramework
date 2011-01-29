@@ -411,11 +411,11 @@ package cyclopsframework.utils.console
 		 * @param channel Target channel.
 		 * 
 		 */
-		public function print(text:String="", channel:String=CCConsole.CHANNEL_DEFAULT):void
+		public function print(text:Object="", channel:String=CCConsole.CHANNEL_DEFAULT):void
 		{
 			if (_channels.has(channel))
 			{
-				_buffer += text;
+				_buffer += String(text);
 				_dirty = true;
 			}
 		}
@@ -430,9 +430,9 @@ package cyclopsframework.utils.console
 		 * @param channel Target channel.
 		 * 
 		 */
-		public function println(text:String="", channel:String=CCConsole.CHANNEL_DEFAULT):void
+		public function println(text:Object="", channel:String=CCConsole.CHANNEL_DEFAULT):void
 		{
-			print(text + "\n", channel);
+			print(String(text) + "\n", channel);
 		}
 		
 		/**

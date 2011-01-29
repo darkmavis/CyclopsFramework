@@ -48,10 +48,10 @@ package cyclopsframework.game.tiles
 		}
 		
 		public function getTile(index:int):BitmapData
-		{			
+		{
 			_tileRect.x = (index % _columns) * tileWidth;
-			_tileRect.y = int(index / _rows) * tileHeight;
-			
+			_tileRect.y = int(index / _columns) * tileHeight;
+						
 			_destPoint.x = 0;
 			_destPoint.y = 0;
 			
@@ -65,8 +65,8 @@ package cyclopsframework.game.tiles
 		{
 			if (rectOut == null) rectOut = new Rectangle();
 			
-			rectOut.x = int(index % _columns) * tileWidth;
-			rectOut.y = int(index / _rows) * tileHeight;
+			rectOut.x = (index % _columns) * tileWidth;
+			rectOut.y = int(index / _columns) * tileHeight;
 			rectOut.width = tileWidth;
 			rectOut.height = tileHeight;
 			

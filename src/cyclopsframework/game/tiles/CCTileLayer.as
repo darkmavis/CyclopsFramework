@@ -34,6 +34,10 @@ package cyclopsframework.game.tiles
 		private var _rows:int;
 		public function get rows():int { return _rows; }
 		
+		private var _transparentTileIndex:int = 0;
+		public function get transparentTileIndex():int { return _transparentTileIndex; }
+		public function set transparentTileIndex(value:int):void { _transparentTileIndex = value; }
+				
 		private var _tileGrid:Vector.<ICCTileData>;
 				
 		public function CCTileLayer(columns:int, rows:int, tileset:CCTileset)
@@ -51,21 +55,21 @@ package cyclopsframework.game.tiles
 		
 		public function getTile(x:int, y:int):ICCTileData
 		{
-			return _tileGrid[CCMath.wrap(y, rows) * columns + CCMath.wrap(x, columns)];
+			return _tileGrid[CCMath.wrap(y, _rows) * _columns + CCMath.wrap(x, _columns)];
 		}
 		
 		public function setTile(x:int, y:int, data:ICCTileData):void
 		{
-			_tileGrid[CCMath.wrap(y, rows) * columns + CCMath.wrap(x, columns)] = data;
+			_tileGrid[CCMath.wrap(y, _rows) * _columns + CCMath.wrap(x, _columns)] = data;
 		}
-		
+				
 		public function forEachTile(f:Function):void
 		{
-			for (var y:int = 0; y < rows; ++y)
+			for (var y:int = 0; y < _rows; ++y)
 			{
-				for (var x:int = 0; x < columns; ++x)
+				for (var x:int = 0; x < _columns; ++x)
 				{
-					f(x, y, _tileGrid[CCMath.wrap(y, rows) * columns + CCMath.wrap(x, columns)]);
+					f(x, y, _tileGrid[CCMath.wrap(y, _rows) * _columns + CCMath.wrap(x, _columns)]);
 				}
 			}
 		}
@@ -88,18 +92,16 @@ package cyclopsframework.game.tiles
 			var tw:Number = tileset.tileWidth;
 			var th:Number = tileset.tileHeight;
 			
-			for (var y:int = -1; y <= vh; ++y)
+			for (var y:int = 0; y < vh; ++y)
 			{
 				p.y = int((y - (viewRect.y % 1)) * th);
-				
-				for (var x:int = -1; x <= vw; ++x)
+				for (var x:int = 0; x < vw; ++x)
 				{
 					var tileIndex:int = getTile(vx + x, vy + y).tileIndex;
-					if (tileIndex > 0)
+					if (tileIndex != _transparentTileIndex)
 					{
 						p.x = int((x - (viewRect.x % 1)) * tw);
 						srect = tileset.getTileRect(tileIndex, srect);
-						
 						target.copyPixels(tileset.atlas, srect, p, null, null, true);
 					}
 				}

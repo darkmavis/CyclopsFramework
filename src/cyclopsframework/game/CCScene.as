@@ -189,7 +189,11 @@ package cyclopsframework.game
 		
 		public function playSound(source:Sound, cycles:int=1, pan:Number=0, volume:Number=1, channelTag:String=null):CCSound
 		{
-			if (engine.count(channelTag) == 0)
+			if (channelTag == null)
+			{
+				return engine.add(new CCSound(source, cycles, pan, volume)) as CCSound;
+			}
+			else if (engine.count(channelTag) == 0)
 			{
 				return engine.add(channelTag, new CCSound(source, cycles, pan, volume)) as CCSound;
 			}
@@ -201,7 +205,11 @@ package cyclopsframework.game
 		
 		public function playDynamicSound(source:Sound, speed:Number=1, pan:Number=0, volume:Number=1, channelTag:String=null):CCDynamicSound
 		{
-			if (engine.count(channelTag) == 0)
+			if (channelTag == null)
+			{
+				return engine.add(new CCDynamicSound(source, speed, pan, volume)) as CCDynamicSound;
+			}
+			else if (engine.count(channelTag) == 0)
 			{
 				return engine.add(channelTag, new CCDynamicSound(source, speed, pan, volume)) as CCDynamicSound;
 			}

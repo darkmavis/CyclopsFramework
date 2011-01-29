@@ -20,6 +20,7 @@ package cyclopsframework.core
 	import cyclopsframework.actions.flow.CCSleep;
 	import cyclopsframework.actions.flow.CCWaitForEvent;
 	import cyclopsframework.actions.flow.CCWaitForMessage;
+	import cyclopsframework.utils.collections.CCCache;
 	import cyclopsframework.utils.collections.CCDataStore;
 	import cyclopsframework.utils.collections.CCRegistry;
 	import cyclopsframework.utils.collections.CCStringHashSet;
@@ -27,7 +28,6 @@ package cyclopsframework.core
 	import cyclopsframework.utils.proxies.CCMessageProxy;
 	
 	import flash.events.IEventDispatcher;
-	import flash.utils.Dictionary;
 	
 	public class CCEngine
 	{
@@ -55,7 +55,7 @@ package cyclopsframework.core
 		private var _delta:Number = 1 / 60;
 		public function get delta():Number { return _delta; }
 		public function get fps():Number { return 1 / _delta; }
-		
+				
 		public function CCEngine()
 		{
 			beginTag(TAG_ALL);
@@ -304,6 +304,7 @@ package cyclopsframework.core
 		
 		public function count(...args):int
 		{
+			if (args.length == 0) return 0;
 			return query.apply(null, args).numItems;
 		}
 				
@@ -320,21 +321,24 @@ package cyclopsframework.core
 				
 				for each (var arg:Object in args)
 				{
-					if (arg is String)
+					if (arg != null)
 					{
-						tagz.push(arg as String);
-					}
-					else if (arg.hasOwnProperty("TAG") && (arg["TAG"] is String))
-					{
-						tagz.push(arg["TAG"]);
-					}
-					else if (arg is Function)
-					{
-						filterz.push(arg as Function);
-					}
-					else
-					{
-						throw(new TypeError("Query argument type not recognized. Valid types are: strings, functions and classes with a public static const TAG:String member"));
+						if (arg is String)
+						{
+							tagz.push(arg as String);
+						}
+						else if (arg.hasOwnProperty("TAG") && (arg["TAG"] is String))
+						{
+							tagz.push(arg["TAG"]);
+						}
+						else if (arg is Function)
+						{
+							filterz.push(arg as Function);
+						}
+						else
+						{
+							throw(new TypeError("Query argument type not recognized. Valid types are: strings, functions and classes with a public static const TAG:String member"));
+						}
 					}
 				}
 				

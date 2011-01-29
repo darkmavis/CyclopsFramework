@@ -16,7 +16,7 @@ package cyclopsframework.actions.messaging
 	public class CCRemoteObject extends CCAction
 	{
 		public static const TAG:String = "@CCRemoteObject";
-				
+		
 		private var _so:CCSharedObjectProxy;
 		public function get proxy():CCSharedObjectProxy { return _so; }
 		

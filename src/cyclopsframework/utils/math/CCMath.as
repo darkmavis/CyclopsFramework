@@ -26,6 +26,8 @@ package cyclopsframework.utils.math
 	{
 		public static const PHI:Number = 1.61803399;
 		public static const PI_OVER_180:Number = (180 / Math.PI);
+		public static const PI:Number = Math.PI;
+		public static const PI2:Number = Math.PI * 2;
 		
 		public function CCMath()
 		{
@@ -113,6 +115,13 @@ package cyclopsframework.utils.math
 			return  (radius * radius) >= (dx * dx + dy * dy + dz * dz);
 		}
 		
+		public static function distance2(o1:Object, o2:Object):Number
+		{
+			var dx:Number = o1.x - o2.x;
+			var dy:Number = o1.y - o2.y;
+			return Math.sqrt(dx * dx + dy * dy);
+		}
+		
 		public static function distanceSquared2(o1:Object, o2:Object):Number
 		{
 			var dx:Number = o1.x - o2.x;
@@ -151,6 +160,70 @@ package cyclopsframework.utils.math
 			var dx:Number = o1.x - o2.x;
 			var dy:Number = o1.y - o2.y;
 			return Math.atan2(dx, dy) * PI_OVER_180;
+		}
+		
+		public static function shortestAngleBetweenInRadians(a1:Number, a2:Number):Number
+		{
+			var d:Number = a2 - a1;
+			var a:Number = wrap(d, PI2);
+			if (a >= PI)
+			{
+				a -= PI2;
+			}
+			return a;
+		}
+		
+		public static function shortestAngleBetweenInDegrees(a1:Number, a2:Number):Number
+		{
+			var d:Number = a2 - a1;
+			var a:Number = wrap(d, 360);
+			if (a >= 180)
+			{
+				a -= 360;
+			}
+			return a;
+		}
+		
+		public static function lerpRadians(a1:Number, a2:Number, t:Number):Number
+		{
+			a1 = wrap(a1, PI2);
+			if (a1 > PI) a1 -= PI2;
+			a2 = wrap(a2, PI2);
+			if (a2 > PI) a2 -= PI2;
+			return lerp(a1, a2, t);
+		}
+		
+		public static function lerpDegrees(a1:Number, a2:Number, t:Number):Number
+		{
+			a1 = wrap(a1, 360);
+			a2 = wrap(a2, 360);
+			
+			var d:Number = a1 - a2;
+			if (d > 180)
+			{
+				if (a1 > 180)
+				{
+					a1 -= 360;
+				}
+				else
+				{
+					a2 -= 360;
+				}
+			}
+			else if (d < -180)
+			{
+				if (a1 > 180)
+				{
+					a1 -= 360;
+				}
+				else
+				{
+					a2 -= 360;
+				}
+			}
+						
+			return lerp(a1, a2, t);
+			
 		}
 		
 	}

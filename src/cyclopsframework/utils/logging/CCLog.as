@@ -15,11 +15,11 @@ package cyclopsframework.utils.logging
 			throw new Error("No need to instantiate CCLog.");
 		}
 		
-		public static function print(text:String, channel:String=CHANNEL_DEFAULT):void
+		public static function print(text:Object="", channel:String=CHANNEL_DEFAULT):void
 		{
 			if (_logger != null)
 			{
-				_logger.print(text, channel);
+				_logger.print(String(text), channel);
 			}
 			else
 			{
@@ -27,11 +27,11 @@ package cyclopsframework.utils.logging
 			}
 		}
 		
-		public static function println(text:String, channel:String=CHANNEL_DEFAULT):void
+		public static function println(text:Object="", channel:String=CHANNEL_DEFAULT):void
 		{
 			if (_logger != null)
 			{
-				_logger.println(text, channel);
+				_logger.println(String(text), channel);
 			}
 			else
 			{

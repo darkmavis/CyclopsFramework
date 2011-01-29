@@ -82,6 +82,7 @@
     <classEntry path="cyclopsframework.utils.logging.ICCLogger"/>
     <classEntry path="cyclopsframework.utils.collections.CCArray"/>
     <classEntry path="cyclopsframework.utils.misc.CCGuid"/>
+    <classEntry path="cyclopsframework.utils.collections.CCCache"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
