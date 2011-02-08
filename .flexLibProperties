@@ -83,6 +83,7 @@
     <classEntry path="cyclopsframework.utils.collections.CCArray"/>
     <classEntry path="cyclopsframework.utils.misc.CCGuid"/>
     <classEntry path="cyclopsframework.utils.collections.CCCache"/>
+    <classEntry path="cyclopsframework.core.CCEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

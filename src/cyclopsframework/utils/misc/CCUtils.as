@@ -20,9 +20,12 @@ package cyclopsframework.utils.misc
 	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.geom.Rectangle;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
+	
+	import spark.primitives.Rect;
 
 	public class CCUtils
 	{
@@ -184,6 +187,6 @@ package cyclopsframework.utils.misc
 				throw new TypeError(name + " can't be a tag.  Perhaps another class that supports grouping by tags would work better.");
 			}
 		}
-		
+				
 	}
 }

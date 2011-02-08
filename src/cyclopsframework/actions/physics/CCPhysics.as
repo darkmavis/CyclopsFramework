@@ -35,8 +35,8 @@ package cyclopsframework.actions.physics
 	{
 		public static const TAG:String = "@CCPhysics";
 		
-		private static var _instance:CCPhysics;
-		public static function get instance():CCPhysics { return _instance; }
+		//private static var _instance:CCPhysics;
+		//public static function get instance():CCPhysics { return _instance; }
 		
 		private var _targetDelta:Number;
 		

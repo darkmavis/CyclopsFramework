@@ -39,6 +39,8 @@ package cyclopsframework.game.tiles
 		private var _rows:int;
 		public function get rows():int { return _rows; }
 		
+		public function get numTiles():int { return _columns * _rows; }
+		
 		public function CCTileset(tileWidth:int, tileHeight:int, source:BitmapData)
 		{
 			_atlas = source;

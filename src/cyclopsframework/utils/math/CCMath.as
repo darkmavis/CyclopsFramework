@@ -100,6 +100,12 @@ package cyclopsframework.utils.math
 			}
 		}
 		
+		public static function recenter2(o:Object, rect:Rectangle):void
+		{
+			o.x = rect.x + rect.width / 2;
+			o.y = rect.y + rect.height / 2;
+		}
+		
 		public static function objectWithinRadiusOfTarget2(o:Object, radius:Number, target:Object):Boolean
 		{
 			var dx:Number = target.x - o.x;

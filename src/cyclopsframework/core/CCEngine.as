@@ -27,6 +27,7 @@ package cyclopsframework.core
 	import cyclopsframework.utils.proxies.CCDataStoreProxy;
 	import cyclopsframework.utils.proxies.CCMessageProxy;
 	
+	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	public class CCEngine
@@ -631,8 +632,14 @@ package cyclopsframework.core
 				{
 					(obj as ICCHasEngine).engine = this;
 				}
-				
+								
 				register(obj);
+				
+				if (obj is IEventDispatcher)
+				{
+					(obj as IEventDispatcher).dispatchEvent(new Event(CCEvent.OBJECT_REGISTERED));
+				}
+				
 			}
 		}
 		

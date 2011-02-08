@@ -40,6 +40,8 @@ package cyclopsframework.game.cc3d
 	{
 		public static const TAG:String = "@CCSpriteActor3D";
 		
+		public static const FIXED_FRAME_MODE_DISABLED:int = -1;
+		
 		private var _scene:CCScene3D;
 		private var _physics:CCPhysics;
 		private var _radius:Number;
@@ -47,7 +49,17 @@ package cyclopsframework.game.cc3d
 		private var _physicsActor:CCPhysicsActor;
 		private var _startingFrameIndex:Number;
 		private var _frameOffset:int;
-		private var _numFrames:int;
+		private var _numAngles:int;
+		private var _numFramesPerAnimation:int;
+		private var _animationPosition:Number = 0;
+		
+		private var _fixedFrame:int = FIXED_FRAME_MODE_DISABLED;
+		public function get fixedFrame():int { return _fixedFrame; }
+		public function set fixedFrame(value:int):void { _fixedFrame = value; }
+		
+		private var _animationFps:Number = 0;
+		public function get animationFps():Number { return _animationFps; }
+		public function set animationFps(value:Number):void { _animationFps = value; }
 		
 		private var _rotation:Number;
 		public function get rotation():Number { return _rotation; }
@@ -58,7 +70,7 @@ package cyclopsframework.game.cc3d
 		
 		private var _sprite3d:Sprite3D;
 		public function get sprite3D():Sprite3D { return _sprite3d; }
-		
+				
 		public function get position3D():Vector3D
 		{
 			return new Vector3D(_sprite3d.x, _sprite3d.y, _sprite3d.z);
@@ -81,7 +93,8 @@ package cyclopsframework.game.cc3d
 			z:Number=0,
 			rotation:Number=0,
 			startingFrameIndex:int=0,
-			numFrames:int=1,
+			numAngles:int=1,
+			numFramesPerAnimation:int=1,
 			period:Number=Number.MAX_VALUE)
 		{
 			super(period, 1, null, [TAG]);
@@ -96,7 +109,8 @@ package cyclopsframework.game.cc3d
 			_sprite3d.z = z;
 			_rotation = rotation;
 			_frameOffset = startingFrameIndex;
-			_numFrames = numFrames;
+			_numAngles = numAngles;
+			_numFramesPerAnimation = numFramesPerAnimation;
 			_rect = _tileset.getTileRect(0);
 			
 			_physicsActor = _physics.createSimpleActor(_sprite3d, _radius, 1);
@@ -112,10 +126,30 @@ package cyclopsframework.game.cc3d
 		
 		protected override function onFrame(t:Number):void
 		{
-			_rotation = body.GetAngle() * (180 / Math.PI);
+			var angleIndex:int;
 			
-			var angleIndex:int = (_frameOffset + int((CCMath.wrap(_rotation, 360) / 360) * _numFrames) + _numFrames
-				- ((Math.atan2(_sprite3d.x - _scene.camera.x, _sprite3d.y - _scene.camera.y) / (Math.PI * 2)) * _numFrames + (_numFrames * .5))) % _numFrames;
+			if (fixedFrame > FIXED_FRAME_MODE_DISABLED)
+			{
+				angleIndex = fixedFrame;
+			}
+			else
+			{
+				_rotation = body.GetAngle() * (180 / Math.PI);
+				
+				angleIndex = (_frameOffset + int((CCMath.wrap(_rotation, 360) / 360) * _numAngles) + _numAngles
+					- ((Math.atan2(_sprite3d.x - _scene.camera.x, _sprite3d.y - _scene.camera.y) / (Math.PI * 2)) * _numAngles + (_numAngles * .5))) % _numAngles;
+				
+				angleIndex += 1;
+				if (angleIndex >= _numAngles) angleIndex = 0;
+				
+				angleIndex *= _numFramesPerAnimation;
+				
+				if (_animationFps > 0)
+				{
+					_animationPosition = (_animationPosition + engine.delta * _animationFps) % _numFramesPerAnimation;
+					angleIndex += int(_animationPosition);
+				}
+			}
 			
 			if (angleIndex != _lastAngleIndex)
 			{
@@ -125,13 +159,14 @@ package cyclopsframework.game.cc3d
 			_lastAngleIndex = angleIndex;
 			
 		}
-		
+				
 		protected override function onExit():void
 		{
 			_scene.scene3d.removeSprite(_sprite3d);
 			engine.removeObject(_physicsActor);
 			if (_physicsActor.body != null)
 			{
+				trace("removing body.");
 				_physics.world.DestroyBody(_physicsActor.body);
 			}
 			else

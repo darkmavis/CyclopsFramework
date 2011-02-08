@@ -74,7 +74,6 @@ package cyclopsframework.utils.console
 		private var _tf:TextField;
 		private var _buffer:String = "";
 		private var _input:String = "";
-		private var _backdrop:Sprite;
 		private var _channels:CCStringHashSet = new CCStringHashSet();
 		
 		private var _dirty:Boolean = true;
@@ -84,6 +83,9 @@ package cyclopsframework.utils.console
 		
 		private var _controlStack:Vector.<CCConsoleControlMode> = new Vector.<CCConsoleControlMode>();
 		protected function get activeControlMode():CCConsoleControlMode { return _controlStack.slice(-1)[0]; }
+		
+		private var _backdrop:Sprite;
+		public function get backdrop():Sprite { return _backdrop; }
 		
 		/**
 		 * Current command prompt.
@@ -166,6 +168,8 @@ package cyclopsframework.utils.console
 			_tf.wordWrap = true;
 			_tf.multiline = true;
 			_tf.cacheAsBitmap = true;
+						
+			_backdrop = CCPrimitives.filledBox(_tf.width, _tf.height, 0, .9);
 		
 			_channels.addItems([CHANNEL_DEFAULT, CHANNEL_INFO, CHANNEL_WARNINGS, CHANNEL_ERRORS]);
 			
@@ -191,9 +195,17 @@ package cyclopsframework.utils.console
 		{
 			if (_locked) return;
 			
-			_backdrop = CCPrimitives.filledBox(_tf.width, _tf.height, 0, .9);
 			addSprite(_backdrop, _tf.width / 2, _tf.height / 2);
 			bg.addChild(_tf);
+			
+			bg.tabEnabled = false;
+			bg.tabIndex = -1;
+			
+			_tf.tabEnabled = false;
+			_tf.tabIndex = -1;
+			
+			backdrop.tabEnabled = false;
+			backdrop.tabIndex = -1;
 			
 			D.setOutput(print);
 			
@@ -231,6 +243,8 @@ package cyclopsframework.utils.console
 			
 			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
 			{
+				if ((_tf.stage.focus != _tf) && (_tf.stage.focus != _tf.parent) && (_tf.stage.focus != _backdrop)) return;
+				
 				if (e.ctrlKey)
 				{
 					if (e.charCode == "z".charCodeAt(0))
@@ -306,13 +320,40 @@ package cyclopsframework.utils.console
 			
 			engine.loop(function():void
 			{
-				if (_tf.scrollV >= _bottomV)
+				if ((_tf.stage.focus == _tf) || (_tf.stage.focus == _tf.parent) || (_tf.stage.focus == _backdrop))
 				{
-					_cursorVisible = !_cursorVisible;
+					if (_tf.scrollV >= _bottomV)
+					{
+						_cursorVisible = !_cursorVisible;
+						_dirty = true;
+					}
+				}
+				else
+				{
+					_cursorVisible = false;
 					_dirty = true;
 				}
 			}, .5, Number.MAX_VALUE);
 												
+		}
+		
+		public function resize(width:Number, height:Number):void
+		{
+			_tf.defaultTextFormat = new TextFormat("Courier New", 14, 0xA0A0A0);
+			_tf.text = "X";
+			_tf.width = width - width % _tf.textWidth;
+			_tf.height = height - height % _tf.textHeight;
+			_tf.text = "";
+			
+			if (_backdrop.parent != null)
+			{
+				_backdrop.parent.removeChild(_backdrop);
+			}
+			
+			_backdrop = CCPrimitives.filledBox(_tf.width, _tf.height, 0, .5);
+			addSprite(_backdrop, _tf.width / 2, _tf.height / 2);
+			
+			redraw();
 		}
 		
 		public function enterControlMode(controlMode:CCConsoleControlMode):void
@@ -457,7 +498,7 @@ package cyclopsframework.utils.console
 			{
 				try
 				{
-					var result:* = D.eval(args, scriptingContext, scriptingContext);
+					var result:* = D.eval(args[0], scriptingContext, scriptingContext);
 					if (result != null) return result;
 				}
 				catch(e:Error)
@@ -598,6 +639,10 @@ package cyclopsframework.utils.console
 		 */
 		public function show():void
 		{
+			engine.add(function():void
+			{
+				_tf.stage.focus = _tf;
+			});
 			_active = true;
 			bg.visible = true;
 			engine.resume(CCEngine.TAG_ALL);
