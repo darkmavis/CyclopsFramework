@@ -6,7 +6,7 @@ So what makes this framework fun and worth a look?
 
 For one, it's biased towards functional programming in Action Script 3.  But more important is the combination of psuedo-threading with a robust object tagging system.  More on this in a moment.
 
-One of the immediate draws of the framework is it's ease of use for tweening.  If you've used other tweening libraries or Cocoas2D, some of this might look familiar, but the tagging system provides critical functionality not found in other systems, at least to the best of my knowledge at the time of this writing.
+One of the immediate draws of the framework is it's ease of use for tweening.  If you've used other tweening libraries or Cocos2D, some of this might look familiar, but the tagging system provides critical functionality not found in other systems, at least to the best of my knowledge at the time of this writing.
 
 It's quick and easy to create fire and forget built-in and custom tweens (aka actions) such as fades, scaling, rotation, etc. via a single line of code.
 
@@ -15,23 +15,23 @@ engine.add(new CCFade(mySprite, 0, 1, .2, 5, CCBias.SINE_WAVE)); // fade mySprit
 It's also as easy to create a sequence of actions, even custom one-offs, right on the spot.
 
 engine
-	.sleep(5) // sugar for: .add(new CCSleep(5)) // sleep for 5 seconds.
-	.add(function():void { trace("Hello World!"); }) // anonymous method converted to an action.
-	.add(new CCFade(mySprite, 0, 1, .2, 5, CCBias.SINE_WAVE)); // fade mySprite in and out over .2 seconds, 5 times.
+    .sleep(5) // sugar for: .add(new CCSleep(5)) // sleep for 5 seconds.
+    .add(function():void { trace("Hello World!"); }) // anonymous method converted to an action.
+    .add(new CCFade(mySprite, 0, 1, .2, 5, CCBias.SINE_WAVE)); // fade mySprite in and out over .2 seconds, 5 times.
 
 And while all of this is happening, what if we want to create another sequence that will run concurrently? No problem!
 
 engine
-	.sleep(1) // sleep for 1 second.
-	.add(new CCTranslateBy(mySprite, 100, 50, 5, 1, CCBias.EASE_IN_OUT); // translate mySprite by x+100, y+50 over 5 seconds.
+    .sleep(1) // sleep for 1 second.
+    .add(new CCTranslateBy(mySprite, 100, 50, 5, 1, CCBias.EASE_IN_OUT)); // translate mySprite by x+100, y+50 over 5 seconds.
 
 Let's add one more thing to the mix... looping.  To demonstrate, let's say that while everything is running, you'd also like to track the frame rate once every 1/2 second.  How easy would that be?
 
 engine.loop(function():void
 {
-	trace("fps: " + engine.fps);
+    trace("fps: " + engine.fps);
 }, .5);
-	
+    
 Now imagine, that you have a number of sequences running concurrently and you need an easy way to manage them.  That brings us to the tagging system.
 
 The framework provides an interface, ICCTaggable, which can be used to assign as many string tags to an object as you'd like.  CCAction, from which all actions are derived, already implements this for you.  Note: Any ICCTaggable can be managed via the tagging system and it's often quite useful for reasons such as querying and messaging which will be explained just a little further down.
@@ -47,8 +47,8 @@ myAction.addTag("foo");
 However in practice with actions, it usually looks something like this:
 
 engine
-	.add("foo", new CCSleep(10))
-	.add(function():void { trace("We made it!"); });
+    .add("foo", new CCSleep(10))
+    .add(function():void { trace("We made it!"); });
 
 In above example, CCSleep is tagged with "foo".  You could add more tags... "foo", "bar", new CCSleep(10)... and in that case, both tags would be applied.
 
@@ -69,16 +69,16 @@ And now it's time for cascading tags, one of the most important features of this
 Let's say you had a sequence like this:
 
 engine
-	.add("cool_stuff", new CCSleep(10))
-	.add(new DoCoolStuffIndefinitely()); // who knows how long this will run?
+    .add("cool_stuff", new CCSleep(10))
+    .add(new DoCoolStuffIndefinitely()); // who knows how long this will run?
 
 Suppose that you want to think of this sequence as a single unit of work that may need to be shut down at any point in time.  No problem!  The "cool_stuff" tag cascades into all child actions... in this case, just DoCoolStuffIndefinitely.  So if you were to remove that tag the way we did before, then regardless of whether CCSleep or DoCoolStuffIndefinitely was active, the process would shut down.
 
 If you noticed that child actions was plural, it's because sequences aren't chains, they're trees.  You can start as many child actions as you'd like after a parent actions finishes.  That could look like this:
 
 engine
-	.add("foo", new CCSleep(1))
-	.add(new Foo(), new Bar(), function():void { trace ("42"); }); // all children of CCSleep and all tagged with "foo".
+    .add("foo", new CCSleep(1))
+    .add(new Foo(), new Bar(), function():void { trace ("42"); }); // all children of CCSleep and all tagged with "foo".
 
 In the example above, after one second, all three actions will start concurrently and all are registered with the "foo" tag.
 
@@ -86,11 +86,11 @@ Now to skip ahead a bit, here's perhaps a more advanced use of the tagging syste
 
 k.space = function():void
 {
-	if (engine.count("missile_throttle") == 0)
-	{
-		engine.add("missile_throttle", new CCSleep(.5));
-		engine.send("missile", "fire");
-	}
+    if (engine.count("missile_throttle") == 0)
+    {
+        engine.add("missile_throttle", new CCSleep(.5));
+        engine.send("missile", "fire");
+    }
 };
 
 In this example, every time the user presses SPACE, a missile should fire.  But a new missile should only fire once every 1/2 second.  Here we're using a simple query feature, engine.count, to determine how many objects are registered with the "missile_throttle" tag.  We're also using the tag based messaging system.
@@ -134,17 +134,17 @@ Here's a quick look at the "inner loop" of a CCEngine, the engine at the heart o
 
 public function update(delta:Number):void
 {
-	_delta = delta;	
-	processDelayedFunctions();
-	processActions(delta);
-	processMessages();
-	processStopRequests();
-	processRemovals();
-	processAdditions();
-	// pause and resume act on new additions intentionally.
-	processResumeRequests();
-	processPauseRequests();
-	_blocksRequested.clear();
+    _delta = delta;    
+    processDelayedFunctions();
+    processActions(delta);
+    processMessages();
+    processStopRequests();
+    processRemovals();
+    processAdditions();
+    // pause and resume act on new additions intentionally.
+    processResumeRequests();
+    processPauseRequests();
+    _blocksRequested.clear();
 }
 
 Thanks so much for taking a look!  I plan on maintaining this library for many years to come.  There's also a C# version underway.  Initially it was written with XNA in mind, but I'm currently in the process of switching to Unity instead.  I'll likely do a release of that framework as well in the very near future when there's more to it than just the core.
