@@ -571,7 +571,9 @@ package cyclopsframework.core
 							
 							if(!childBlocked)
 							{
-								add(action.tags.toArray(), child);
+								child.addTags(action.tags.toArray());
+								add(child);
+								//add(action.tags.toArray(), child);
 								for each (var cco:Object in action.dataPipe)
 								{
 									child.dataPipe.push(cco);
@@ -583,12 +585,14 @@ package cyclopsframework.core
 					{
 						for each (child in action.children)
 						{
-							add(action.tags.toArray(), child);
+							child.addTags(action.tags.toArray());
+							add(child);
+							//add(action.tags.toArray(), child);
 							for each (cco in action.dataPipe)
 							{
 								child.dataPipe.push(cco);
 							}
-						}	
+						}
 					}
 				}
 				else

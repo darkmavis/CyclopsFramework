@@ -75,7 +75,7 @@ package cyclopsframework.game.cc3d
 		{
 			return new Vector3D(_sprite3d.x, _sprite3d.y, _sprite3d.z);
 		}
-				
+						
 		private var _rect:Rectangle;
 		private var _p:Point = new Point();
 		
