@@ -84,6 +84,9 @@
     <classEntry path="org.cyclopsframework.utils.misc.CFGuid"/>
     <classEntry path="org.cyclopsframework.utils.collections.CFCache"/>
     <classEntry path="org.cyclopsframework.core.CFEvent"/>
+    <classEntry path="org.cyclopsframework.examples.example1_helloworld.HelloWorld"/>
+    <classEntry path="org.cyclopsframework.examples.example2_scenes.HelloScenes"/>
+    <classEntry path="org.cyclopsframework.examples.example2_scenes.Gameplay"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

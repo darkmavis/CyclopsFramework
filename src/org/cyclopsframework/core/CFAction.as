@@ -16,14 +16,14 @@
 
 package org.cyclopsframework.core
 {
+	import flash.events.IEventDispatcher;
+	
 	import org.cyclopsframework.actions.flow.CFFunction;
 	import org.cyclopsframework.actions.flow.CFSleep;
 	import org.cyclopsframework.actions.flow.CFWaitForEvent;
 	import org.cyclopsframework.actions.flow.CFWaitForMessage;
 	import org.cyclopsframework.core.easing.CFBias;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
-	
-	import flash.events.IEventDispatcher;
 
 	public class CFAction implements ICFPausable, ICFTaggable, ICFHasEngine
 	{
@@ -156,37 +156,30 @@ package org.cyclopsframework.core
 		
 		private function addSequence(actions:Array, returnHead:Boolean):CFAction
 		{
-			var currTags:Array = [];
-			var head:CFAction;
-			var tail:CFAction;
+			var head:Object;
+			var tail:Object;
 			
 			for each (var o:Object in actions)
 			{
-				if (o is String)
+				if (head == null)
 				{
-					currTags.push(o);
-				}
-				else if (head == null)
-				{
-					head = tail = add(currTags, o);
-					currTags = [];
+					head = tail = add(o);
 				}
 				else
 				{
-					tail = tail.add(currTags, o);
-					currTags = [];
+					tail = tail.add(o);
 				}
 			}
 			
-			return (returnHead ? head : tail);
+			return ((returnHead ? head : tail) as CFAction);
 		}
-		
-		public function addSequenceReturnHead(...actions):CFAction
+				
+		public function addSequenceReturnHead(actions:Array):CFAction
 		{
 			return addSequence(actions, true);
 		}
 		
-		public function addSequenceReturnTail(...actions):CFAction
+		public function addSequenceReturnTail(actions:Array):CFAction
 		{
 			return addSequence(actions, false);
 		}

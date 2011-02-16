@@ -86,7 +86,7 @@ package org.cyclopsframework.game
 			console.update(delta);
 		}
 		
-		public function bootstrap():void
+		protected function bootstrap():void
 		{
 			console.println("Override bootstrap in CFGame to begin writing your game.");
 		}

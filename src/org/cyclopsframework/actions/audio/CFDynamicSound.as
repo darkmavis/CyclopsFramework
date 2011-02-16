@@ -87,12 +87,20 @@ package org.cyclopsframework.actions.audio
 		
 		protected override function onExit():void
 		{
-			_channel.stop();
+			if (_channel != null)
+			{
+				_channel.stop();
+			}
 			_output.removeEventListener(SampleDataEvent.SAMPLE_DATA, sampleData);
 		}
 		
 		protected override function onFrame(t:Number):void
 		{	
+			if (_channel == null)
+			{
+				stop();
+			}
+			
 			if (_channel.position >= _source.length)
 			{
 				stop();

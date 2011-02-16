@@ -80,7 +80,6 @@ package org.cyclopsframework.actions.audio
 		public function set pan(value:Number):void
 		{
 			if (_channel == null) return;
-						
 			_transform.pan = value;
 			_transform.leftToRight = 2 - CFMath.PHI;
 			_transform.rightToLeft = 2 - CFMath.PHI;
@@ -122,10 +121,9 @@ package org.cyclopsframework.actions.audio
 		
 		protected override function onExit():void
 		{
-			_channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
-			
 			if (_channel != null)
 			{
+				_channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 				_channel.stop();
 			}
 		}
@@ -143,11 +141,11 @@ package org.cyclopsframework.actions.audio
 		
 		private function onSoundComplete(e:Event):void
 		{
-			_channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+			if (_channel != null) _channel.removeEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			
 			if (paused)
 			{
-				_channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
+				if (_channel != null) _channel.addEventListener(Event.SOUND_COMPLETE, onSoundComplete);
 			}
 			else
 			{
