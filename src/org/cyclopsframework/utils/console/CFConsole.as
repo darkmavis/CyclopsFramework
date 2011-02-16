@@ -16,6 +16,13 @@
 
 package org.cyclopsframework.utils.console
 {
+	import flash.display.Sprite;
+	import flash.events.KeyboardEvent;
+	import flash.text.TextField;
+	import flash.text.TextFormat;
+	import flash.ui.Keyboard;
+	import flash.utils.describeType;
+	
 	import org.cyclopsframework.core.CFEngine;
 	import org.cyclopsframework.game.CFScene;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
@@ -24,13 +31,6 @@ package org.cyclopsframework.utils.console
 	import org.cyclopsframework.utils.math.CFMath;
 	import org.cyclopsframework.utils.misc.CFUtils;
 	import org.cyclopsframework.utils.primitives.CFPrimitives;
-	
-	import flash.display.Sprite;
-	import flash.events.KeyboardEvent;
-	import flash.text.TextField;
-	import flash.text.TextFormat;
-	import flash.ui.Keyboard;
-	import flash.utils.describeType;
 	
 	import r1.deval.D;
 	
@@ -521,24 +521,40 @@ package org.cyclopsframework.utils.console
 		 */
 		public function importConsoleCommands(source:Object):void
 		{
-			var desc:XML = flash.utils.describeType(source);
-			for each (var methodData:* in desc.method.(hasOwnProperty("metadata") && metadata.attribute("name").contains("ConsoleCommand")))
+			// Adding try/catch blocks to counter an apparent problem in some environments.
+			// May just be an issue of getting folks caught up with the latest player.
+			try
 			{
-				var methodName:String = methodData.@name;
-				var helpText:String = "" + methodData.metadata.arg.(@key=="help").@value;
-				var syntaxText:String = "" + methodData.metadata.arg.(@key=="syntax").@value;
-				
-				_commands[methodName] = {method:source[methodName]};
-				
-				if (helpText.length > 0)
+				var desc:XML = flash.utils.describeType(source);
+				for each (var methodData:* in desc.method.(hasOwnProperty("metadata") && metadata.attribute("name").contains("ConsoleCommand")))
 				{
-					_commands[methodName].help = helpText;
+					try
+					{
+						var methodName:String = methodData.@name;
+						var helpText:String = "" + methodData.metadata.arg.(@key=="help").@value;
+						var syntaxText:String = "" + methodData.metadata.arg.(@key=="syntax").@value;
+						
+						_commands[methodName] = {method:source[methodName]};
+						
+						if (helpText.length > 0)
+						{
+							_commands[methodName].help = helpText;
+						}
+						
+						if (syntaxText.length > 0)
+						{
+							_commands[methodName].syntax = syntaxText;
+						}
+					}
+					catch (e:Error)
+					{
+						println(e.getStackTrace(), CHANNEL_ERRORS);
+					}
 				}
-				
-				if (syntaxText.length > 0)
-				{
-					_commands[methodName].syntax = syntaxText;
-				}
+			}
+			catch (e:Error)
+			{
+				println(e.getStackTrace(), CHANNEL_ERRORS);
 			}
 		}
 		
