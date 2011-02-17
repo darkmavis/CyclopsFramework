@@ -16,8 +16,22 @@
 
 package org.cyclopsframework.game
 {
+	import flash.display.DisplayObject;
+	import flash.display.DisplayObjectContainer;
+	import flash.display.MovieClip;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.events.EventDispatcher;
+	import flash.events.IEventDispatcher;
+	import flash.events.KeyboardEvent;
+	import flash.events.MouseEvent;
+	import flash.media.Sound;
+	import flash.utils.getTimer;
+	
+	import org.cyclopsframework.actions.animation.CFFadeTo;
 	import org.cyclopsframework.actions.audio.CFDynamicSound;
 	import org.cyclopsframework.actions.audio.CFSound;
+	import org.cyclopsframework.actions.interpolation.CFInterpolate;
 	import org.cyclopsframework.core.CFAction;
 	import org.cyclopsframework.core.CFEngine;
 	import org.cyclopsframework.core.CFMessage;
@@ -25,22 +39,13 @@ package org.cyclopsframework.game
 	import org.cyclopsframework.core.ICFMessageInterceptor;
 	import org.cyclopsframework.core.ICFPausable;
 	import org.cyclopsframework.core.ICFTaggable;
+	import org.cyclopsframework.core.easing.CFBias;
 	import org.cyclopsframework.game.bindings.CFKeyboardBindings;
 	import org.cyclopsframework.utils.collections.CFDataStore;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
 	import org.cyclopsframework.utils.math.CFMath;
 	import org.cyclopsframework.utils.proxies.CFDataStoreProxy;
 	import org.cyclopsframework.utils.proxies.CFFunctionProxy;
-	
-	import flash.display.DisplayObject;
-	import flash.display.DisplayObjectContainer;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.events.EventDispatcher;
-	import flash.events.IEventDispatcher;
-	import flash.events.KeyboardEvent;
-	import flash.media.Sound;
-	import flash.utils.getTimer;
 	
 	import r1.deval.D;
 	
@@ -177,6 +182,44 @@ package org.cyclopsframework.game
 		public function getSceneByTag(tag:String):CFScene
 		{
 			return engine.query(tag).first() as CFScene;
+		}
+		
+		public function crossfadeToScene(toScene:CFScene, period:Number=1, bias:Function=null):void
+		{
+			toScene.bg.alpha = 0;
+			parent.addScene(toScene);
+			engine
+				.add(new CFFadeTo(toScene.bg, 1, period, 1, bias))
+				.add(removeFromParent);
+			
+			engine.query(CFSound.TAG).forEach(function(sound:CFSound):void
+			{
+				engine.add(new CFInterpolate(sound, "volume", sound.volume, 0, period, 1, bias));
+			});
+		}
+		
+		public function gotoScene(scene:CFScene):void
+		{
+			var pscene:CFScene = parent;
+			pscene.removeScene(self);
+			pscene.addScene(scene);
+		}
+		
+		public function launchSceneOnClick(scene:CFScene, target:MovieClip):void
+		{
+			target.buttonMode = true;
+			target.useHandCursor = true;
+			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, 1, function(e:Event):void
+			{
+				gotoScene(scene);
+			});
+		}
+		
+		public function doOnClick(target:MovieClip, f:Function, cycles:Number=1):void
+		{
+			target.buttonMode = true;
+			target.useHandCursor = true;
+			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
 		}
 		
 		public function addDisplayObject(displayObject:DisplayObject, x:Number=0, y:Number=0):DisplayObject
