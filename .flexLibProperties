@@ -87,6 +87,8 @@
     <classEntry path="org.cyclopsframework.examples.example1_helloworld.HelloWorld"/>
     <classEntry path="org.cyclopsframework.examples.example2_scenes.HelloScenes"/>
     <classEntry path="org.cyclopsframework.examples.example2_scenes.Gameplay"/>
+    <classEntry path="org.cyclopsframework.actions.interpolation.CFStopwatch"/>
+    <classEntry path="org.cyclopsframework.actions.interpolation.events.CFStopwatchEvent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

@@ -78,7 +78,7 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 		{
 			return new Vector3D(_sprite3d.x, _sprite3d.y, _sprite3d.z);
 		}
-						
+		
 		private var _rect:Rectangle;
 		private var _p:Point = new Point();
 		
@@ -169,7 +169,6 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			engine.removeObject(_physicsActor);
 			if (_physicsActor.body != null)
 			{
-				trace("removing body.");
 				_physics.world.DestroyBody(_physicsActor.body);
 			}
 			else

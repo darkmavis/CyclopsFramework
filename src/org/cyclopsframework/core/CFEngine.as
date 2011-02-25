@@ -132,7 +132,7 @@ package org.cyclopsframework.core
 					{
 						if (ao is String)
 						{
-							currTags.push(o);
+							currTags.push(ao); // was o
 						}
 						else if (ao is Array)
 						{
