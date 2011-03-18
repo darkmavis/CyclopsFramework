@@ -16,6 +16,8 @@
 
 package org.cyclopsframework.core.easing
 {
+	import org.cyclopsframework.utils.math.CFMath;
+
 	public class CFBias
 	{
 		public static const LINEAR:Function = linear;
@@ -42,6 +44,94 @@ package org.cyclopsframework.core.easing
 		public function CFBias()
 		{
 			
+		}
+		
+		public static function reversedBias(f:Function):Function
+		{
+			return function(t:Number):Number { return f(1 - t); };
+		}
+		
+		public static function invertedBias(f:Function):Function
+		{
+			return function(t:Number):Number { return (1 - f(t)) };
+		}
+		
+		public static function scaledBias(f:Function, amount:Number):Function
+		{
+			return function(t:Number):Number { return (f(t) * amount); };
+		}
+		
+		public static function shiftedBias(f:Function, amount:Number):Function
+		{
+			return function(t:Number):Number { return (f(t) + amount); };
+		}
+		
+		public static function averagedBiases(bias:Function, ...additionalBiases):Function
+		{
+			var result:Function = function(t:Number):Number
+			{
+				var blendedT:Number = bias(t);
+				for each (var f:Function in additionalBiases)
+				{
+					blendedT += f(t);
+				}
+				return (blendedT / (additionalBiases.length + 1));
+			};
+			return result;
+		}
+		
+		public static function addedBiases(bias:Function, ...additionalBiases):Function
+		{
+			var result:Function = function(t:Number):Number
+			{
+				var blendedT:Number = bias(t);
+				for each (var f:Function in additionalBiases)
+				{
+					blendedT += f(t);
+				}
+				return blendedT;
+			};
+			return result;
+		}
+				
+		public static function multipliedBiases(bias:Function, ...additionalBiases):Function
+		{
+			var result:Function = function(t:Number):Number
+			{
+				var blendedT:Number = bias(t);
+				for each (var f:Function in additionalBiases)
+				{
+					blendedT *= f(t);
+				}
+				return blendedT;
+			};
+			return result;
+		}
+		
+		public static function subtractedBiases(bias:Function, ...additionalBiases):Function
+		{
+			var result:Function = function(t:Number):Number
+			{
+				var blendedT:Number = bias(t);
+				for each (var f:Function in additionalBiases)
+				{
+					blendedT -= f(t);
+				}
+				return blendedT;
+			};
+			return result;
+		}
+		
+		public static function joinedBiases(...biases):Function
+		{
+			if (biases.length == 0) throw new Error("joinedBiases() requires at least 1 argument.");
+			var result:Function = function(t:Number):Number
+			{
+				var n:Number = t * biases.length;
+				var i:Number = int(CFMath.clamp(n, 0, biases.length - 1));
+				return (biases[i] as Function)(t * 4 - i);
+			};
+			return result;
 		}
 		
 		public static function linear(t:Number):Number

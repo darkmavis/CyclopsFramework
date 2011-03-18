@@ -24,6 +24,7 @@ package org.cyclopsframework.core
 	import org.cyclopsframework.actions.flow.CFWaitForMessage;
 	import org.cyclopsframework.core.easing.CFBias;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
+	import org.cyclopsframework.utils.logging.CFLog;
 
 	public class CFAction implements ICFPausable, ICFTaggable, ICFHasEngine
 	{
@@ -136,11 +137,11 @@ package org.cyclopsframework.core
 						}
 						else if (ao is Array)
 						{
-							add(currTags, contextualTags, ao);
+							currAction = add(currTags, contextualTags, ao);
 						}
 						else
 						{
-							add(currTags, contextualTags, ao);
+							currAction = add(currTags, contextualTags, ao);
 							currTags = [];
 						}
 					}
@@ -224,6 +225,11 @@ package org.cyclopsframework.core
 		{
 			return addf(function():void { engine.send(receiverTag, messageName, data); });
 		}
+		
+		public function addLogEntry(text:Object, channel:String="default"):CFAction
+		{
+			return (add(function():void { CFLog.println(text, channel); }));
+		}
 				
 		protected function safeset(target:Object, propertyName:String, value:Object):void
 		{
@@ -242,7 +248,7 @@ package org.cyclopsframework.core
 				target[propertyName] = value;
 			}
 		}
-		
+				
 		public function addTag(tag:String):CFAction
 		{
 			_tags.addItem(tag);

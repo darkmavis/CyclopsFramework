@@ -21,7 +21,7 @@ package org.cyclopsframework.game.tiles
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 
-	public class CFTileset
+	public class CFTileset implements ICFTileset
 	{
 		private var _atlas:BitmapData;
 		public function get atlas():BitmapData { return _atlas; }

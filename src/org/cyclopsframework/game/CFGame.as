@@ -16,16 +16,18 @@
 
 package org.cyclopsframework.game
 {
+	import flash.display.Graphics;
+	import flash.display.Sprite;
+	import flash.events.Event;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
+	import flash.system.System;
+	import flash.utils.getTimer;
+	
 	import org.cyclopsframework.core.CFEngine;
 	import org.cyclopsframework.utils.console.CFConsole;
 	import org.cyclopsframework.utils.logging.CFLog;
 	import org.cyclopsframework.utils.math.CFMath;
-	
-	import flash.display.Graphics;
-	import flash.display.Sprite;
-	import flash.events.Event;
-	import flash.system.System;
-	import flash.utils.getTimer;
 	
 	public class CFGame extends Sprite
 	{
@@ -37,22 +39,26 @@ package org.cyclopsframework.game
 		
 		public function get self():CFGame { return this; }
 		
-		private var _width:Number;
-		private var _height:Number;
+		private var _rect:Rectangle;
+		public function get rect():Rectangle { return _rect; };
+		
+		private var _centerPoint:Point;
+		public function get centerPoint():Point { return _centerPoint; }
 		
 		private var _lastTime:Number = flash.utils.getTimer();
 		
-		public function CFGame(width:Number=800, height:Number=600, fillBackground:Boolean=false)
+		public function CFGame(gameWidth:Number=800, gameHeight:Number=600, fillBackground:Boolean=false)
 		{
 			super();
-			_width = width;
-			_height = height;
+			
+			_rect = new Rectangle(0, 0, gameWidth, gameHeight);
+			
 			this.addEventListener(Event.ADDED_TO_STAGE, onReady);
 			if (fillBackground)
 			{
 				var g:Graphics = _scene.bg.graphics;
 				g.beginFill(0);
-				g.drawRect(0, 0, width, height);
+				g.drawRect(0, 0, _rect.width, _rect.height);
 				g.endFill();
 			}
 		}
@@ -63,7 +69,7 @@ package org.cyclopsframework.game
 			
 			this.addChild(scene.bg);
 			
-			_console = new CFConsole(_width, _height);
+			_console = new CFConsole(_rect.width, _rect.height);
 			console.scriptingContext["game"] = this;
 			this.addChild(console.bg);
 			

@@ -29,6 +29,12 @@ package org.cyclopsframework.actions.interpolation
 	{
 		public static const TAG:String = "@CFStopwatch";
 		
+		public static var TAG_RECEIVER:String = "stopwatch_receiver";
+		public static var MSG_SECONDS_CHANGED:String = "seconds_changed";
+		public static var MSG_MINUTES_CHANGED:String = "minutes_changed";
+		public static var MSG_HOURS_CHANGED:String = "hours_changed";
+		public static var MSG_DAYS_CHANGED:String = "days_changed";
+		
 		private var _lastSeconds:Number = 0;
 		private var _seconds:Number = 0;
 		public function get seconds():int { return int(_seconds % 60); }
@@ -74,21 +80,25 @@ package org.cyclopsframework.actions.interpolation
 			{
 				_lastSeconds = s;
 				dispatchEvent(new CFStopwatchEvent(CFStopwatchEvent.SECONDS_CHANGED));
+				engine.send(TAG_RECEIVER, MSG_SECONDS_CHANGED);
 				var m:Number = minutes;
 				if (m != _lastMinutes)
 				{
 					_lastMinutes = m;
 					dispatchEvent(new CFStopwatchEvent(CFStopwatchEvent.MINUTES_CHANGED));
+					engine.send(TAG_RECEIVER, MSG_MINUTES_CHANGED);
 					var h:Number = hours;
 					if (h != _lastHours)
 					{
 						_lastHours = h;
 						dispatchEvent(new CFStopwatchEvent(CFStopwatchEvent.HOURS_CHANGED));
+						engine.send(TAG_RECEIVER, MSG_HOURS_CHANGED);
 						var d:Number = days;
 						if (d != _lastDays)
 						{
 							_lastDays = d;
 							dispatchEvent(new CFStopwatchEvent(CFStopwatchEvent.DAYS_CHANGED));
+							engine.send(TAG_RECEIVER, MSG_DAYS_CHANGED);
 						}
 					}
 				}

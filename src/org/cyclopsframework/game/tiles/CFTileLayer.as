@@ -16,11 +16,14 @@
 
 package org.cyclopsframework.game.tiles
 {
-	import org.cyclopsframework.utils.math.CFMath;
-	
 	import flash.display.BitmapData;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
+	
+	import org.cyclopsframework.actions.flow.CFFunction;
+	import org.cyclopsframework.actions.flow.CFSleep;
+	import org.cyclopsframework.core.CFAction;
+	import org.cyclopsframework.utils.math.CFMath;
 	
 	public class CFTileLayer
 	{
@@ -73,6 +76,54 @@ package org.cyclopsframework.game.tiles
 				}
 			}
 		}
+		
+		public function yieldTiles(f:Function):Array
+		{
+			var result:Array = [];
+			for (var y:int = 0; y < _rows; ++y)
+			{
+				for (var x:int = 0; x < _columns; ++x)
+				{
+					result.push(new CFFunction(0, 1, this, [x, y], function(x:int, y:int):void
+					{
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+					}));
+				}
+			}
+			return result;
+		}
+		
+		public function yieldTilesByRow(f:Function):Array
+		{
+			var result:Array = [];
+			for (var y:int = 0; y < _rows; ++y)
+			{
+				result.push(new CFFunction(0, 1, this, [y], function(y:int):void
+				{
+					for (var x:int = 0; x < _columns; ++x)
+					{
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+					}
+				}));
+			}
+			return result;
+		}
+		
+		public function yieldTilesByColumn(f:Function):Array
+		{
+			var result:Array = [];
+			for (var x:int = 0; x < _columns; ++x)
+			{
+				result.push(new CFFunction(0, 1, this, [x], function(x:int):void
+				{
+					for (var y:int = 0; y < _rows; ++y)
+					{
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+					}
+				}));
+			}
+			return result;
+		}
 				
 		public function drawView(viewRect:Rectangle, target:BitmapData=null):BitmapData
 		{
@@ -110,10 +161,12 @@ package org.cyclopsframework.game.tiles
 			return target;
 		}
 		
+		/*
 		public static function fromTMX(tileset:CFTileset):void
 		{
 			
 		}
+		*/
 		
 	}
 }

@@ -16,6 +16,8 @@
 
 package org.cyclopsframework.core
 {
+	import away3d.loaders.Obj;
+	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
@@ -27,6 +29,7 @@ package org.cyclopsframework.core
 	import org.cyclopsframework.utils.collections.CFDataStore;
 	import org.cyclopsframework.utils.collections.CFRegistry;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
+	import org.cyclopsframework.utils.logging.CFLog;
 	import org.cyclopsframework.utils.proxies.CFDataStoreProxy;
 	import org.cyclopsframework.utils.proxies.CFMessageProxy;
 	
@@ -36,18 +39,18 @@ package org.cyclopsframework.core
 		
 		private var _registry:CFRegistry = new CFRegistry();
 		
-		private var _actions:Vector.<CFAction> = new Vector.<CFAction>();
-		private var _additions:Vector.<ICFTaggable> = new Vector.<ICFTaggable>();
-		private var _removals:Vector.<ICFTaggable> = new Vector.<ICFTaggable>();
-		private var _stopsRequested:Vector.<CFStopActionRequest> = new Vector.<CFStopActionRequest>();
-		private var _messages:Vector.<CFMessage> = new Vector.<CFMessage>();
+		private var _actions:Array = [];
+		private var _additions:Array = [];
+		private var _removals:Array = [];
+		private var _stopsRequested:Array = [];
+		private var _messages:Array = [];
 		
 		private var _pausesRequested:CFStringHashSet = new CFStringHashSet();
 		private var _resumesRequested:CFStringHashSet = new CFStringHashSet();
 		private var _blocksRequested:CFStringHashSet = new CFStringHashSet();
 		private var _autotags:CFStringHashSet = new CFStringHashSet();
-				
-		private var _delayedFunctions:Vector.<Function> = new Vector.<Function>();
+		
+		private var _delayedFunctions:Array = [];
 		
 		private var _context:CFAction;
 		public function get context():CFAction { return _context; }
@@ -136,11 +139,11 @@ package org.cyclopsframework.core
 						}
 						else if (ao is Array)
 						{
-							add(currTags, contextualTags, ao);
+							currAction = add(currTags, contextualTags, ao);
 						}
 						else
 						{
-							add(currTags, contextualTags, ao);
+							currAction = add(currTags, contextualTags, ao);
 							currTags = [];
 						}
 					}
@@ -158,6 +161,7 @@ package org.cyclopsframework.core
 		{
 			var head:Object;
 			var tail:Object;
+			var tmpTail:Object;
 			
 			for each (var o:Object in actions)
 			{
@@ -167,7 +171,8 @@ package org.cyclopsframework.core
 				}
 				else
 				{
-					tail = tail.add(o);
+					tmpTail = tail.add(o);
+					if (tmpTail != null) tail = tmpTail;
 				}
 			}
 			
@@ -217,9 +222,9 @@ package org.cyclopsframework.core
 		
 		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CFAction
 		{
-			return add(receiverTag, new CFWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
+			return waitForMessage(receiverTag, messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener);
 		}
-		
+				
 		// improve this later.
 		public function when(trigger:Function, response:Function=null):CFAction
 		{

@@ -26,6 +26,29 @@ package org.cyclopsframework.utils.collections
 		{
 			return (length > 0) ? this[int(Math.random() * length)] : null;
 		}
+		
+		public function shuffled():CFArray
+		{
+			var src:Array = slice(0);
+			var result:CFArray = new CFArray();
+			for (var i:int = 0; i < length; ++i)
+			{
+				result[i] = src.splice(int(Math.random() * src.length), 1)[0];
+			}
+			return result;
+		}
+		
+		public function clustered(minSize:int, maxSize:int):CFArray
+		{
+			var src:Array = [].concat(this);
+			var result:CFArray = new CFArray();
+			var range:int = maxSize - minSize;
+			while (src.length > 0)
+			{
+				result.push(src.splice(0, minSize + int(Math.random() * range)));
+			}
+			return result;
+		}
 				
 	}
 }

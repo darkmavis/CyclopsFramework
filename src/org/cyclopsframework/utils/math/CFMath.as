@@ -16,18 +16,25 @@
 
 package org.cyclopsframework.utils.math
 {
-	import org.cyclopsframework.core.easing.CFBias;
-	
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
-
+	
+	import org.cyclopsframework.core.easing.CFBias;
+	
 	public class CFMath
 	{
 		public static const PHI:Number = 1.61803399;
 		public static const PI_OVER_180:Number = (180 / Math.PI);
 		public static const PI:Number = Math.PI;
 		public static const PI2:Number = Math.PI * 2;
+		
+		public static const INSIDE:int = 1;
+		public static const OUTSIDE:int = 2;
+		public static const TOP:int = 4;
+		public static const BOTTOM:int = 8;
+		public static const LEFT:int = 16;
+		public static const RIGHT:int = 32;
 		
 		public function CFMath()
 		{
@@ -104,6 +111,37 @@ package org.cyclopsframework.utils.math
 		{
 			o.x = rect.x + rect.width / 2;
 			o.y = rect.y + rect.height / 2;
+		}
+		
+		public static function snap2(itemRect:Rectangle, containerRect:Rectangle, alignment:int, padding:int=0):Point
+		{
+			var p:Point = new Point();
+			
+			var inside:Boolean = (alignment & INSIDE) != 0;
+						
+			if ((alignment & TOP) != 0)
+			{
+				p.y = containerRect.top + padding;
+				if (!inside) p.y -= itemRect.height + padding * 2;
+			}
+			else if ((alignment & BOTTOM) != 0)
+			{
+				p.y = containerRect.bottom + padding;
+				if (inside) p.y -= itemRect.height + padding * 2;
+			}
+			
+			if ((alignment & LEFT) != 0)
+			{
+				p.x = containerRect.left + padding;
+				if (!inside) p.x -= itemRect.width + padding * 2;
+			}
+			else if ((alignment & RIGHT) != 0)
+			{
+				p.x = containerRect.right + padding;
+				if (inside) p.x -= itemRect.width + padding * 2;
+			}
+			
+			return p;
 		}
 		
 		public static function objectWithinRadiusOfTarget2(o:Object, radius:Number, target:Object):Boolean

@@ -89,6 +89,8 @@
     <classEntry path="org.cyclopsframework.examples.example2_scenes.Gameplay"/>
     <classEntry path="org.cyclopsframework.actions.interpolation.CFStopwatch"/>
     <classEntry path="org.cyclopsframework.actions.interpolation.events.CFStopwatchEvent"/>
+    <classEntry path="org.cyclopsframework.game.tiles.ICFTileset"/>
+    <classEntry path="org.cyclopsframework.game.tiles.CFTilesetIndependent"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

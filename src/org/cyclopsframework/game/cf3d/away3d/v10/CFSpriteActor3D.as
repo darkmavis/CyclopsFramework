@@ -24,17 +24,19 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 	import away3d.materials.BitmapMaterial;
 	import away3d.sprites.Sprite3D;
 	
-	import org.cyclopsframework.actions.physics.box2d.CFPhysicsBox2D;
-	import org.cyclopsframework.actions.physics.box2d.CFPhysicsActorBox2D;
-	import org.cyclopsframework.core.CFAction;
-	import org.cyclopsframework.game.tiles.CFTileset;
-	import org.cyclopsframework.utils.math.CFMath;
-	
 	import flash.display.BitmapData;
 	import flash.display.DisplayObjectContainer;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
+	
+	import org.cyclopsframework.actions.physics.box2d.CFPhysicsActorBox2D;
+	import org.cyclopsframework.actions.physics.box2d.CFPhysicsBox2D;
+	import org.cyclopsframework.core.CFAction;
+	import org.cyclopsframework.game.tiles.CFTileset;
+	import org.cyclopsframework.game.tiles.CFTilesetIndependent;
+	import org.cyclopsframework.game.tiles.ICFTileset;
+	import org.cyclopsframework.utils.math.CFMath;
 	
 	public class CFSpriteActor3D extends CFAction
 	{
@@ -52,9 +54,9 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 		private var _numFramesPerAnimation:int;
 		private var _animationPosition:Number = 0;
 		
-		private var _tileset:CFTileset;
-		public function get tileset():CFTileset { return _tileset; }
-		public function set tileset(value:CFTileset):void { _tileset = value; }
+		private var _tileset:ICFTileset;
+		public function get tileset():ICFTileset { return _tileset; }
+		public function set tileset(value:ICFTileset):void { _tileset = value; }
 		
 		private var _fixedFrame:int = FIXED_FRAME_MODE_DISABLED;
 		public function get fixedFrame():int { return _fixedFrame; }
@@ -89,7 +91,7 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			physics:CFPhysicsBox2D,
 			radius:Number,
 			density:Number,
-			tileset:CFTileset,
+			tileset:ICFTileset,
 			scale:Number,
 			x:Number=0,
 			y:Number=0,
@@ -114,7 +116,7 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			_frameOffset = startingFrameIndex;
 			_numAngles = numAngles;
 			_numFramesPerAnimation = numFramesPerAnimation;
-			_rect = _tileset.getTileRect(0);
+			_rect = _tileset.getTile(0).rect;
 			
 			_physicsActor = _physics.createSimpleActor(_sprite3d, _radius, 1);
 			_physicsActor.body.SetActive(false);
@@ -156,7 +158,14 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			
 			if (angleIndex != _lastAngleIndex)
 			{
-				(_sprite3d.material as BitmapMaterial).bitmap.copyPixels(_tileset.getTile(angleIndex), _rect, _p);
+				/*if (_tileset is CFTilesetIndependent)
+				{
+					(_sprite3d.material as BitmapMaterial).bitmap = _tileset.getTile(angleIndex);
+				}
+				else
+				{*/
+					(_sprite3d.material as BitmapMaterial).bitmap.copyPixels(_tileset.getTile(angleIndex), _rect, _p);
+				//}
 			}
 			
 			_lastAngleIndex = angleIndex;
