@@ -16,6 +16,7 @@
 
 package org.cyclopsframework.game.bindings
 {
+	import flash.geom.Point;
 	import flash.ui.Keyboard;
 
 	public class CFKeyboardBindingsGroup

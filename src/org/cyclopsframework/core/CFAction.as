@@ -25,6 +25,7 @@ package org.cyclopsframework.core
 	import org.cyclopsframework.core.easing.CFBias;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
 	import org.cyclopsframework.utils.logging.CFLog;
+	import org.cyclopsframework.utils.misc.CFGuid;
 
 	public class CFAction implements ICFPausable, ICFTaggable, ICFHasEngine
 	{
@@ -77,6 +78,18 @@ package org.cyclopsframework.core
 		private var _engine:CFEngine;
 		public function get engine():CFEngine { return _engine; }
 		public function set engine(value:CFEngine):void { _engine = value; }
+		
+		private var _uniqueTag:String;
+		
+		/** Use this to track "subactions" within an originating action, but not the originating action itself. **/
+		protected function get uniqueTag():String
+		{
+			if (_uniqueTag == null)
+			{
+				_uniqueTag = CFGuid.create();
+			}
+			return _uniqueTag;
+		}
 				
 		public function CFAction(period:Number=0, cycles:Number=1, bias:Function=null, tags:Array=null)
 		{

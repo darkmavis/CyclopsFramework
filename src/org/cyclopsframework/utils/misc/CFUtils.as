@@ -16,13 +16,14 @@
 
 package org.cyclopsframework.utils.misc
 {
-	import org.cyclopsframework.utils.collections.CFArray;
-	
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.MovieClip;
 	import flash.text.TextField;
 	import flash.utils.Dictionary;
 	import flash.utils.describeType;
+	
+	import org.cyclopsframework.utils.collections.CFArray;
 
 	public class CFUtils
 	{
@@ -130,6 +131,18 @@ package org.cyclopsframework.utils.misc
 			path.pop();
 		}
 		
+		public static function gotoAndStopMovieClips(target:DisplayObject, frame:Object):void
+		{
+			CFUtils.walkDisplayObject(target, function(path:CFArray):void
+			{
+				var o:Object = path.last;
+				if (o is MovieClip)
+				{
+					(o as MovieClip).gotoAndStop(frame);
+				}
+			});
+		}
+		
 		public static function disableTextInput(target:DisplayObject):void
 		{
 			CFUtils.walkDisplayObject(target, function(path:CFArray):void
@@ -137,7 +150,7 @@ package org.cyclopsframework.utils.misc
 				var o:Object = path.last;
 				if (o is TextField)
 				{
-					(path.last as TextField).mouseEnabled = false;
+					(o as TextField).mouseEnabled = false;
 				}
 			});
 		}

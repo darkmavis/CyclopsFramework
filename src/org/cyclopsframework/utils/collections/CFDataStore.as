@@ -287,6 +287,11 @@ package org.cyclopsframework.utils.collections
 			return result;
 		}
 		
+		public function random():Object
+		{
+			return toArray().random;
+		}
+		
 		public function setProperties(kvObject:Object, deep:Boolean=false):CFDataStore
 		{
 			forEach(function(item:Object):void
@@ -313,9 +318,9 @@ package org.cyclopsframework.utils.collections
 			return result + "\n";
 		}
 		
-		public function toArray():Array
+		public function toArray():CFArray
 		{
-			var results:Array = [];
+			var results:CFArray = new CFArray();
 			forEach(function(item:Object):void
 			{
 				results.push(item);

@@ -37,7 +37,7 @@ package org.cyclopsframework.core
 		public function get canceled():Boolean { return _canceled; }
 		public function set canceled(value:Boolean):void { _canceled = value; }
 				
-		public function CFMessage(receiverTag:String, name:String, data:Array, sender:Object, receiverType:Class)
+		public function CFMessage(receiverTag:String, name:String, data:Array=null, sender:Object=null, receiverType:Class=null)
 		{
 			_receiverTag = receiverTag;
 			_name = name;

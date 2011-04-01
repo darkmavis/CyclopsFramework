@@ -112,6 +112,9 @@ package org.cyclopsframework.game
 		
 		public function get self():CFScene { return this; }
 		
+		private var _ready:Boolean = false;
+		public function get ready():Boolean { return _ready; }
+		
 		public function CFScene(...tags)
 		{
 			super();
@@ -127,6 +130,7 @@ package org.cyclopsframework.game
 			engine.runNextFrame(function():void
 			{
 				dispatchEvent(new Event(EVENT_SCENE_READY));
+				_ready = true;
 			});
 			
 			bg.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
@@ -207,6 +211,7 @@ package org.cyclopsframework.game
 		
 		public function launchSceneOnClick(scene:CFScene, target:MovieClip):void
 		{
+			target.mouseEnabled = true;
 			target.buttonMode = true;
 			target.useHandCursor = true;
 			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, 1, function(e:Event):void
@@ -217,6 +222,7 @@ package org.cyclopsframework.game
 		
 		public function doOnClick(target:MovieClip, f:Function, cycles:Number=1):void
 		{
+			target.mouseEnabled = true;
 			target.buttonMode = true;
 			target.useHandCursor = true;
 			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
@@ -315,6 +321,15 @@ package org.cyclopsframework.game
 			}
 		}
 		
+		public function sendMessage(msg:CFMessage):void
+		{
+			engine.sendMessage(msg);
+			for each (var scene:CFScene in children)
+			{
+				scene.sendMessage(msg);
+			}
+		}
+		
 		public function find(tag:String):Object
 		{
 			var result:Object = engine.query(tag).first();
@@ -328,7 +343,7 @@ package org.cyclopsframework.game
 			
 			return null;
 		}
-		
+				
 		public function status():String
 		{
 			var result:String = engine.status();

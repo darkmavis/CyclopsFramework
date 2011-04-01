@@ -56,6 +56,9 @@ package org.cyclopsframework.core
 		public function get context():CFAction { return _context; }
 		public function set context(value:CFAction):void { _context = value; }
 		
+		private var _frameData:Object = {};
+		public function get frameData():Object { return _frameData; }
+		
 		private var _delta:Number = 1 / 60;
 		public function get delta():Number { return _delta; }
 		public function get fps():Number { return 1 / _delta; }
@@ -226,13 +229,31 @@ package org.cyclopsframework.core
 		}
 				
 		// improve this later.
-		public function when(trigger:Function, response:Function=null):CFAction
+		public function when(trigger:Object, response:Function=null):CFAction
 		{
 			return loop(function():void
 			{
-				if ((trigger != null) && trigger())
+				if (trigger != null)
 				{
-					if (response != null) response();
+					if ((trigger is Function) ? trigger() : Boolean(trigger))
+					{
+						if (response != null) response();
+					}
+				}
+			});
+		}
+		
+		public function waitForCondition(condition:Object, response:Function=null):CFAction
+		{
+			return loop(function():void
+			{
+				if (condition != null)
+				{
+					if ((condition is Function) ? condition() : Boolean(condition))
+					{
+						if (response != null) response();
+						context.stop();
+					}
 				}
 			});
 		}
@@ -398,10 +419,15 @@ package org.cyclopsframework.core
 		{
 			return new CFMessageProxy(this, tag, sender, receiverType);
 		}
+				
+		public function sendMessage(msg:CFMessage):void
+		{
+			_messages.push(msg);
+		}
 		
 		public function send(receiverTag:String, name:String, data:Array=null, sender:Object=null, receiverType:Class=null):void
 		{
-			_messages.push(new CFMessage(receiverTag, name, data, sender, receiverType));
+			sendMessage(new CFMessage(receiverTag, name, data, sender, receiverType));
 		}
 		
 		private function deliverMessage(msg:CFMessage, receiver:Object):void
@@ -685,10 +711,19 @@ package org.cyclopsframework.core
 			_pausesRequested.clear();
 		}
 		
+		private function clearFrameData():void
+		{
+			for (var key:Object in _frameData)
+			{
+				trace(_frameData[key]);
+				delete _frameData[key];
+			}
+		}
+		
 		public function update(delta:Number):void
 		{
 			_delta = delta;
-			
+						
 			processDelayedFunctions();
 			
 			processActions(delta);
@@ -708,6 +743,8 @@ package org.cyclopsframework.core
 			processPauseRequests();
 			
 			_blocksRequested.clear();
+			
+			clearFrameData();
 		}
 		
 	}

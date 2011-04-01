@@ -107,6 +107,12 @@ package org.cyclopsframework.utils.math
 			}
 		}
 		
+		public static function repositionNormalized(o:Object, containerRect:Rectangle, nx:Number, ny:Number):void
+		{
+			o.x = containerRect.width * nx;
+			o.y = containerRect.height * ny;
+		}
+		
 		public static function recenter2(o:Object, rect:Rectangle):void
 		{
 			o.x = rect.x + rect.width / 2;
@@ -118,7 +124,7 @@ package org.cyclopsframework.utils.math
 			var p:Point = new Point();
 			
 			var inside:Boolean = (alignment & INSIDE) != 0;
-						
+			
 			if ((alignment & TOP) != 0)
 			{
 				p.y = containerRect.top + padding;

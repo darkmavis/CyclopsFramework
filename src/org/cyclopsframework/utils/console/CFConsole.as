@@ -535,10 +535,14 @@ package org.cyclopsframework.utils.console
 						var syntaxText:String = "" + methodData.metadata.arg.(@key=="syntax").@value;
 						
 						_commands[methodName] = {method:source[methodName]};
-						
+												
 						if (helpText.length > 0)
 						{
 							_commands[methodName].help = helpText;
+						}
+						else
+						{
+							_commands[methodName].help = methodName;
 						}
 						
 						if (syntaxText.length > 0)
