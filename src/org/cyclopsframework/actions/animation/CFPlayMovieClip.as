@@ -21,20 +21,26 @@ package org.cyclopsframework.actions.animation
 	
 	import org.cyclopsframework.core.CFAction;
 	import org.cyclopsframework.core.easing.CFBias;
-
-	public class CFAnimateMovieClip extends CFAction
+	
+	public class CFPlayMovieClip extends CFAction
 	{
-		public static const TAG:String = "@CFAnimateMovieClip";
+		public static const TAG:String = "@CFPlayMovieClip";
 		
 		public static const EVENT_ANIMATION_FINISHED:String = "ANIMATION_FINISHED";
 		
 		private var _mc:MovieClip;
 		private var _stopEvents:Array = [EVENT_ANIMATION_FINISHED];
+		private var _startingFrame:Object;
 		
-		public function CFAnimateMovieClip(mc:MovieClip, fps:Number=24)
+		public function CFPlayMovieClip(mc:MovieClip, startingFrame:Object=null, ...stopEvents)
 		{
-			super(1 / fps, Number.MAX_VALUE, null, [TAG]);
+			super(0, Number.MAX_VALUE, null, [TAG]);
 			_mc = mc;
+			_startingFrame = startingFrame;
+			if (stopEvents.length > 0)
+			{
+				_stopEvents = _stopEvents.concat(stopEvents);
+			}
 		}
 		
 		protected override function onEnter():void
@@ -46,29 +52,12 @@ package org.cyclopsframework.actions.animation
 					stop();
 				}).addTag(uniqueTag);
 			}
-		}
-						
-		protected override function onLastFrame():void
-		{
-			_mc.nextFrame();
-			_mc.stop();
+			_mc.gotoAndPlay(_startingFrame);
 		}
 		
 		protected override function onExit():void
 		{
 			engine.remove(uniqueTag);
-		}
-		
-		public function addStopEvent(name:String):CFAnimateMovieClip
-		{
-			_stopEvents.push(name);
-			return this;
-		}
-		
-		public function setStartingFrame(frame:Object):CFAnimateMovieClip
-		{
-			_mc.gotoAndStop(frame);
-			return this;
 		}
 		
 	}

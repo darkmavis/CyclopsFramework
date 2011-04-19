@@ -43,7 +43,9 @@ package org.cyclopsframework.game
 	import org.cyclopsframework.game.bindings.CFKeyboardBindings;
 	import org.cyclopsframework.utils.collections.CFDataStore;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
+	import org.cyclopsframework.utils.logging.CFLog;
 	import org.cyclopsframework.utils.math.CFMath;
+	import org.cyclopsframework.utils.misc.CFUtils;
 	import org.cyclopsframework.utils.proxies.CFDataStoreProxy;
 	import org.cyclopsframework.utils.proxies.CFFunctionProxy;
 	
@@ -172,6 +174,7 @@ package org.cyclopsframework.game
 		
 		public function removeScene(scene:CFScene):void
 		{
+			CFUtils.gotoAndStopMovieClips(scene.bg, 0);
 			engine.removeObject(scene);
 			bg.removeChild(scene.bg);
 			scene.parent = null;
@@ -226,6 +229,13 @@ package org.cyclopsframework.game
 			target.buttonMode = true;
 			target.useHandCursor = true;
 			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
+		}
+		
+		public function addSceneObject(sceneObject:CFSceneObject):CFSceneObject
+		{
+			sceneObject.scene = this;
+			engine.add(sceneObject);
+			return sceneObject;
 		}
 		
 		public function addDisplayObject(displayObject:DisplayObject, x:Number=0, y:Number=0):DisplayObject
@@ -343,12 +353,27 @@ package org.cyclopsframework.game
 			
 			return null;
 		}
+		
+		public function no(tag:String):Boolean
+		{
+			return (engine.count(tag) == 0);
+		}
+		
+		public function any(tag:String):Boolean
+		{
+			return (engine.count(tag) > 0);
+		}
 				
 		public function status():String
 		{
 			var result:String = engine.status();
 			result += "\nChild scenes: " + _children.toString() + "\nTotal local display objects: " + bg.numChildren;
 			return result;
+		}
+		
+		protected function log(text:String, channel:String=CFLog.CHANNEL_DEFAULT):void
+		{
+			CFLog.println(text, channel);
 		}
 		
 		private function onKeyDown(e:KeyboardEvent):void
@@ -400,7 +425,7 @@ package org.cyclopsframework.game
 		}
 		
 		protected function onEnter():void { }
-				
+		
 		public function dispose():void
 		{
 			_sceneContext = this;

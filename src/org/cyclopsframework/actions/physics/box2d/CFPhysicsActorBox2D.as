@@ -18,11 +18,13 @@ package org.cyclopsframework.actions.physics.box2d
 {
 	import Box2D.Common.Math.b2Vec2;
 	import Box2D.Dynamics.b2Body;
-	
-	import org.cyclopsframework.core.CFAction;
-	import org.cyclopsframework.utils.misc.CFUtils;
+	import Box2D.Dynamics.b2Fixture;
 	
 	import flash.geom.Point;
+	
+	import org.cyclopsframework.core.CFAction;
+	import org.cyclopsframework.utils.math.CFMath;
+	import org.cyclopsframework.utils.misc.CFUtils;
 	
 	public class CFPhysicsActorBox2D extends CFAction
 	{
@@ -83,6 +85,25 @@ package org.cyclopsframework.actions.physics.box2d
 			{
 				throw new Error("Orientation incorrect.  Please choose ORIENTATION_XY or ORIENTATION_XZ.");
 			}
+		}
+		
+		public function raycast(degrees:Number, radius:Number):Vector.<b2Fixture>
+		{
+			var a:Number = degrees / 57.2957795;
+			var wc:b2Vec2 = _body.GetWorldCenter();
+			var v:b2Vec2 = new b2Vec2(wc.x + Math.sin(a) * radius, wc.y - Math.cos(a) * radius);
+			return raycastTo(v);
+		}
+		
+		public function raycastTo(v:b2Vec2):Vector.<b2Fixture>
+		{
+			var results:Vector.<b2Fixture> = _body.GetWorld().RayCastAll(_body.GetWorldCenter(), v).sort(function(a:b2Fixture, b:b2Fixture):int
+			{
+				var d1:Number = CFMath.distanceSquared2(a.GetBody().GetWorldCenter(), _body.GetWorldCenter());
+				var d2:Number = CFMath.distanceSquared2(b.GetBody().GetWorldCenter(), _body.GetWorldCenter());
+				return d1 - d2;
+			});
+			return results;
 		}
 		
 	}

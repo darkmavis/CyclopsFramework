@@ -25,6 +25,8 @@ package org.cyclopsframework.core
 	import org.cyclopsframework.actions.flow.CFSleep;
 	import org.cyclopsframework.actions.flow.CFWaitForEvent;
 	import org.cyclopsframework.actions.flow.CFWaitForMessage;
+	import org.cyclopsframework.actions.flow.CFWaitUntil;
+	import org.cyclopsframework.actions.interpolation.CFInterpolate;
 	import org.cyclopsframework.utils.collections.CFCache;
 	import org.cyclopsframework.utils.collections.CFDataStore;
 	import org.cyclopsframework.utils.collections.CFRegistry;
@@ -202,9 +204,9 @@ package org.cyclopsframework.core
 			return add(new CFFunction(period, cycles, null, null, f));
 		}
 				
-		public function nop():CFAction
+		public function nop(tag:String=null):CFAction
 		{
-			return add(new CFAction());
+			return add(tag, new CFAction());
 		}
 		
 		public function sleep(period:Number):CFAction
@@ -212,6 +214,12 @@ package org.cyclopsframework.core
 			return add(new CFSleep(period));
 		}
 		
+		public function tween(target:Object, propertyName:String, a:Number, b:Number,
+			period:Number=0, cycles:Number=1, bias:Function=null, mapFunc:Function=null):CFAction
+		{
+			return add(new CFInterpolate(target, propertyName, a, b, period, cycles, bias, mapFunc));
+		}
+				
 		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CFAction
 		{
 			return add(new CFWaitForEvent(target, eventType, timeout, cycles, listener));
@@ -221,6 +229,11 @@ package org.cyclopsframework.core
 			messageListener:Function=null, timeoutListener:Function=null):CFAction
 		{
 			return add(receiverTag, new CFWaitForMessage(messageName, timeout, cycles, messageListener, timeoutListener));
+		}
+		
+		public function waitUntil(predicate:Function, timeout:Number=Number.MAX_VALUE):CFAction
+		{
+			return add(new CFWaitUntil(predicate, timeout));
 		}
 		
 		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CFAction
@@ -715,7 +728,6 @@ package org.cyclopsframework.core
 		{
 			for (var key:Object in _frameData)
 			{
-				trace(_frameData[key]);
 				delete _frameData[key];
 			}
 		}

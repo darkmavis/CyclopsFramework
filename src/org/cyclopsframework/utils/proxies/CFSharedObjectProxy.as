@@ -1,18 +1,18 @@
 package org.cyclopsframework.utils.proxies
 {
-	import org.cyclopsframework.core.ICFDisposable;
-	import org.cyclopsframework.core.ICFTaggable;
-	import org.cyclopsframework.utils.collections.CFRegistry;
-	import org.cyclopsframework.utils.collections.CFStringHashSet;
-	import org.cyclopsframework.utils.math.CFMath;
-	import org.cyclopsframework.utils.misc.CFUtils;
-	
 	import flash.events.SyncEvent;
 	import flash.net.SharedObject;
 	import flash.utils.Dictionary;
 	import flash.utils.Proxy;
 	import flash.utils.flash_proxy;
 	import flash.utils.getQualifiedClassName;
+	
+	import org.cyclopsframework.core.ICFDisposable;
+	import org.cyclopsframework.core.ICFTaggable;
+	import org.cyclopsframework.utils.collections.CFRegistry;
+	import org.cyclopsframework.utils.collections.CFStringHashSet;
+	import org.cyclopsframework.utils.math.CFMath;
+	import org.cyclopsframework.utils.misc.CFUtils;
 	
 	public dynamic class CFSharedObjectProxy extends Proxy
 	{
@@ -38,18 +38,26 @@ package org.cyclopsframework.utils.proxies
 		
 		override flash_proxy function callProperty(name:*, ...parameters):*
 		{
+			var localName:String = String(name);
+			
+			if (name is QName)
+			{
+				localName = (name as QName).localName;
+			}
+			
 			if (parameters.length == 0)
 			{
-				_so.setProperty(name, null);
+				_so.send.apply(null, [localName]);
 			}
 			else if (parameters.length == 1)
 			{
-				_so.setProperty(name, parameters[0]);
+				_so.send.apply(null, [localName].concat(parameters));
 			}
 			else
 			{
-				_so.setProperty(name, parameters);
+				_so.send.apply(null, [localName].concat(parameters));
 			}
+			
 		}
 		
 		override flash_proxy function setProperty(name:*, value:*):void

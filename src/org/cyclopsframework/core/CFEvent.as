@@ -10,5 +10,7 @@ package org.cyclopsframework.core
 		{
 			super(type, bubbles, cancelable);
 		}
+		
+		
 	}
 }

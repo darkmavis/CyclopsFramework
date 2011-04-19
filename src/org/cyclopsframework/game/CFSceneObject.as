@@ -8,6 +8,7 @@ package org.cyclopsframework.game
 	import org.cyclopsframework.core.CFEvent;
 	import org.cyclopsframework.core.CFTaggable;
 	import org.cyclopsframework.core.ICFHasEngine;
+	import org.cyclopsframework.utils.logging.CFLog;
 	
 	public class CFSceneObject extends CFTaggable implements IEventDispatcher
 	{
@@ -16,11 +17,12 @@ package org.cyclopsframework.game
 		private var _dispatcher:EventDispatcher;
 		
 		private var _scene:CFScene = null;
-		protected function get scene():CFScene
+		public function get scene():CFScene
 		{
 			if (_scene == null) throw new Error("CFSceneObject hasn't been registered with a CFScene.");
 			return _scene;
 		}
+		public function set scene(value:CFScene):void { _scene = value; }
 		
 		protected function get engine():CFEngine { return _scene.engine; }
 		
@@ -36,13 +38,18 @@ package org.cyclopsframework.game
 		
 		private function onObjectRegistered(e:Event):void
 		{
-			_scene = CFScene.sceneContext;
+			if (_scene == null) _scene = CFScene.sceneContext;
 			onRegistered();
 		}
 		
 		protected function onRegistered():void
 		{
 			
+		}
+		
+		protected function log(text:String, channel:String=CFLog.CHANNEL_DEFAULT):void
+		{
+			CFLog.println(text, channel);
 		}
 		
 		public function addEventListener(type:String, listener:Function, useCapture:Boolean=false, priority:int=0, useWeakReference:Boolean=false):void

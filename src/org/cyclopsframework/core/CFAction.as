@@ -22,9 +22,12 @@ package org.cyclopsframework.core
 	import org.cyclopsframework.actions.flow.CFSleep;
 	import org.cyclopsframework.actions.flow.CFWaitForEvent;
 	import org.cyclopsframework.actions.flow.CFWaitForMessage;
+	import org.cyclopsframework.actions.flow.CFWaitUntil;
+	import org.cyclopsframework.actions.interpolation.CFInterpolate;
 	import org.cyclopsframework.core.easing.CFBias;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
 	import org.cyclopsframework.utils.logging.CFLog;
+	import org.cyclopsframework.utils.math.CFMath;
 	import org.cyclopsframework.utils.misc.CFGuid;
 
 	public class CFAction implements ICFPausable, ICFTaggable, ICFHasEngine
@@ -46,8 +49,14 @@ package org.cyclopsframework.core
 		
 		public function get position():Number { return ((_position - _cycle) >= 1) ? 1 : (_position - _cycle);}
 		
+		private var _entered:Boolean = false;
+		private var _firstFrameEntered:Boolean = false;
+		
 		public function get speed():Number { return _speed; }
-		public function set speed(value:Number):void { _speed = value; }
+		public function set speed(value:Number):void
+		{
+			_speed = value;
+		}
 		
 		private var _accDelta:Number = 0;
 		
@@ -208,14 +217,20 @@ package org.cyclopsframework.core
 			return add(new CFFunction(period, cycles, null, null, f));
 		}
 		
-		public function nop():CFAction
+		public function nop(tag:String=null):CFAction
 		{
-			return add(new CFAction());
+			return add(tag, new CFAction());
 		}
 		
 		public function sleep(period:Number):CFAction
 		{
 			return add(new CFSleep(period));
+		}
+		
+		public function tween(target:Object, propertyName:String, a:Number, b:Number,
+							  period:Number=0, cycles:Number=1, bias:Function=null, mapFunc:Function=null):CFAction
+		{
+			return add(new CFInterpolate(target, propertyName, a, b, period, cycles, bias, mapFunc));
 		}
 		
 		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CFAction
@@ -227,6 +242,11 @@ package org.cyclopsframework.core
 									   messageListener:Function=null, timeoutListener:Function=null):CFAction
 		{
 			return add(receiverTag, new CFWaitForMessage(messageName, timeout, cycles, messageListener, timeoutListener));
+		}
+		
+		public function waitUntil(predicate:Function, timeout:Number=Number.MAX_VALUE):CFAction
+		{
+			return add(new CFWaitUntil(predicate, timeout));
 		}
 		
 		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CFAction
@@ -291,7 +311,7 @@ package org.cyclopsframework.core
 		
 		public function stop(callLastFrame:Boolean=true, callExit:Boolean=true):void
 		{
-			if (_active)
+			if (_active && _entered)
 			{
 				_active = false;
 				if (callLastFrame) onLastFrame();
@@ -327,12 +347,14 @@ package org.cyclopsframework.core
 			{
 				if (!_active) return false;
 				
-				if (_position == 0)
+				if (!_firstFrameEntered)
 				{
-					if(_cycle == 0)
+					if (!_entered)
 					{
+						_entered = true;
 						onEnter();
 					}
+					_firstFrameEntered = true;
 					onFirstFrame();
 				}
 												

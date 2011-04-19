@@ -1,10 +1,5 @@
 package org.cyclopsframework.actions.messaging
 {
-	import org.cyclopsframework.core.CFAction;
-	import org.cyclopsframework.core.CFMessage;
-	import org.cyclopsframework.utils.logging.CFLog;
-	import org.cyclopsframework.utils.proxies.CFSharedObjectProxy;
-	
 	import flash.events.Event;
 	import flash.events.NetStatusEvent;
 	import flash.events.SecurityErrorEvent;
@@ -13,12 +8,20 @@ package org.cyclopsframework.actions.messaging
 	import flash.net.ObjectEncoding;
 	import flash.net.SharedObject;
 	
+	import org.cyclopsframework.core.CFAction;
+	import org.cyclopsframework.core.CFMessage;
+	import org.cyclopsframework.utils.logging.CFLog;
+	import org.cyclopsframework.utils.proxies.CFSharedObjectProxy;
+	
 	public class CFRemoteObject extends CFAction
 	{
 		public static const TAG:String = "@CFRemoteObject";
 		
 		private var _so:CFSharedObjectProxy;
 		public function get proxy():CFSharedObjectProxy { return _so; }
+		
+		private var _realSO:SharedObject;
+		public function get sharedObject():SharedObject { return _realSO; }
 		
 		private var _nc:NetConnection;
 		
@@ -66,9 +69,11 @@ package org.cyclopsframework.actions.messaging
 			{
 				CFLog.println("Connected to: " + _hostAddress, CFLog.CHANNEL_INFO);
 				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, false);
+				_realSO = so;
 				engine.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
 				so.client = _messageListeners;
 				//so.addEventListener(NetStatusEvent.NET_STATUS, onSOConnect);
+				so.fps = 30;
 				so.connect(_nc);
 				_so = new CFSharedObjectProxy(so);
 				
@@ -97,6 +102,11 @@ package org.cyclopsframework.actions.messaging
 			{
 				engine.send(_objectId, item.name, [_so[item.name]]);
 			}
+		}
+		
+		public function rpc(...args):void
+		{
+			_realSO.send.apply(null, args);
 		}
 		
 		public function addMessageListener(name:String, listener:Function):void

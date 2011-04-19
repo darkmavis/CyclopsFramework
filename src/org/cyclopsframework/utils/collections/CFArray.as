@@ -8,7 +8,7 @@ package org.cyclopsframework.utils.collections
 			
 			if (source != null)
 			{
-				splice.apply(this, source);
+				push.apply(this, source);
 			}
 		}
 				

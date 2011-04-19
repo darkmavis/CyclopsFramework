@@ -28,7 +28,7 @@ package org.cyclopsframework.game.bindings
 				if ((engine.count("keypressHandler") == 0) && !("CFDirectionalPad.kph" in engine.frameData))
 				{
 					engine.frameData["CFDirectionalPad.kph"] = "CFDirectionalPad.kph";
-					engine.loop(_keypressHandler).addTag("keypressHandler");
+					engine.loop(function():void { if (_pressed) _keypressHandler(); }).addTag("keypressHandler");
 				}
 			}
 		}

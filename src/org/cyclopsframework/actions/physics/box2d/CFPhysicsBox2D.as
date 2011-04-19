@@ -28,6 +28,8 @@ package org.cyclopsframework.actions.physics.box2d
 	import Box2D.Dynamics.b2FixtureDef;
 	import Box2D.Dynamics.b2World;
 	
+	import flash.geom.Rectangle;
+	
 	import org.cyclopsframework.actions.physics.box2d.listeners.CFContactListenerBox2D;
 	import org.cyclopsframework.core.CFAction;
 	
@@ -188,6 +190,66 @@ package org.cyclopsframework.actions.physics.box2d
 			var actor:CFPhysicsActorBox2D = new CFPhysicsActorBox2D(target, body, scale, orientation, period);
 			
 			var shape:b2CircleShape = new b2CircleShape(radius);
+			var fixture:b2Fixture = body.CreateFixture2(shape, density);
+			
+			fixture.SetRestitution(.5);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			
+			return actor;
+		}
+		
+		public function createSimpleBoxActor(target:Object, width:Number, height:Number, density:Number=1, orientation:int=0, period:Number=Number.MAX_VALUE):CFPhysicsActorBox2D
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = b2Body.b2_dynamicBody;
+			bodydef.fixedRotation = false;
+			
+			if (orientation == CFPhysicsActorBox2D.ORIENTATION_XY)
+			{
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.y * scale;
+			}
+			else if(orientation == CFPhysicsActorBox2D.ORIENTATION_XZ)
+			{
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.z * scale;
+			}
+			
+			var body:b2Body = world.CreateBody(bodydef);
+			var actor:CFPhysicsActorBox2D = new CFPhysicsActorBox2D(target, body, scale, orientation, period);
+			
+			var shape:b2Shape = b2PolygonShape.AsBox(width, height);
+			var fixture:b2Fixture = body.CreateFixture2(shape, density);
+			
+			fixture.SetRestitution(.5);
+			body.SetLinearDamping(.25);
+			body.SetAngularDamping(.25);
+			
+			return actor;
+		}
+		
+		public function createSimpleHumanoidActor(target:Object, width:Number, height:Number, density:Number=1, orientation:int=0, period:Number=Number.MAX_VALUE):CFPhysicsActorBox2D
+		{
+			var bodydef:b2BodyDef = new b2BodyDef();
+			bodydef.type = b2Body.b2_dynamicBody;
+			bodydef.fixedRotation = false;
+			
+			if (orientation == CFPhysicsActorBox2D.ORIENTATION_XY)
+			{
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.y * scale;
+			}
+			else if(orientation == CFPhysicsActorBox2D.ORIENTATION_XZ)
+			{
+				bodydef.position.x = target.x * scale;
+				bodydef.position.y = target.z * scale;
+			}
+			
+			var body:b2Body = world.CreateBody(bodydef);
+			var actor:CFPhysicsActorBox2D = new CFPhysicsActorBox2D(target, body, scale, orientation, period);
+			
+			var shape:b2Shape = b2PolygonShape.AsBox(width, height);
 			var fixture:b2Fixture = body.CreateFixture2(shape, density);
 			
 			fixture.SetRestitution(.5);

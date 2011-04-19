@@ -65,13 +65,16 @@ package org.cyclopsframework.actions.interpolation
 		
 		private function processFrame(target:Object, t:Number):void
 		{
-			if (_mapFunc == null)
+			if (_target.hasOwnProperty(_propertyName))
 			{
-				target[_propertyName] = CFMath.lerp(_a, _b, t);
-			}
-			else
-			{
-				target[_propertyName] = _mapFunc(CFMath.lerp(_a, _b, t));
+				if (_mapFunc == null)
+				{
+					target[_propertyName] = CFMath.lerp(_a, _b, t);
+				}
+				else
+				{
+					target[_propertyName] = _mapFunc(CFMath.lerp(_a, _b, t));
+				}
 			}
 		}
 		

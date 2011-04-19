@@ -16,10 +16,10 @@
 
 package org.cyclopsframework.actions.flow
 {
-	import org.cyclopsframework.core.CFAction;
-	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	
+	import org.cyclopsframework.core.CFAction;
 	
 	public class CFWaitForEvent extends CFAction
 	{

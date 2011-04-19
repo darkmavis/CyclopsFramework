@@ -86,7 +86,7 @@ package org.cyclopsframework.game.tiles
 				{
 					result.push(new CFFunction(0, 1, this, [x, y], function(x:int, y:int):void
 					{
-						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);
 					}));
 				}
 			}
@@ -102,7 +102,7 @@ package org.cyclopsframework.game.tiles
 				{
 					for (var x:int = 0; x < _columns; ++x)
 					{
-						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);
 					}
 				}));
 			}
@@ -118,7 +118,7 @@ package org.cyclopsframework.game.tiles
 				{
 					for (var y:int = 0; y < _rows; ++y)
 					{
-						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);	
+						f(x, y, _tileGrid[CFMath.wrap(y, _rows) * _columns + CFMath.wrap(x, _columns)]);
 					}
 				}));
 			}
