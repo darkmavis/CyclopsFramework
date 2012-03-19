@@ -70,7 +70,7 @@ package org.cyclopsframework.actions.messaging
 				CFLog.println("Connected to: " + _hostAddress, CFLog.CHANNEL_INFO);
 				var so:SharedObject = SharedObject.getRemote(_objectId, _nc.uri, false);
 				_realSO = so;
-				engine.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
+				engine.sugar.waitForEvent(so, SyncEvent.SYNC, Number.MAX_VALUE, Number.MAX_VALUE, onSharedObjectUpdate);
 				so.client = _messageListeners;
 				//so.addEventListener(NetStatusEvent.NET_STATUS, onSOConnect);
 				so.fps = 30;

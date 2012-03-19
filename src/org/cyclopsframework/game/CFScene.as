@@ -142,8 +142,8 @@ package org.cyclopsframework.game
 		private function onAddedToStage(e:Event):void
 		{
 			bg.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);
+			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
+			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);
 			_stageReady = true;
 		}
 		
@@ -217,7 +217,7 @@ package org.cyclopsframework.game
 			target.mouseEnabled = true;
 			target.buttonMode = true;
 			target.useHandCursor = true;
-			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, 1, function(e:Event):void
+			engine.sugar.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, 1, function(e:Event):void
 			{
 				gotoScene(scene);
 			});
@@ -228,7 +228,7 @@ package org.cyclopsframework.game
 			target.mouseEnabled = true;
 			target.buttonMode = true;
 			target.useHandCursor = true;
-			engine.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
+			engine.sugar.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
 		}
 		
 		public function addSceneObject(sceneObject:CFSceneObject):CFSceneObject
@@ -434,7 +434,7 @@ package org.cyclopsframework.game
 			{
 				child.dispose();
 			}
-			engine.proxy(CFEngine.TAG_ALL).stop();
+			engine.proxy(CFEngine.TAG_ALL)["stop"]();
 			
 			if (bg.parent != null)
 			{

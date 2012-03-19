@@ -38,7 +38,7 @@ package org.cyclopsframework.examples.example2_scenes
 			// we're translating the circle from one point to another over a period of 5 seconds,
 			// with the maximum number of countable cycles and using a SINE_WAVE biasing curve... aka easing.
 			engine
-				.sleep(1)
+				.sugar.sleep(1)
 				.add(new CFFadeTo(circle, 1, 2, 1, CFBias.EASE_OUT))
 				.add(new CFTranslateTo(circle, circle.x + 200, circle.y, 5, Number.MAX_VALUE, CFBias.SINE_WAVE));
 			
@@ -57,9 +57,9 @@ package org.cyclopsframework.examples.example2_scenes
 			// Well not quite forever, because we're going to shut it down in this next sequence by using a tag.
 			// And then let's wait a bit and bring it back.
 			engine
-				.sleep(8)
+				.sugar.sleep(8)
 				.add(function():void { engine.remove("boing"); })
-				.sleep(4)
+				.sugar.sleep(4)
 				.add(bounce);
 			
 			// So you may be wondering what's up with the "boing" tag.  it's a cascading tag that cascades from

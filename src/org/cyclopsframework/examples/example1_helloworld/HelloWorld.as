@@ -33,7 +33,7 @@ package org.cyclopsframework.examples.example1_helloworld
 			// Note that the 1st is sugar for: new CFSleep(1)
 			// The 2nd is a function that is auto-converted to a CFAction.
 			engine
-				.sleep(1)
+				.sugar.sleep(1)
 				.add(function():void { console.println("Hello again world of Cyclops Framework!"); });
 			
 			// Although action sequences are usually used as seen above, if required, an array can be used as well.
@@ -52,8 +52,8 @@ package org.cyclopsframework.examples.example1_helloworld
 			// Sleep 2 seconds.
 			// Then add the head of the sequence to the engine and return the tail in case we need to add more goodies to it via the add(...) method.
 			engine
-				.sleep(2)
-				.addSequenceReturnTail(actions)
+				.sugar.sleep(2)
+				.sugar.addSequenceReturnTail(actions)
 				.add(function():void
 				{
 					console.help();

@@ -40,22 +40,22 @@ package org.cyclopsframework.utils.console
 	 * <a href="http://www.riaone.com/products/deval/">http://www.riaone.com/products/deval/</a>
 	 * <p>
 	 * Integrated mode example:<br/><listing>
-	 * var console:CFConsole = new CFConsole(800, 600);<br/>
-	 * scene.addScene(console);<br/>
-	 * // An integrated option for using the console when it becomes ready.<br/>
+	 * var console:CFConsole = new CFConsole(800, 600);
+	 * scene.addScene(console);
+	 * // An integrated option for using the console when it becomes ready.
 	 * console.engine.add(function():void { console.println("Hello World!"); });
 	 * </listing></p>
 	 * <p>
 	 * Stand-alone mode example:<br/><listing>
-	 * var console:CFConsole = new CFConsole(800, 600);<br/>
-	 * console.manualStart(this);<br/>
-	 * // The integrated option will work here, but some unfamiliar with CyclopsFramework may prefer using this instead.<br/>
-	 * console.addEventListener(CFScene.EVENT_SCENE_READY, function(e:Event):void { console.println("Hello World!"); });<br/>
+	 * var console:CFConsole = new CFConsole(800, 600);
+	 * console.manualStart(this);
+	 * // The integrated option will work here, but some unfamiliar with CyclopsFramework may prefer using this instead.
+	 * console.addEventListener(CFScene.EVENT_SCENE_READY, function(e:Event):void { console.println("Hello World!"); });
 	 * </listing></p>
 	 * <p>
 	 * CFGame mode example:<br/><listing>
-	 * // Assumes that a public static property 'game' (of type MyGame) exists in this hypothetical CFGame subclass, MyGame.<br/>
-	 * // Using CFGame is a great way to go if you are starting from scratch.<br/>
+	 * // Assumes that a public static property 'game' (of type MyGame) exists in this hypothetical CFGame subclass, MyGame.
+	 * // Using CFGame is a great way to go if you are starting from scratch.
 	 * MyGame.game.console.println("Hello World!");
 	 * </listing></p>
 	 * 
@@ -186,6 +186,8 @@ package org.cyclopsframework.utils.console
 			
 			scriptingContext.print = println;
 			
+			scriptingContext.console = this;
+			
 		}
 				
 		/**
@@ -229,7 +231,7 @@ package org.cyclopsframework.utils.console
 				}
 			});
 			
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
+			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
 			{
 				if ((e.charCode >= 32) && (e.charCode <= 255)
 					|| (e.keyCode == Keyboard.ENTER)
@@ -241,7 +243,7 @@ package org.cyclopsframework.utils.console
 				}
 			});
 			
-			engine.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
+			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, function(e:KeyboardEvent):void
 			{
 				if ((_tf.stage.focus != _tf) && (_tf.stage.focus != _tf.parent) && (_tf.stage.focus != _backdrop)) return;
 				
@@ -309,7 +311,7 @@ package org.cyclopsframework.utils.console
 					
 			});
 			
-			engine.loop(function():void
+			engine.sugar.loop(function():void
 			{
 				if (_dirty && bg.visible && (bg.parent != null))
 				{
@@ -318,7 +320,7 @@ package org.cyclopsframework.utils.console
 				}
 			});
 			
-			engine.loop(function():void
+			engine.sugar.loop(function():void
 			{
 				if ((_tf.stage.focus == _tf) || (_tf.stage.focus == _tf.parent) || (_tf.stage.focus == _backdrop))
 				{
@@ -350,7 +352,7 @@ package org.cyclopsframework.utils.console
 				_backdrop.parent.removeChild(_backdrop);
 			}
 			
-			_backdrop = CFPrimitives.filledBox(_tf.width, _tf.height, 0, .5);
+			_backdrop = CFPrimitives.filledBox(_tf.width, _tf.height, 0, .9);
 			addSprite(_backdrop, _tf.width / 2, _tf.height / 2);
 			
 			redraw();
@@ -445,8 +447,8 @@ package org.cyclopsframework.utils.console
 		/**
 		 * Print text to the console without a new line. Optionally specify a channel for filtering purposes.
 		 * Built-in channels include:<br/><listing>
-		 * public static const CHANNEL_DEFAULT:String = "default";<br/>
-		 * public static const CHANNEL_ERRORS:String = "errors";<br/>
+		 * public static const CHANNEL_DEFAULT:String = "default";
+		 * public static const CHANNEL_ERRORS:String = "errors";
 		 * public static const CHANNEL_WARNINGS:String = "warnings";</listing>
 		 * @param text Source text.
 		 * @param channel Target channel.
@@ -464,8 +466,8 @@ package org.cyclopsframework.utils.console
 		/**
 		 * Print text to the console with a new line appended. Optionally specify a channel for filtering purposes.
 		 * Built-in channels include:<br/><listing>
-		 * public static const CHANNEL_DEFAULT:String = "default";<br/>
-		 * public static const CHANNEL_ERRORS:String = "errors";<br/>
+		 * public static const CHANNEL_DEFAULT:String = "default";
+		 * public static const CHANNEL_ERRORS:String = "errors";
 		 * public static const CHANNEL_WARNINGS:String = "warnings";</listing>
 		 * @param text Source text.
 		 * @param channel Target channel.
@@ -513,8 +515,8 @@ package org.cyclopsframework.utils.console
 		 * Any method using the <code>[ConsoleCommand(...)]</code> metatag will be imported and added to the help command.<br/>
 		 * Help description and syntax attributes are optionally available and recommended for clarity.<p>
 		 * Example:<br/>
-		 * <listing>[ConsoleCommand(help="enable channels", syntax="enable &lt;channel1 [channel2 ...]&gt;")]<br/>
-		 * public function enable(...channels):void { ... }<br/>
+		 * <listing>[ConsoleCommand(help="enable channels", syntax="enable &lt;channel1 [channel2 ...]&gt;")]
+		 * public function enable(...channels):void { ... }
 		 * </listing></p>
 		 * @param source Any object providing the appropriate metadata.
 		 * 

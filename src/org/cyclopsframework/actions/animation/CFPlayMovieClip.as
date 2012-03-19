@@ -47,7 +47,7 @@ package org.cyclopsframework.actions.animation
 		{
 			for each (var name:String in _stopEvents)
 			{
-				engine.waitForEvent(_mc, name, Number.MAX_VALUE, Number.MAX_VALUE, function(e:Event):void
+				engine.sugar.waitForEvent(_mc, name, Number.MAX_VALUE, Number.MAX_VALUE, function(e:Event):void
 				{
 					stop();
 				}).addTag(uniqueTag);

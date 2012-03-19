@@ -63,7 +63,7 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			});	
 			
 			// render each frame
-			engine.loop(view.render).addTag("view.render");
+			engine.sugar.loop(view.render).addTag("view.render");
 		}
 				
 	}

@@ -59,7 +59,7 @@ package org.cyclopsframework.game.cf3d.away3d.v10
 			
 			if (_autoRefreshEnabled)
 			{
-				engine.loop(refresh).addTag("refresh");
+				engine.sugar.loop(refresh).addTag("refresh");
 			}
 			
 			_terrain = new Plane();

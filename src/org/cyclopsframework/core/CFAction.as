@@ -86,7 +86,19 @@ package org.cyclopsframework.core
 		
 		private var _engine:CFEngine;
 		public function get engine():CFEngine { return _engine; }
-		public function set engine(value:CFEngine):void { _engine = value; }
+		public function set engine(value:CFEngine):void { _engine = value; _sugar = new CFSugar(this); }
+		
+		/**
+		 * This object contains many methods that are common to both CFEngine and CFAction.
+		 * These methods wrap common actions and can be considered syntactic sugar.
+		 */		
+		private var _sugar:CFSugar;
+		
+		/**
+		 * Gets the object which contains many methods that are common to both CFEngine and CFAction.
+		 * These methods wrap common actions and can be considered syntactic sugar.
+		 */		
+		public function get sugar():CFSugar { return _sugar; }
 		
 		private var _uniqueTag:String;
 		
@@ -130,6 +142,7 @@ package org.cyclopsframework.core
 				if (o is CFAction)
 				{
 					currAction = o as CFAction;
+					currAction.engine = engine;
 					if (currTags.length > 0)
 					{
 						currAction.addTags(currTags);
@@ -140,6 +153,7 @@ package org.cyclopsframework.core
 				else if (o is Function)
 				{
 					currAction = new CFFunction(0, 1, null, null, o as Function);
+					currAction.engine = engine;
 					if (currTags.length > 0)
 					{
 						currAction.addTags(currTags);
@@ -175,93 +189,6 @@ package org.cyclopsframework.core
 			}
 			
 			return currAction;
-		}
-		
-		private function addSequence(actions:Array, returnHead:Boolean):CFAction
-		{
-			var head:Object;
-			var tail:Object;
-			
-			for each (var o:Object in actions)
-			{
-				if (head == null)
-				{
-					head = tail = add(o);
-				}
-				else
-				{
-					tail = tail.add(o);
-				}
-			}
-			
-			return ((returnHead ? head : tail) as CFAction);
-		}
-				
-		public function addSequenceReturnHead(actions:Array):CFAction
-		{
-			return addSequence(actions, true);
-		}
-		
-		public function addSequenceReturnTail(actions:Array):CFAction
-		{
-			return addSequence(actions, false);
-		}
-		
-		public function addf(f:Function, thisObject:Object=null, data:Array=null):CFAction
-		{
-			return add(new CFFunction(0, 1, thisObject, data, f));
-		}
-				
-		public function loop(f:Function, period:Number=0, cycles:Number=Number.MAX_VALUE):CFAction
-		{
-			return add(new CFFunction(period, cycles, null, null, f));
-		}
-		
-		public function nop(tag:String=null):CFAction
-		{
-			return add(tag, new CFAction());
-		}
-		
-		public function sleep(period:Number):CFAction
-		{
-			return add(new CFSleep(period));
-		}
-		
-		public function tween(target:Object, propertyName:String, a:Number, b:Number,
-							  period:Number=0, cycles:Number=1, bias:Function=null, mapFunc:Function=null):CFAction
-		{
-			return add(new CFInterpolate(target, propertyName, a, b, period, cycles, bias, mapFunc));
-		}
-		
-		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1, listener:Function=null):CFAction
-		{
-			return add(new CFWaitForEvent(target, eventType, timeout, cycles, listener));
-		}
-		
-		public function waitForMessage(receiverTag:String, messageName:String, timeout:Number=Number.MAX_VALUE, cycles:Number=1,
-									   messageListener:Function=null, timeoutListener:Function=null):CFAction
-		{
-			return add(receiverTag, new CFWaitForMessage(messageName, timeout, cycles, messageListener, timeoutListener));
-		}
-		
-		public function waitUntil(predicate:Function, timeout:Number=Number.MAX_VALUE):CFAction
-		{
-			return add(new CFWaitUntil(predicate, timeout));
-		}
-		
-		public function listen(receiverTag:String, messageName:String, messageListener:Function=null):CFAction
-		{
-			return add(receiverTag, new CFWaitForMessage(messageName, Number.MAX_VALUE, Number.MAX_VALUE, messageListener));
-		}
-		
-		public function send(receiverTag:String, messageName:String, ...data):CFAction
-		{
-			return addf(function():void { engine.send(receiverTag, messageName, data); });
-		}
-		
-		public function addLogEntry(text:Object, channel:String="default"):CFAction
-		{
-			return (add(function():void { CFLog.println(text, channel); }));
 		}
 				
 		protected function safeset(target:Object, propertyName:String, value:Object):void

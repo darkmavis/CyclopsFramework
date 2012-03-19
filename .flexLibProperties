@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<flexLibProperties includeAllClasses="true" version="3">
+<flexLibProperties includeAllClasses="true" useMultiPlatformConfig="false" version="3">
   <includeClasses>
     <classEntry path="org.cyclopsframework.core.CFEngine"/>
     <classEntry path="org.cyclopsframework.core.CFAction"/>
@@ -54,7 +54,6 @@
     <classEntry path="org.cyclopsframework.game.tiles.CFTileLayer"/>
     <classEntry path="org.cyclopsframework.game.tiles.ICFTileData"/>
     <classEntry path="org.cyclopsframework.game.tiles.CFTileData"/>
-    <classEntry path="org.cyclopsframework.utils.misc.CFBase64"/>
     <classEntry path="org.cyclopsframework.actions.physics.box2d.CFPhysicsBox2D"/>
     <classEntry path="org.cyclopsframework.actions.physics.box2d.listeners.CFContactListenerBox2D"/>
     <classEntry path="org.cyclopsframework.actions.physics.box2d.CFPhysicsActorBox2D"/>
@@ -94,6 +93,7 @@
     <classEntry path="org.cyclopsframework.game.bindings.CFDirectionalPad"/>
     <classEntry path="org.cyclopsframework.actions.animation.CFAnimateMovieClip"/>
     <classEntry path="org.cyclopsframework.actions.animation.CFPlayMovieClip"/>
+    <classEntry path="org.cyclopsframework.core.CFSugar"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>
