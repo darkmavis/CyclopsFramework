@@ -35,6 +35,7 @@ package org.cyclopsframework.game
 	import org.cyclopsframework.core.CFAction;
 	import org.cyclopsframework.core.CFEngine;
 	import org.cyclopsframework.core.CFMessage;
+	import org.cyclopsframework.core.CFTaggable;
 	import org.cyclopsframework.core.ICFDisposable;
 	import org.cyclopsframework.core.ICFMessageInterceptor;
 	import org.cyclopsframework.core.ICFPausable;
@@ -434,7 +435,8 @@ package org.cyclopsframework.game
 			{
 				child.dispose();
 			}
-			engine.proxy(CFEngine.TAG_ALL)["stop"]();
+			
+			(engine.proxy(CFEngine.TAG_ALL, function(o:Object):Boolean { return (o.hasOwnProperty("stop")); }) as Object).stop();
 			
 			if (bg.parent != null)
 			{

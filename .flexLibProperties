@@ -94,6 +94,7 @@
     <classEntry path="org.cyclopsframework.actions.animation.CFAnimateMovieClip"/>
     <classEntry path="org.cyclopsframework.actions.animation.CFPlayMovieClip"/>
     <classEntry path="org.cyclopsframework.core.CFSugar"/>
+    <classEntry path="org.cyclopsframework.utils.collections.CFWeightedItems"/>
   </includeClasses>
   <includeResources/>
   <namespaceManifests/>

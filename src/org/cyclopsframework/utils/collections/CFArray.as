@@ -49,6 +49,16 @@ package org.cyclopsframework.utils.collections
 			}
 			return result;
 		}
+		
+		public static function arraysToKeyValuePairs(keys:Array, values:Array):Object
+		{
+			var result:Object = {};
+			for (var i:int = 0; i < keys.length; ++i)
+			{
+				result[keys[i]] = values[i];
+			}
+			return result;
+		}
 				
 	}
 }

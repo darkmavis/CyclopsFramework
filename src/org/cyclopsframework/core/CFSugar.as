@@ -397,7 +397,7 @@ package org.cyclopsframework.core
 		 */		
 		public function send(receiverTag:String, messageName:String, ...data):CFAction
 		{
-			return _parent.addf(function():void { _engine.send(receiverTag, messageName, data); });
+			return _parent.sugar.addf(function():void { _engine.send(receiverTag, messageName, data); });
 		}
 		
 		/**

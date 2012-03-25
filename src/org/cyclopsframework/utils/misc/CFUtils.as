@@ -197,6 +197,17 @@ package org.cyclopsframework.utils.misc
 				throw new TypeError(name + " can't be a tag.  Perhaps another class that supports grouping by tags would work better.");
 			}
 		}
+		
+		public static function anyAreNull(...params):Boolean
+		{
+			for (var i:int = 0; i < params.length; ++i)
+			{
+				if (params[i] == null) return true;
+			}
+			
+			return false;
+			
+		}
 				
 	}
 }
