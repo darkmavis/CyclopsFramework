@@ -16,9 +16,9 @@
 
 package org.cyclopsframework.utils.color
 {
-	import org.cyclopsframework.utils.math.CFMath;
-	
 	import flash.geom.ColorTransform;
+	
+	import org.cyclopsframework.utils.math.CFMath;
 	
 	public class CFColor
 	{
@@ -32,6 +32,24 @@ package org.cyclopsframework.utils.color
 		public static const GRAY:CFColor = new CFColor(.62,.62,.62);
 		public static const YELLOW:CFColor = new CFColor(1,1,.38);
 		public static const WHITE:CFColor = new CFColor(1,1,1);
+		
+		public static const EIGHT_COLORS:Vector.<CFColor> = Vector.<CFColor>([
+			BLUE,
+			GREEN,
+			CYAN,
+			RED,
+			PURPLE,
+			BROWN,
+			GRAY,
+			YELLOW
+		]);
+		
+		public static const SIXTEEN_COLORS:Vector.<CFColor> = Vector.<CFColor>([
+			boost(random()), boost(random()), boost(random()), boost(random()),
+			boost(random()), boost(random()), boost(random()), boost(random()),
+			boost(random()), boost(random()), boost(random()), boost(random()),
+			boost(random()), boost(random()), boost(random()), boost(random())
+		]);
 		
 		public var r:Number;
 		public var g:Number;
@@ -56,9 +74,24 @@ package org.cyclopsframework.utils.color
 			return uint(r * 16711680 + g * 65280 + b * 255);
 		}
 		
+		public static function fromUint(c:uint):CFColor
+		{
+			var a:uint = (c >>> 24);
+			var r:uint = (c >>> 16) & 0x000000FF;
+			var g:uint = (c >>> 8) & 0x000000FF;
+			var b:uint = c & 0x000000FF;
+			
+			return new CFColor(r / 255.0, g / 255.0, b / 255.0, a / 255.0);
+		}
+		
 		public static function fromColorTransform(ct:ColorTransform):CFColor
 		{
 			return new CFColor(ct.redMultiplier, ct.greenMultiplier, ct.blueMultiplier, ct.alphaMultiplier);
+		}
+		
+		public static function random(randomizeAlpha:Boolean=false):CFColor
+		{
+			return new CFColor(CFMath.random(), CFMath.random(), CFMath.random(), !randomizeAlpha ? 1.0 : CFMath.random());
 		}
 				
 		public static function lerp(target:CFColor, c1:CFColor, c2:CFColor, t:Number):CFColor
@@ -92,6 +125,14 @@ package org.cyclopsframework.utils.color
 			target.g = c1.g * c1.a * c2.g * c2.a;
 			target.b = c1.b * c1.a * c2.b * c2.a;
 			return target;
+		}
+		
+		public static function boost(c:CFColor):CFColor
+		{
+			var maxc:Number = Math.max(c.r, c.g, c.b);
+			var d:Number = (1.0 / Math.min(maxc, 1.0));
+			
+			return new CFColor(c.r * d, c.g * d, c.b * d)
 		}
 				
 	}

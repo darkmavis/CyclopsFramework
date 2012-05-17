@@ -29,6 +29,7 @@ package org.cyclopsframework.game
 		public function CFSceneObject(...tags)
 		{
 			super(TAG);
+			
 			this.tags.addItems(tags);
 			_dispatcher = new EventDispatcher(this);
 			

@@ -18,6 +18,7 @@ package org.cyclopsframework.utils.console
 {
 	import flash.display.Sprite;
 	import flash.events.KeyboardEvent;
+	import flash.text.StyleSheet;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
@@ -86,6 +87,13 @@ package org.cyclopsframework.utils.console
 		
 		private var _backdrop:Sprite;
 		public function get backdrop():Sprite { return _backdrop; }
+		
+		private var _htmlEnabled:Boolean = false;
+		public function get htmlEnabled():Boolean { return _htmlEnabled; }
+		public function set htmlEnabled(value:Boolean):void { _htmlEnabled = value; }
+		
+		private var _styleSheet:StyleSheet = new StyleSheet();
+		public function get styleSheet():StyleSheet { return _styleSheet; }
 		
 		/**
 		 * Current command prompt.
@@ -188,6 +196,7 @@ package org.cyclopsframework.utils.console
 			
 			scriptingContext.console = this;
 			
+			_tf.styleSheet = _styleSheet;
 		}
 				
 		/**
@@ -341,11 +350,14 @@ package org.cyclopsframework.utils.console
 		
 		public function resize(width:Number, height:Number):void
 		{
+			_tf.styleSheet = null;
 			_tf.defaultTextFormat = new TextFormat("Courier New", 14, 0xA0A0A0);
 			_tf.text = "X";
 			_tf.width = width - width % _tf.textWidth;
 			_tf.height = height - height % _tf.textHeight;
 			_tf.text = "";
+			
+			_tf.styleSheet = _styleSheet;
 			
 			if (_backdrop.parent != null)
 			{
@@ -439,7 +451,14 @@ package org.cyclopsframework.utils.console
 		 */
 		public function redraw():void
 		{
-			_tf.text = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
+			if (_htmlEnabled)
+			{
+				_tf.htmlText = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
+			}
+			else
+			{
+				_tf.text = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
+			}
 			_tf.scrollV = _tf.numLines - 1;
 			_bottomV = _tf.scrollV;
 		}

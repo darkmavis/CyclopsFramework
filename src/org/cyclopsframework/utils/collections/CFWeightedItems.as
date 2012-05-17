@@ -1,5 +1,7 @@
 package org.cyclopsframework.utils.collections
 {
+	import org.cyclopsframework.utils.math.CFMath;
+
 	public class CFWeightedItems
 	{
 		private var _items:Array;
@@ -8,7 +10,8 @@ package org.cyclopsframework.utils.collections
 		
 		public function get random():Object
 		{
-			var target:Number = Math.random() * _sumOfProbabilities;
+			//var target:Number = Math.random() * _sumOfProbabilities;
+			var target:Number = CFMath.random() * _sumOfProbabilities;
 			
 			for (var i:int = 0; i < _probabilities.length; ++i)
 			{
@@ -34,7 +37,34 @@ package org.cyclopsframework.utils.collections
 				_sumOfProbabilities += indexedProbabilities[i];
 				_probabilities[i] = _sumOfProbabilities;
 			}
+		}
+		
+		public static function fromKeyValuePairs(pairs:Object):CFWeightedItems
+		{
+			var keys:Array = [];
+			var values:Array = [];
 			
+			for (var k:Object in pairs)
+			{
+				keys.push(k);
+				values.push(pairs[k]);
+			}
+			
+			return new CFWeightedItems(keys, values);
+		}
+		
+		public static function fromIndexedArray(items:Array):CFWeightedItems
+		{
+			var keys:Array = [];
+			var values:Array = [];
+			
+			for (var i:int = 0; i < items.length; ++i)
+			{
+				keys.push(i);
+				values.push(items[i]);
+			}
+			
+			return new CFWeightedItems(keys, values);
 		}
 		
 	}

@@ -31,7 +31,7 @@ package org.cyclopsframework.actions.animation
 		private var _mc:MovieClip;
 		private var _stopEvents:Array = [EVENT_ANIMATION_FINISHED];
 		
-		public function CFAnimateMovieClip(mc:MovieClip, fps:Number=24)
+		public function CFAnimateMovieClip(mc:MovieClip, fps:Number=30)
 		{
 			super(1 / fps, Number.MAX_VALUE, null, [TAG]);
 			_mc = mc;

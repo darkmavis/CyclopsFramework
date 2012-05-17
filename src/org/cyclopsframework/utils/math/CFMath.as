@@ -19,15 +19,19 @@ package org.cyclopsframework.utils.math
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.geom.Vector3D;
+	import flash.utils.getTimer;
 	
 	import org.cyclopsframework.core.easing.CFBias;
 	
 	public class CFMath
 	{
+		private static const rgen:CFRandom = new CFRandom((new Date().time & 0xFFFFFFFF) ^ getTimer());
+		
 		public static const PHI:Number = 1.61803399;
 		public static const PI_OVER_180:Number = (180 / Math.PI);
 		public static const PI:Number = Math.PI;
 		public static const PI2:Number = Math.PI * 2;
+		public static const DEGREES_TO_RADIANS:Number = 1.0 / PI_OVER_180;
 		
 		public static const INSIDE:int = 1;
 		public static const OUTSIDE:int = 2;
@@ -39,6 +43,21 @@ package org.cyclopsframework.utils.math
 		public function CFMath()
 		{
 			
+		}
+		
+		public static function random():Number
+		{
+			return rgen.extractNumber();
+		}
+		
+		public static function toRadians(n:Number):Number
+		{
+			return n * DEGREES_TO_RADIANS;
+		}
+		
+		public static function toDegrees(n:Number):Number
+		{
+			return n * PI_OVER_180;
 		}
 		
 		public static function clamp(n:Number, min:Number, max:Number):Number
@@ -68,26 +87,26 @@ package org.cyclopsframework.utils.math
 		{
 			if (bias == null)
 			{
-				return new Point(Math.random() * rect.width + rect.x, Math.random() * rect.height + rect.y);
+				return new Point(CFMath.random() * rect.width + rect.x, CFMath.random() * rect.height + rect.y);
 			}
 			else
 			{
-				return new Point(bias(Math.random()) * rect.width + rect.x, bias(Math.random()) * rect.height + rect.y);
+				return new Point(bias(CFMath.random()) * rect.width + rect.x, bias(CFMath.random()) * rect.height + rect.y);
 			}
 		}
 		
 		public static function radialScatter2(radius:Number, bias:Function=null):Point
 		{
-			var angle:Number = Math.random() * Math.PI * 2;
+			var angle:Number = CFMath.random() * Math.PI * 2;
 			var length:Number;
 			
 			if (bias != null)
 			{
-				length = bias(Math.random()) * radius;
+				length = bias(CFMath.random()) * radius;
 			}
 			else
 			{
-				length = Math.random() * radius;
+				length = CFMath.random() * radius;
 			}
 			
 			return new Point(Math.sin(angle) * length, Math.cos(angle) * length);
@@ -107,10 +126,30 @@ package org.cyclopsframework.utils.math
 			}
 		}
 		
-		public static function repositionNormalized(o:Object, containerRect:Rectangle, nx:Number, ny:Number):void
+		public static function normalizeUnclamped01(n:Number, lowerBound:Number, upperBound:Number):Number
+		{
+			var d:Number = upperBound - lowerBound;
+			
+			return n / d;
+		}
+		
+		public static function normalizeClamped01(n:Number, lowerBound:Number, upperBound:Number):Number
+		{
+			var d:Number = upperBound - lowerBound;
+			
+			return clamp(n / d, 0, 1);
+		}
+		
+		public static function normalizeUnclampedObject2(o:Object, containerRect:Rectangle, nx:Number, ny:Number):void
 		{
 			o.x = containerRect.width * nx;
 			o.y = containerRect.height * ny;
+		}
+		
+		public static function normalizeClampedObject2(o:Object, containerRect:Rectangle, nx:Number, ny:Number):void
+		{
+			o.x = clamp(containerRect.width * nx, containerRect.left, containerRect.right);
+			o.y = clamp(containerRect.height * ny, containerRect.top, containerRect.bottom);
 		}
 		
 		public static function recenter2(o:Object, rect:Rectangle):void
@@ -274,6 +313,18 @@ package org.cyclopsframework.utils.math
 						
 			return lerp(a1, a2, t);
 			
+		}
+		
+		public static function nextHighestPowerOfTwo(n:uint):uint
+		{
+			var i:int = 2;
+			
+			while (i < n)
+			{
+				i << 1;
+			}
+			
+			return i;
 		}
 		
 	}

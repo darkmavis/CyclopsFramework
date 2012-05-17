@@ -16,23 +16,13 @@
 
 package org.cyclopsframework.core
 {
-	import away3d.loaders.Obj;
-	
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
 	
 	import org.cyclopsframework.actions.flow.CFFunction;
-	import org.cyclopsframework.actions.flow.CFSleep;
-	import org.cyclopsframework.actions.flow.CFWaitForEvent;
-	import org.cyclopsframework.actions.flow.CFWaitForMessage;
-	import org.cyclopsframework.actions.flow.CFWaitUntil;
-	import org.cyclopsframework.actions.interpolation.CFInterpolate;
-	import org.cyclopsframework.utils.collections.CFCache;
 	import org.cyclopsframework.utils.collections.CFDataStore;
 	import org.cyclopsframework.utils.collections.CFRegistry;
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
-	import org.cyclopsframework.utils.logging.CFLog;
-	import org.cyclopsframework.utils.proxies.CFDataStoreProxy;
 	import org.cyclopsframework.utils.proxies.CFMessageProxy;
 	
 	/**
@@ -471,7 +461,7 @@ package org.cyclopsframework.core
 		 * the object from being added if it contains the tag to be blocked.
 		 * The specified tag will only blocked for the current frame.
 		 * It should be considered bad practice to allow this to occur in the first place,
-		 * but this method is provided just in case it is required.
+		 * but this method is provided just in case it is required.</p>
 		 * 
 		 * @param tag
 		 * Use this tag to filter the tagged objects.
@@ -647,7 +637,7 @@ package org.cyclopsframework.core
 		
 		/**
 		 * <p>Use this to immediately call methods or set properties of every tagged object selected by the query.
-		 * This method calls query() internally.  See query() for more information.
+		 * This method calls query() internally.  See query() for more information.</p>
 		 * 
 		 * @param args
 		 * Arguments may be tags, tagged objects containing a constant string TAG member which will be
@@ -657,7 +647,7 @@ package org.cyclopsframework.core
 		 * An instance of CFDataStoreProxy is returned, but this method is intended to be used as a one-liner.
 		 * 
 		 */		
-		public function proxy(...args):CFDataStoreProxy
+		public function proxy(...args):Object // CFDataStoreProxy
 		{
 			return query.apply(null, args).proxy;
 		}
@@ -739,7 +729,7 @@ package org.cyclopsframework.core
 		
 		/**
 		 * <p>Use this to send a message to a group of tagged objects.  This may be the most common messaging method.
-		 * The only required arguments are receiverTag and name.
+		 * The only required arguments are receiverTag and name.</p>
 		 * 
 		 * @param receiverTag
 		 * All receivers must contain this tag in order to receive the message.
@@ -810,7 +800,7 @@ package org.cyclopsframework.core
 				}
 				else
 				{
-					currReceiver[msg.name] = msg.data;
+					currReceiver[msg.name] = msg.data[0];
 					break;
 				}
 			}

@@ -216,7 +216,7 @@ package org.cyclopsframework.core.easing
 		
 		public static function noise(t:Number):Number
 		{
-			return Math.random();
+			return CFMath.random();
 		}
 		
 		public static function sawtoothWave(t:Number):Number

@@ -21,9 +21,6 @@
 
 package org.cyclopsframework.actions.audio
 {
-	import org.cyclopsframework.core.CFAction;
-	import org.cyclopsframework.utils.math.CFMath;
-	
 	import flash.events.Event;
 	import flash.events.SampleDataEvent;
 	import flash.media.Sound;
@@ -32,7 +29,10 @@ package org.cyclopsframework.actions.audio
 	import flash.net.URLRequest;
 	import flash.utils.ByteArray;
 	
-	public class CFDynamicSound extends CFAction
+	import org.cyclopsframework.core.CFAction;
+	import org.cyclopsframework.utils.math.CFMath;
+	
+	public class CFDynamicSound extends CFAction implements ICFSound
 	{
 		public static const TAG:String = "@CFSound";
 		

@@ -20,7 +20,9 @@ package org.cyclopsframework.utils.misc
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
 	import flash.text.TextField;
+	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
+	import flash.utils.Endian;
 	import flash.utils.describeType;
 	
 	import org.cyclopsframework.utils.collections.CFArray;
@@ -205,8 +207,15 @@ package org.cyclopsframework.utils.misc
 				if (params[i] == null) return true;
 			}
 			
-			return false;
+			return false;	
+		}
+		
+		public static function createResource(inputType:Class, outputType:Class):*
+		{
+			var data:ByteArray = (new inputType()) as ByteArray;
+			var o:Object = new outputType(data.readUTFBytes(data.length));
 			
+			return o;
 		}
 				
 	}

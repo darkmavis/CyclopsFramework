@@ -284,7 +284,7 @@ package org.cyclopsframework.core
 		 * @return
 		 * The returned action can be used to build a sequence tree of actions.
 		 */		
-		public function waitForEvent(target:IEventDispatcher, eventType:String, timeout:Number=Number.MAX_VALUE,
+		public function waitForEvent(target:*, eventType:String, timeout:Number=Number.MAX_VALUE,
 									 cycles:Number=1, listener:Function=null):CFAction
 		{
 			return _parent.add(new CFWaitForEvent(target, eventType, timeout, cycles, listener));
@@ -343,9 +343,9 @@ package org.cyclopsframework.core
 		 * @return 
 		 * The returned action can be used to build a sequence tree of actions.
 		 */		
-		public function waitUntil(predicate:Function, timeout:Number=Number.MAX_VALUE):CFAction
+		public function waitUntil(predicate:Function, timeout:Number=Number.MAX_VALUE, listener:Function=null):CFAction
 		{
-			return _parent.add(new CFWaitUntil(predicate, timeout));
+			return _parent.add(new CFWaitUntil(predicate, timeout, listener));
 		}
 		
 		/**

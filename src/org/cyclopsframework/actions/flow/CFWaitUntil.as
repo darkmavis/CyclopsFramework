@@ -22,19 +22,30 @@ package org.cyclopsframework.actions.flow
 	{
 		public static const TAG:String = "@CFWaitUntil";
 		
-		private var _f:Function;
+		private var _predicate:Function;
+		private var _listener:Function;
 		
 		public function CFWaitUntil(
-			f:Function,
-			timeout:Number=Number.MAX_VALUE)
+			predicate:Function,
+			timeout:Number=Number.MAX_VALUE,
+			listener:Function=null)
 		{
 			super(timeout, 1, null, [TAG]);
-			_f = f;
+			_predicate = predicate;
+			_listener = listener;
 		}
 		
 		protected override function onFrame(t:Number):void
 		{
-			if (_f() == true) this.stop();
+			if (_predicate() == true)
+			{
+				this.stop();
+				
+				if (_listener != null)
+				{
+					_listener.apply();
+				}
+			}
 		}
 	}
 }

@@ -1,5 +1,7 @@
 package org.cyclopsframework.utils.collections
 {
+	import org.cyclopsframework.utils.math.CFMath;
+
 	public dynamic class CFArray extends Array
 	{
 		public function CFArray(source:Array=null)
@@ -24,7 +26,7 @@ package org.cyclopsframework.utils.collections
 		
 		public function get random():Object
 		{
-			return (length > 0) ? this[int(Math.random() * length)] : null;
+			return (length > 0) ? this[int(CFMath.random() * length)] : null;
 		}
 		
 		public function shuffled():CFArray
@@ -33,7 +35,7 @@ package org.cyclopsframework.utils.collections
 			var result:CFArray = new CFArray();
 			for (var i:int = 0; i < length; ++i)
 			{
-				result[i] = src.splice(int(Math.random() * src.length), 1)[0];
+				result[i] = src.splice(int(CFMath.random() * src.length), 1)[0];
 			}
 			return result;
 		}
@@ -45,8 +47,20 @@ package org.cyclopsframework.utils.collections
 			var range:int = maxSize - minSize;
 			while (src.length > 0)
 			{
-				result.push(src.splice(0, minSize + int(Math.random() * range)));
+				result.push(src.splice(0, minSize + int(CFMath.random() * range)));
 			}
+			return result;
+		}
+		
+		public function remapToIndices(indices:Array):CFArray
+		{
+			var result:CFArray = new CFArray();
+			
+			for (var i:int = 0; i < indices.length; ++i)
+			{
+				result.push(this[indices[i]]);
+			}
+			
 			return result;
 		}
 		
@@ -58,7 +72,6 @@ package org.cyclopsframework.utils.collections
 				result[keys[i]] = values[i];
 			}
 			return result;
-		}
-				
+		}		
 	}
 }

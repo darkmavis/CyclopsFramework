@@ -26,12 +26,17 @@ package org.cyclopsframework.game
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
 	import flash.media.Sound;
+	import flash.media.Video;
 	import flash.utils.getTimer;
 	
 	import org.cyclopsframework.actions.animation.CFFadeTo;
 	import org.cyclopsframework.actions.audio.CFDynamicSound;
 	import org.cyclopsframework.actions.audio.CFSound;
 	import org.cyclopsframework.actions.interpolation.CFInterpolate;
+	import org.cyclopsframework.actions.loading.CFLoadFromURL;
+	import org.cyclopsframework.actions.loading.CFStreamVideo;
+	import org.cyclopsframework.actions.loading.enums.CFLoaderDataFormat;
+	import org.cyclopsframework.actions.loading.status.CFLoaderStatus;
 	import org.cyclopsframework.core.CFAction;
 	import org.cyclopsframework.core.CFEngine;
 	import org.cyclopsframework.core.CFMessage;
@@ -46,6 +51,7 @@ package org.cyclopsframework.game
 	import org.cyclopsframework.utils.collections.CFStringHashSet;
 	import org.cyclopsframework.utils.logging.CFLog;
 	import org.cyclopsframework.utils.math.CFMath;
+	import org.cyclopsframework.utils.misc.CFObjectTracker;
 	import org.cyclopsframework.utils.misc.CFUtils;
 	import org.cyclopsframework.utils.proxies.CFDataStoreProxy;
 	import org.cyclopsframework.utils.proxies.CFFunctionProxy;
@@ -237,6 +243,11 @@ package org.cyclopsframework.game
 			sceneObject.scene = this;
 			engine.add(sceneObject);
 			return sceneObject;
+		}
+		
+		public function track(object:Object, ...tags):void
+		{
+			engine.add(new CFObjectTracker(object, tags));
 		}
 		
 		public function addDisplayObject(displayObject:DisplayObject, x:Number=0, y:Number=0):DisplayObject

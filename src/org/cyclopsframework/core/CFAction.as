@@ -58,16 +58,6 @@ package org.cyclopsframework.core
 			_speed = value;
 		}
 		
-		private var _accDelta:Number = 0;
-		
-		private var _minDelta:Number = Number.MIN_VALUE;
-		public function get minDelta():Number { return _minDelta; }
-		public function set minDelta(value:Number):void { _minDelta = value; }
-		
-		private var _maxDelta:Number = 1;
-		public function get maxDelta():Number { return _maxDelta; }
-		public function set maxDelta(value:Number):void { _maxDelta = value; }
-		
 		private var _dataPipe:Array = [];
 		public function get dataPipe():Array { return _dataPipe; }
 		
@@ -224,18 +214,6 @@ package org.cyclopsframework.core
 			return this;
 		}
 		
-		public function setMaxDelta(value:Number):CFAction
-		{
-			maxDelta = value;
-			return this;
-		}
-		
-		public function setMinDelta(value:Number):CFAction
-		{
-			minDelta = value;
-			return this;
-		}
-		
 		public function stop(callLastFrame:Boolean=true, callExit:Boolean=true):void
 		{
 			if (_active && _entered)
@@ -260,73 +238,58 @@ package org.cyclopsframework.core
 		
 		public function update(delta:Number):Boolean
 		{
-			var remainingDelta:Number = delta + _accDelta;
+			if (!_active) return false;
 			
-			if (remainingDelta < minDelta)
+			if (!_firstFrameEntered)
 			{
-				_accDelta += delta;
+				if (!_entered)
+				{
+					_entered = true;
+					onEnter();
+				}
+				_firstFrameEntered = true;
+				onFirstFrame();
+			}
+											
+			if (_position >= _cycles)
+			{
+				stop();
 				return _active;
 			}
-			
-			_accDelta = (_accDelta > 0) ? (_accDelta - remainingDelta) : 0;
-			
-			do
+							
+			if(_period > 0)
 			{
-				if (!_active) return false;
-				
-				if (!_firstFrameEntered)
+				_position += (delta * _speed) / _period;
+			}
+			else
+			{
+				++_position;
+			}
+			
+			if (_position > _cycles) _position = _cycles;
+			
+			onFrame(_bias(position));
+			
+			if ((_position - _cycle) >= 1)
+			{
+				if (_cycle < (_cycles - 1))
 				{
-					if (!_entered)
+					onLastFrame();
+					++_cycle;
+					
+					if (_cycle >= _cycles)
 					{
-						_entered = true;
-						onEnter();
+						stop(false, true);
+						return _active;
 					}
-					_firstFrameEntered = true;
+					
 					onFirstFrame();
-				}
-												
-				if (_position >= _cycles)
-				{
-					stop();
-					return _active;
-				}
-								
-				if(_period > 0)
-				{
-					_position += (remainingDelta * _speed) / _period;
 				}
 				else
 				{
-					++_position;
+					stop();
 				}
-				
-				remainingDelta -= _maxDelta;
-				
-				if (_position > _cycles) _position = _cycles;
-				
-				onFrame(_bias(position));
-				
-				if ((_position - _cycle) >= 1)
-				{
-					if (_cycle < (_cycles - 1))
-					{
-						onLastFrame();
-						++_cycle;
-						
-						if (_cycle >= _cycles)
-						{
-							stop(false, true);
-							return _active;
-						}
-						
-						onFirstFrame();
-					}
-					else
-					{
-						stop();
-					}
-				}
-			} while (remainingDelta > 0)
+			}
 			
 			return _active;
 		}

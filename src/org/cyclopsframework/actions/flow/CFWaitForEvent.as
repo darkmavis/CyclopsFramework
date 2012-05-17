@@ -25,12 +25,14 @@ package org.cyclopsframework.actions.flow
 	{
 		public static const TAG:String = "@CFWaitForEvent";
 		
-		private var _target:IEventDispatcher;
+		//private var _target:IEventDispatcher;
+		private var _target:*;
 		private var _eventType:String;
 		private var _handler:Function;
 		
 		public function CFWaitForEvent(
-			target:IEventDispatcher,
+			//target:IEventDispatcher,
+			target:*,
 			eventType:String,
 			timeout:Number=Number.MAX_VALUE,
 			cycles:Number=1,
@@ -47,9 +49,12 @@ package org.cyclopsframework.actions.flow
 			_target.addEventListener(_eventType, onEvent);
 		}
 		
-		private function onEvent(e:Event):void
+		//private function onEvent(e:Event):void
+		private function onEvent(e:*):void
 		{
 			if (paused) return;
+			
+			engine.context = this;
 			
 			if (_handler != null)
 			{

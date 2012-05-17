@@ -6,6 +6,8 @@ package org.cyclopsframework.utils.misc
 	import flash.display.Sprite;
 	import flash.system.Capabilities;
 	
+	import org.cyclopsframework.utils.math.CFMath;
+	
 	public class CFGuid extends Sprite {
 		
 		private static var counter:Number = 0;
@@ -17,7 +19,7 @@ package org.cyclopsframework.utils.misc
 		public static function create():String {
 			var dt:Date = new Date();
 			var id1:Number = dt.getTime();
-			var id2:Number = Math.random()*Number.MAX_VALUE;
+			var id2:Number = CFMath.random()*Number.MAX_VALUE;
 			var id3:String = Capabilities.serverString;
 			var rawID:String = calculate(id1+id3+id2+counter++).toUpperCase();
 			var finalString:String = rawID.substring(0, 8) + "-" + rawID.substring(8, 12) + "-" + rawID.substring(12, 16) + "-" + rawID.substring(16, 20) + "-" + rawID.substring(20, 32);
