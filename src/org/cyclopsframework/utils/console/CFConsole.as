@@ -17,8 +17,8 @@
 package org.cyclopsframework.utils.console
 {
 	import flash.display.Sprite;
+	import flash.events.Event;
 	import flash.events.KeyboardEvent;
-	import flash.text.StyleSheet;
 	import flash.text.TextField;
 	import flash.text.TextFormat;
 	import flash.ui.Keyboard;
@@ -71,7 +71,10 @@ package org.cyclopsframework.utils.console
 		public static const CHANNEL_INFO:String = CFLog.CHANNEL_INFO;
 		public static const CHANNEL_WARNINGS:String = CFLog.CHANNEL_WARNINGS;
 		public static const CHANNEL_ERRORS:String = CFLog.CHANNEL_ERRORS;
-						
+		
+		public static const EVENT_SHOW:String = "SHOW";
+		public static const EVENT_HIDE:String = "HIDE";
+		
 		private var _tf:TextField;
 		private var _buffer:String = "";
 		private var _input:String = "";
@@ -88,12 +91,9 @@ package org.cyclopsframework.utils.console
 		private var _backdrop:Sprite;
 		public function get backdrop():Sprite { return _backdrop; }
 		
-		private var _htmlEnabled:Boolean = false;
-		public function get htmlEnabled():Boolean { return _htmlEnabled; }
-		public function set htmlEnabled(value:Boolean):void { _htmlEnabled = value; }
-		
-		private var _styleSheet:StyleSheet = new StyleSheet();
-		public function get styleSheet():StyleSheet { return _styleSheet; }
+		private var _additionalHelpText:String;
+		public function get additionalHelpText():String { return _additionalHelpText; }
+		public function set additionalHelpText(value:String):void { _additionalHelpText = value; }
 		
 		/**
 		 * Current command prompt.
@@ -176,7 +176,7 @@ package org.cyclopsframework.utils.console
 			_tf.wordWrap = true;
 			_tf.multiline = true;
 			_tf.cacheAsBitmap = true;
-						
+			
 			_backdrop = CFPrimitives.filledBox(_tf.width, _tf.height, 0, .9);
 		
 			_channels.addItems([CHANNEL_DEFAULT, CHANNEL_INFO, CHANNEL_WARNINGS, CHANNEL_ERRORS]);
@@ -195,8 +195,6 @@ package org.cyclopsframework.utils.console
 			scriptingContext.print = println;
 			
 			scriptingContext.console = this;
-			
-			_tf.styleSheet = _styleSheet;
 		}
 				
 		/**
@@ -267,7 +265,7 @@ package org.cyclopsframework.utils.console
 				
 				if ((e.charCode >= 32) && (e.charCode <= 255))
 				{
-					_input += (String.fromCharCode(e.charCode));
+					_input += (String.fromCharCode(e.charCode)).replace("<", "&lt;").replace(">", "&gt;");
 					_dirty = true;
 				}
 				else if (e.keyCode == Keyboard.ENTER)
@@ -345,19 +343,16 @@ package org.cyclopsframework.utils.console
 					_dirty = true;
 				}
 			}, .5, Number.MAX_VALUE);
-												
+			
 		}
 		
 		public function resize(width:Number, height:Number):void
 		{
-			_tf.styleSheet = null;
 			_tf.defaultTextFormat = new TextFormat("Courier New", 14, 0xA0A0A0);
 			_tf.text = "X";
 			_tf.width = width - width % _tf.textWidth;
 			_tf.height = height - height % _tf.textHeight;
 			_tf.text = "";
-			
-			_tf.styleSheet = _styleSheet;
 			
 			if (_backdrop.parent != null)
 			{
@@ -365,7 +360,9 @@ package org.cyclopsframework.utils.console
 			}
 			
 			_backdrop = CFPrimitives.filledBox(_tf.width, _tf.height, 0, .9);
-			addSprite(_backdrop, _tf.width / 2, _tf.height / 2);
+			_backdrop.x = _tf.width / 2;
+			_backdrop.y = _tf.height / 2;
+			bg.addChildAt(_backdrop, 0);
 			
 			redraw();
 		}
@@ -423,6 +420,9 @@ package org.cyclopsframework.utils.console
 						
 						println(prompt + command);
 						(cmdo.method as Function).apply(null, args);
+						
+						// Dispatches an event with the same name as the command that was just executed.
+						dispatchEvent(new CFConsoleCommandEvent(command, args));
 					}
 				}
 				else if (cmd == "")
@@ -432,7 +432,7 @@ package org.cyclopsframework.utils.console
 				else
 				{
 					println(prompt + command);
-					var result:Object = D.eval(command, _scriptingContext, _scriptingContext);
+					var result:Object = D.eval(command.replace("&lt;", "<").replace("&gt;", ">"), _scriptingContext, _scriptingContext);
 					if (result != null)
 					{
 						println("" + result);
@@ -451,14 +451,7 @@ package org.cyclopsframework.utils.console
 		 */
 		public function redraw():void
 		{
-			if (_htmlEnabled)
-			{
-				_tf.htmlText = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
-			}
-			else
-			{
-				_tf.text = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
-			}
+			_tf.htmlText = _buffer + _prompt + (_cursorVisible ? _input + _cursor : _input + " ");
 			_tf.scrollV = _tf.numLines - 1;
 			_bottomV = _tf.scrollV;
 		}
@@ -508,7 +501,7 @@ package org.cyclopsframework.utils.console
 		
 		public function eval(...args):*
 		{
-			var head:Object = args[0];
+			var head:Object = String(args[0]).replace("&lt;", "<").replace("&gt;", ">");
 			var tail:Array = (args.length < 2) ? null : args.slice(1);
 			
 			if (commands.hasOwnProperty(head))
@@ -552,8 +545,8 @@ package org.cyclopsframework.utils.console
 					try
 					{
 						var methodName:String = methodData.@name;
-						var helpText:String = "" + methodData.metadata.arg.(@key=="help").@value;
-						var syntaxText:String = "" + methodData.metadata.arg.(@key=="syntax").@value;
+						var helpText:String = String("" + (methodData.metadata.arg.(@key=="help").@value)).replace("<", "&lt;").replace(">", "&gt;");
+						var syntaxText:String = String("" + (methodData.metadata.arg.(@key=="syntax").@value)).replace("<", "&lt;").replace(">", "&gt;");
 						
 						_commands[methodName] = {method:source[methodName]};
 												
@@ -611,7 +604,7 @@ package org.cyclopsframework.utils.console
 				}
 			}
 			
-			println("\n");
+			println("\n\n" + _additionalHelpText + "\n");
 		}
 		
 		[ConsoleCommand(help="enable channels", syntax="enable <channel1 [channel2 ...]>")]
@@ -687,6 +680,7 @@ package org.cyclopsframework.utils.console
 			_active = true;
 			bg.visible = true;
 			engine.resume(CFEngine.TAG_ALL);
+			dispatchEvent(new Event(EVENT_SHOW));
 		}
 		
 		[ConsoleCommand(help="hide console")]
@@ -699,6 +693,7 @@ package org.cyclopsframework.utils.console
 			_active = false;
 			bg.visible = false;
 			engine.pause(CFEngine.TAG_ALL);
+			dispatchEvent(new Event(EVENT_HIDE));
 		}
 						
 	}

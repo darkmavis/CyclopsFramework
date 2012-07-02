@@ -71,7 +71,7 @@ package org.cyclopsframework.utils.color
 		
 		public function toUint():uint
 		{
-			return uint(r * 16711680 + g * 65280 + b * 255);
+			return uint(a * 4278190080 + r * 16711680 + g * 65280 + b * 255);
 		}
 		
 		public static function fromUint(c:uint):CFColor

@@ -19,11 +19,14 @@ package org.cyclopsframework.utils.misc
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
 	import flash.display.MovieClip;
+	import flash.geom.Point;
+	import flash.system.System;
 	import flash.text.TextField;
 	import flash.utils.ByteArray;
 	import flash.utils.Dictionary;
 	import flash.utils.Endian;
 	import flash.utils.describeType;
+	import flash.utils.getDefinitionByName;
 	
 	import org.cyclopsframework.utils.collections.CFArray;
 
@@ -133,6 +136,17 @@ package org.cyclopsframework.utils.misc
 			path.pop();
 		}
 		
+		public static function positionGlobally(o:Object, destObject:Object):void
+		{
+			var dp:Point = destObject.hasOwnProperty("localToGlobal")
+				? destObject.localToGlobal(new Point()) : new Point(destObject.x, destObject.y);
+			
+			var p:Point = o.hasOwnProperty("globalToLocal") ? o.globalToLocal(dp) : new Point(dp.x, dp.y);
+			
+			o.x = p.x;
+			o.y = p.y;
+		}
+		
 		public static function gotoAndStopMovieClips(target:DisplayObject, frame:Object):void
 		{
 			CFUtils.walkDisplayObject(target, function(path:CFArray):void
@@ -155,6 +169,34 @@ package org.cyclopsframework.utils.misc
 					(o as TextField).mouseEnabled = false;
 				}
 			});
+		}
+		
+		public static function hasValidShape(target:Object, template:Object):Boolean
+		{
+			for (var childName:Object in template)
+			{
+				if (!target.hasOwnProperty(childName))
+				{
+					return false;
+				}
+				else if(target[childName] != null)
+				{
+					if (typeof(target[childName]) != getDefinitionByName(template[childName]))
+					{
+						return false;
+					}
+					else
+					{
+						return hasValidShape(target, template[childName]);
+					}
+				}
+				else
+				{
+					return true;
+				}
+			}
+			
+			return true;
 		}
 		
 		public static function hasProperties(o:Object, requiredProperties:Array):Boolean
@@ -216,6 +258,21 @@ package org.cyclopsframework.utils.misc
 			var o:Object = new outputType(data.readUTFBytes(data.length));
 			
 			return o;
+		}
+		
+		public static function ignoreErrorIDs(errorIDs:Array, f:Function):void
+		{
+			try
+			{
+				f();
+			}
+			catch(e:Error)
+			{
+				if (errorIDs.indexOf(e.errorID) == -1)
+				{
+					throw(e);
+				}
+			}
 		}
 				
 	}

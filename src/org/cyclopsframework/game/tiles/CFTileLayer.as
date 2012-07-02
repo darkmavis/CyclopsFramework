@@ -145,13 +145,13 @@ package org.cyclopsframework.game.tiles
 			
 			for (var y:int = 0; y < vh; ++y)
 			{
-				p.y = int((y - (viewRect.y % 1)) * th);
+				p.y = int((y - ((viewRect.y % 1))) * th);
 				for (var x:int = 0; x < vw; ++x)
 				{
 					var tileIndex:int = getTile(vx + x, vy + y).tileIndex;
 					if (tileIndex != _transparentTileIndex)
 					{
-						p.x = int((x - (viewRect.x % 1)) * tw);
+						p.x = int((x - ((viewRect.x % 1))) * tw);
 						srect = tileset.getTileRect(tileIndex, srect);
 						target.copyPixels(tileset.atlas, srect, p, null, null, true);
 					}

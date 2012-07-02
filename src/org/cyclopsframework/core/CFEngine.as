@@ -18,6 +18,7 @@ package org.cyclopsframework.core
 {
 	import flash.events.Event;
 	import flash.events.IEventDispatcher;
+	import flash.utils.getQualifiedClassName;
 	
 	import org.cyclopsframework.actions.flow.CFFunction;
 	import org.cyclopsframework.utils.collections.CFDataStore;
@@ -580,7 +581,7 @@ package org.cyclopsframework.core
 		 * 
 		 */		
 		public function query(...args):CFDataStore
-		{	
+		{
 			if ((args.length == 1) && (args[0] is String))
 			{
 				return _registry.getObjects(args[0] as String);
@@ -592,7 +593,11 @@ package org.cyclopsframework.core
 				
 				for each (var arg:Object in args)
 				{
-					if (arg != null)
+					if (arg is Number)
+					{
+						tagz.push(arg.toString());
+					}
+					else if (arg != null)
 					{
 						if (arg is String)
 						{
@@ -609,7 +614,7 @@ package org.cyclopsframework.core
 						else
 						{
 							throw(new TypeError("Query argument type not recognized. Valid types are:" +
-								"strings, functions and classes with a public static const TAG:String member"));
+								"strings, numbers, functions and classes with a public static const TAG:String member"));
 						}
 					}
 				}
@@ -667,27 +672,56 @@ package org.cyclopsframework.core
 		public function status(tag:String=CFEngine.TAG_ALL):String
 		{
 			var actions:Array = [];
+			var nonActions:Array = [];
 			
 			query(tag).forEach(function(o:ICFTaggable):void
 			{
-				if (o is CFAction) actions.push(o);
+				if (o is CFAction)
+				{	
+					actions.push(o);
+				}
+				else
+				{
+					nonActions.push(o);
+				}
 			});
 			
 			actions = actions.sortOn(["cycles", "period", "position"], Array.DESCENDING);
 			
-			var result:String = "";
+			var result:String = "Actions: (" + actions.length + ")\n";
+			
+			var comparitor:Function = function(a:String, b:String):int
+			{
+				a = a.replace("@","").toLowerCase();
+				b = b.replace("@","").toLowerCase();
+				return (a >= b) ? 1 : (a < b) ? -1 : 0;
+			}
 			
 			for each (var action:CFAction in actions)
 			{
-				result += ("pos: " + int(action.position * 100)
+				var actionTags:Array = action.tags.toArray();
+				
+				actionTags.sort(comparitor);
+				
+				result += ("pos: " + String((int(action.position * 100) == 0) ? "  0" : int(action.position * 100).toPrecision(3))
+					.replace(".", "")
 					+ "%\t\tcycle: " + action.cycle + "/" + ((action.cycles == Number.MAX_VALUE)
-						? "MAX" : ("" + action.cycles)) 
-					+ "\t\t" + action.tags.toArray().join(", ")) + "\n";
+						? String.fromCharCode(8734) : ("" + action.cycles)) 
+					+ "\t\t" + actionTags.join(", ")) + "\n";
 			}
 			
-			result += "Total actions: " + actions.length + "\n" + "Total objects: " + count(tag);
+			result += "\nNon-actions: (" + nonActions.length + ")\n";
 			
-			return result;
+			for each (var nonAction:ICFTaggable in nonActions)
+			{
+				var nonActionTags:Array = nonAction.tags.toArray();
+				
+				nonActionTags.sort(comparitor);
+				
+				result += getQualifiedClassName(nonAction).split("::").slice(-1)[0] + ": " + nonActionTags.join(", ") + "\n";
+			}
+			
+			return result + "\n";
 		}
 				
 		// Messaging

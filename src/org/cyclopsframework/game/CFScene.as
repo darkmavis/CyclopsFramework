@@ -18,6 +18,7 @@ package org.cyclopsframework.game
 {
 	import flash.display.DisplayObject;
 	import flash.display.DisplayObjectContainer;
+	import flash.display.Graphics;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
@@ -25,8 +26,11 @@ package org.cyclopsframework.game
 	import flash.events.IEventDispatcher;
 	import flash.events.KeyboardEvent;
 	import flash.events.MouseEvent;
+	import flash.geom.Point;
+	import flash.geom.Rectangle;
 	import flash.media.Sound;
 	import flash.media.Video;
+	import flash.utils.getQualifiedClassName;
 	import flash.utils.getTimer;
 	
 	import org.cyclopsframework.actions.animation.CFFadeTo;
@@ -67,6 +71,7 @@ package org.cyclopsframework.game
 		public static const TAG_KEY_UP:String = "@CFSceneKeyUp";
 		
 		public static const EVENT_SCENE_READY:String = "ready";
+		public static const EVENT_SCENE_REMOVED:String = "removed";
 		
 		private var _dispatcher:EventDispatcher;
 		private var _manualStart:Boolean = false;
@@ -76,7 +81,7 @@ package org.cyclopsframework.game
 		
 		private var _tags:CFStringHashSet = new CFStringHashSet();
 		public function get tags():CFStringHashSet { return _tags; }
-				
+		
 		private var _parent:CFScene;
 		public function get parent():CFScene { return _parent; }
 		public function set parent(value:CFScene):void { _parent = value; }
@@ -86,6 +91,8 @@ package org.cyclopsframework.game
 		
 		private var _bg:Sprite = new Sprite();
 		public function get bg():Sprite { return _bg; }
+		
+		private var _clickBlocker:Sprite = new Sprite();
 		
 		private var _children:Vector.<CFScene> = new Vector.<CFScene>();
 		public function get children():Vector.<CFScene> { return _children; }
@@ -127,11 +134,14 @@ package org.cyclopsframework.game
 		public function CFScene(...tags)
 		{
 			super();
+			
 			this.tags.addItem(TAG);
+			
 			if (tags != null)
 			{
 				this.tags.addItems(tags);
 			}
+			
 			engine.runNextFrame(onEnter);
 			
 			_dispatcher = new EventDispatcher(this);
@@ -143,15 +153,44 @@ package org.cyclopsframework.game
 			});
 			
 			bg.addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
-			
 		}
 		
 		private function onAddedToStage(e:Event):void
 		{
 			bg.removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
 			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_DOWN, Number.MAX_VALUE, Number.MAX_VALUE, onKeyDown).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_DOWN]);
 			engine.sugar.waitForEvent(bg.stage, KeyboardEvent.KEY_UP, Number.MAX_VALUE, Number.MAX_VALUE, onKeyUp).addTags([TAG_KEYBOARD_INPUT, TAG_KEY_UP]);
+			
 			_stageReady = true;
+			
+			_clickBlocker = new Sprite();
+			bg.addChildAt(_clickBlocker, 0);
+			
+			var p:Point = _clickBlocker.globalToLocal(new Point(0,0));
+			
+			_clickBlocker.x = p.x;
+			_clickBlocker.y = p.y;
+			
+			var g:Graphics = _clickBlocker.graphics;
+			
+			g.beginFill(0x0, 0);
+			g.drawRect(0, 0, bg.stage.width, bg.stage.height);
+			g.endFill();
+			
+			_clickBlocker.visible = false;
+			_clickBlocker.mouseEnabled = true;
+			_clickBlocker.mouseChildren = false;
+		}
+		
+		public function enableClickBlockerBackground():void
+		{
+			_clickBlocker.visible = true;
+		}
+		
+		public function disableClickBlockerBackground():void
+		{
+			_clickBlocker.visible = false;
 		}
 		
 		public function manualStart(container:DisplayObjectContainer):void
@@ -166,8 +205,10 @@ package org.cyclopsframework.game
 			if (!_stageReady) return;
 			
 			var currentTime:Number = flash.utils.getTimer();
-			var delta:Number = CFMath.clamp((currentTime - _lastTime) / 1000, Number.MIN_VALUE, .5);
+			var delta:Number = CFMath.clamp((currentTime - _lastTime) / 1000.0, Number.MIN_VALUE, .5);
+			
 			_lastTime = currentTime;
+			
 			update(delta);
 		}
 		
@@ -186,6 +227,7 @@ package org.cyclopsframework.game
 			bg.removeChild(scene.bg);
 			scene.parent = null;
 			children.splice(children.indexOf(scene), 1);
+			scene.dispatchEvent(new Event(EVENT_SCENE_REMOVED));
 		}
 		
 		public function removeFromParent():void
@@ -202,10 +244,35 @@ package org.cyclopsframework.game
 		{
 			toScene.bg.alpha = 0;
 			parent.addScene(toScene);
+			
 			engine
 				.add(new CFFadeTo(toScene.bg, 1, period, 1, bias))
 				.add(removeFromParent);
 			
+			if (bias == null) bias = CFBias.EASE_OUT;	
+			
+			engine.query(CFSound.TAG).forEach(function(sound:CFSound):void
+			{
+				engine.add(new CFInterpolate(sound, "volume", sound.volume, 0, period, 1, bias));
+			});
+		}
+		
+		public function addAndFadeInScene(scene:CFScene, period:Number=1, bias:Function=null):void
+		{
+			scene.bg.alpha = 0;
+			addScene(scene);
+			
+			if (bias == null) bias = CFBias.EASE_OUT;
+			
+			engine.add(new CFFadeTo(scene.bg, 1, period, 1, bias));
+		}
+		
+		public function fadeOutAndRemoveFromParent(period:Number=1, bias:Function=null):void
+		{
+			engine
+				.add(new CFFadeTo(bg, 0, period, 1, bias))
+				.add(removeFromParent);
+				
 			engine.query(CFSound.TAG).forEach(function(sound:CFSound):void
 			{
 				engine.add(new CFInterpolate(sound, "volume", sound.volume, 0, period, 1, bias));
@@ -235,7 +302,18 @@ package org.cyclopsframework.game
 			target.mouseEnabled = true;
 			target.buttonMode = true;
 			target.useHandCursor = true;
-			engine.sugar.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:Event):void { f(); });
+			
+			engine.sugar.waitForEvent(target, MouseEvent.CLICK, Number.MAX_VALUE, cycles, function(e:MouseEvent):void
+			{
+				if (f.length == 0)
+				{
+					f();
+				}
+				else if (f.length == 1)
+				{
+					f(e);
+				}
+			});
 		}
 		
 		public function addSceneObject(sceneObject:CFSceneObject):CFSceneObject
@@ -317,7 +395,7 @@ package org.cyclopsframework.game
 			}
 		}
 		
-		public function $(...args):CFDataStoreProxy
+		public function $(...args):Object
 		{	
 			return engine.proxy.apply(null, args);
 		}
@@ -352,14 +430,16 @@ package org.cyclopsframework.game
 			}
 		}
 		
-		public function find(tag:String):Object
+		public function find(...args):Object
 		{
-			var result:Object = engine.query(tag).first();
+			var result:Object = (engine.query.apply(this, args) as CFDataStore).first();
+			
 			if (result != null) return result;
 			
 			for each (var scene:CFScene in children)
 			{
-				result = scene.find(tag);
+				result = scene.find.apply(this, args);	
+				
 				if (result != null) return result;
 			}
 			
@@ -375,11 +455,21 @@ package org.cyclopsframework.game
 		{
 			return (engine.count(tag) > 0);
 		}
-				
+		
 		public function status():String
 		{
-			var result:String = engine.status();
-			result += "\nChild scenes: " + _children.toString() + "\nTotal local display objects: " + bg.numChildren;
+			var result:String = "\n--------------------------------------------------------------------------------"
+				+ "\nScene: " + ((parent == null) ? "Root" : getQualifiedClassName(this).split("::").slice(-1)[0]) + "\n";
+			
+			result += engine.status();
+			result += "Total local display objects: " + bg.numChildren + "\n"
+			
+			for each (var childScene:CFScene in _children)
+			{
+				result += childScene.status();
+			}
+			
+			
 			return result;
 		}
 		

@@ -1,0 +1,247 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd"><!-- saved from url=(0014)about:internet --><html><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8"><link rel="stylesheet" href="../../../style.css" type="text/css" media="screen"><link rel="stylesheet" href="../../../print.css" type="text/css" media="print"><link rel="stylesheet" href="../../../override.css" type="text/css"><meta name="keywords" content="CFSugar,org.cyclopsframework.core.CFSugar,add,addLogEntry,addSequenceReturnHead,addSequenceReturnTail,addTag,addTags,addf,add,beginTag,block,count,dispose,endTag,interceptMessage,jumpTo,listen,loop,nop,onEnter,onExit,onFirstFrame,onFrame,onLastFrame,pause,proxy,query,remove,removeChildren,removeObject,resume,runNextFrame,safeset,send,send,sendByProxy,sendMessage,setMaxDelta,setMinDelta,simulateFrame,sleep,status,stop,tween,update,update,waitForEvent,waitForMessage,waitUntil"><title>org.cyclopsframework.core.CFSugar</title></head><body><script language="javascript" type="text/javascript" src="../../../asdoc.js"></script><script language="javascript" type="text/javascript" src="../../../help.js"></script><script language="javascript" type="text/javascript" src="../../../cookies.js"></script><script language="javascript" type="text/javascript"><!--
+				asdocTitle = 'CFSugar - API Documentation';
+				var baseRef = '../../../';
+				window.onload = configPage;
+			--></script>
+<script type="text/javascript">
+			scrollToNameAnchor();
+		</script><table class="titleTable" cellpadding="0" cellspacing="0" id="titleTable" style="display:none"><tr><td class="titleTableTitle" align="left">Cyclops Framework</td><td class="titleTableTopNav" align="right"><a href="../../../package-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Packages</a>&nbsp;|&nbsp;<a href="../../../class-summary.html" onclick="loadClassListFrame('../../../all-classes.html')">All Classes</a>&nbsp;|&nbsp;<a href="../../../all-index-A.html" onclick="loadClassListFrame('../../../index-list.html')">Index</a>&nbsp;|&nbsp;<a id="framesLink1" href="../../../index.html?org/cyclopsframework/core/CFSugar.html&amp;org/cyclopsframework/core/class-list.html">Frames</a><a id="noFramesLink1" style="display:none" href="" onclick="parent.location=document.location"> No Frames </a></td><td class="titleTableLogo" align="right" rowspan="3"><img src="../../../images/logo.jpg" class="logoImage" alt=" Adobe Logo " title=" Adobe Logo "></td></tr><tr class="titleTableRow2"><td class="titleTableSubTitle" id="subTitle" align="left">CFSugar</td><td class="titleTableSubNav" id="subNav" align="right"><a href="#methodSummary">Methods</a></td></tr><tr class="titleTableRow3"><td colspan="3">&nbsp;</td></tr></table><script language="javascript" type="text/javascript" xml:space="preserve">
+				<!--
+				
+					if (!isEclipse() || window.name != ECLIPSE_FRAME_NAME) {titleBar_setSubTitle("CFSugar"); titleBar_setSubNav(false,false,false,false,false,false,false,false,true,false,false	,false,false,false,false,false);}	
+				-->
+			</script><div xmlns:fn="http://www.w3.org/2005/xpath-functions" class="MainContent"><table class="classHeaderTable" cellpadding="0" cellspacing="0"><tr><td class="classHeaderTableLabel">Package</td><td><a href="package-detail.html" onclick="javascript:loadClassListFrame('class-list.html')">org.cyclopsframework.core</a></td></tr><tr><td class="classHeaderTableLabel">Class</td><td class="classSignature">public  class  CFSugar</td></tr><tr><td class="classHeaderTableLabel">Inheritance</td><td class="inheritanceList">CFSugar  <img src="../../../images/inherit-arrow.gif" title="Inheritance" alt="Inheritance" class="inheritArrow"> Object</td></tr></table><p></p><p></p><p></p>
+	              <p>The purpose of <code>CFSugar</code> is to provide common syntactic sugar methods to both
+	 <code>CFEngine</code> and <code>CFAction</code>.
+	 These are sequencing methods and can be used to build complex sequence trees.
+	 In earlier versions of the framework,
+	 these methods were duplicated, and cluttered up the classes they resided in.
+	 Hopefully this will make it clearer to beginners that the framework is built upon
+	 solid core elements and that these methods use actions underneath.
+	 If extra functionality is required, take a look at the underlying actions for an answer.</p>
+	           <p></p><br/><hr></div><a name="methodSummary"></a><div class="summarySection"><div class="summaryTableTitle">Public Methods </div><table cellspacing="0" cellpadding="3" class="summaryTable " id="summaryTableMethod"><tr><th>&nbsp;</th><th colspan="2">Method</th><th class="summaryTableOwnerCol">Defined By</th></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#CFSugar()" class="signatureLink">CFSugar</a>(parent:Object)</div><div class="summaryTableDescription">
+		 The purpose of CFSugar is to provide common syntactic sugar methods to both
+		 CFEngine and CFAction.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addf()" class="signatureLink">addf</a>(f:Function, thisObject:Object = null, data:Array = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to add a function as an action with more control than that provided by the add method.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addLogEntry()" class="signatureLink">addLogEntry</a>(text:Object, channel:String = default):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to add a log entry from within a sequence tree.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addSequenceReturnHead()" class="signatureLink">addSequenceReturnHead</a>(actions:Array):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to add a sequence of actions stored in an array.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#addSequenceReturnTail()" class="signatureLink">addSequenceReturnTail</a>(actions:Array):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to add a sequence of actions stored in an array.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#listen()" class="signatureLink">listen</a>(receiverTag:String, messageName:String, messageListener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to listen indefinitely for a message before continuing in a sequence tree.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#loop()" class="signatureLink">loop</a>(f:Function, period:Number = 0, cycles:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to loop a function for a given number of cycles with a given period.
+		 Note: This is a syntactic sugar method.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#nop()" class="signatureLink">nop</a>(tag:String = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this "No OPeration" method to add a default CFAction that will do nothing other than run for a single frame.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#send()" class="signatureLink">send</a>(receiverTag:String, messageName:String, ... data):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to send a message from within a sequence tree.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#sleep()" class="signatureLink">sleep</a>(period:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to sleep for a period of time measured in seconds.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#tween()" class="signatureLink">tween</a>(target:Object, propertyName:String, a:Number, b:Number, period:Number = 0, cycles:Number = 1, bias:Function = null, mapFunc:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to interpolate an object's property from one value to another.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#waitForEvent()" class="signatureLink">waitForEvent</a>(target:*, eventType:String, timeout:Number, cycles:Number = 1, listener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to wait for an event before continuing to process a sequence tree of actions.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#waitForMessage()" class="signatureLink">waitForMessage</a>(receiverTag:String, messageName:String, timeout:Number, cycles:Number = 1, messageListener:Function = null, timeoutListener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to wait for a message within a sequence tree before continuing.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr><tr class=""><td class="summaryTablePaddingCol">&nbsp;</td><td class="summaryTableInheritanceCol">&nbsp;</td><td class="summaryTableSignatureCol"><div class="summarySignature"><a href="#waitUntil()" class="signatureLink">waitUntil</a>(predicate:Function, timeout:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></div><div class="summaryTableDescription">
+		 Use this to wait for a predicate to return true from within a sequence tree.</div></td><td class="summaryTableOwnerCol">CFSugar</td></tr></table></div><script language="javascript" type="text/javascript"><!--
+										showHideInherited();
+										--></script><div class="MainContent"><a name="constructorDetail"></a><div class="detailSectionHeader">Constructor Detail</div><a name="CFSugar()"></a><a name="CFSugar(Object)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">CFSugar</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">Constructor</td></tr></table><div class="detailBody"><code>public function CFSugar(parent:Object)</code><p></p><p>
+		 <p>The purpose of <code>CFSugar</code> is to provide common syntactic sugar methods to both
+		 <code>CFEngine</code> and <code>CFAction</code>.
+		 These are sequencing methods and can be used to build complex sequence trees.
+		 In earlier versions of the framework,
+		 these methods were duplicated, and cluttered up the classes they resided in.
+		 Hopefully this will make it clearer to beginners that the framework is built upon
+		 solid core elements and that these methods use actions underneath.
+		 If extra functionality is required, take a look at the underlying actions for an answer.</p>
+		 
+		 </p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">parent</span>:Object</code> &mdash; 	 This is the host object that will contain an instance of CFSugar.
+		 At the time of this writing, only two classes contain <code>CFSugar</code> instances.
+		 Those are <code>CFEngine</code> and <code>CFAction</code>.
+		 </td></tr></table></div><a name="methodDetail"></a><div class="detailSectionHeader">Method Detail</div><a name="addf()"></a><a name="addf(Function,Object,Array)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addf</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td></tr></table><div class="detailBody"><code> public function addf(f:Function, thisObject:Object = null, data:Array = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to add a function as an action with more control than that provided by the <code>add</code> method.
+		 This method is capable of starting a sequence.</p>  
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFFunction</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">f</span>:Function</code> &mdash; 	 Provide a function that will be wrapped as a <code>CFFunction</code> internally.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">thisObject</span>:Object</code> (default = <code>null</code>)<code></code> &mdash; 	 The <code>thisObject</code> provides a <code>this</code> context to the function in case
+		 <code>this</code> is referenced from within the function.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">data</span>:Array</code> (default = <code>null</code>)<code></code> &mdash; 	 These are the arguments to pass to the function if it requires arguments.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="addLogEntry()"></a><a name="addLogEntry(Object,String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addLogEntry</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addLogEntry(text:Object, channel:String = default):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to add a log entry from within a sequence tree.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFFunction</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">text</span>:Object</code> &mdash; 	 This text will be written to the active log if the channel is enabled.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">channel</span>:String</code> (default = <code>default</code>)<code></code> &mdash; 	 This is the channel to write this text to. Text will only be written if the channel is enabled.
+		 <p>Common channels include:</p>
+		 
+		 <p>Respectively, these are:
+		 <code>"default"</code>, <code>"info"</code>, <code>"warnings"</code>, and <code>"errors"</code>.</p>
+		 <p>Any channel name is acceptable, and you use as many channels as you like.</p>
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="addSequenceReturnHead()"></a><a name="addSequenceReturnHead(Array)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addSequenceReturnHead</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addSequenceReturnHead(actions:Array):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 Use this to add a sequence of actions stored in an array.
+		 The first action in the sequence will be returned.
+		  
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">actions</span>:Array</code> &mdash; 	 This should be an array of either <code>CFAction</code> or <code>Function</code> objects.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="addSequenceReturnTail()"></a><a name="addSequenceReturnTail(Array)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">addSequenceReturnTail</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function addSequenceReturnTail(actions:Array):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 Use this to add a sequence of actions stored in an array.
+		 The last action in the sequence will be returned.
+		  
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">actions</span>:Array</code> &mdash; 	 This should be an array of either <code>CFAction</code> or <code>Function</code> objects.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="listen()"></a><a name="listen(String,String,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">listen</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function listen(receiverTag:String, messageName:String, messageListener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to listen indefinitely for a message before continuing in a sequence tree.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFWaitForMessage</code>.
+		 It can also be achieved by using <code>waitForMessage</code> from a <code>CFSugar</code> instance.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">receiverTag</span>:String</code> &mdash; 	 The tag "channel" to listen on.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">messageName</span>:String</code> &mdash; 	 This is the name of the message to listen for. 
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">messageListener</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 This is a function <code>f(msg:CFMessage)</code> that will be called if and when the message is received.
+		 It's similar to an event listener, except that it processes a message instead.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="loop()"></a><a name="loop(Function,Number,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">loop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function loop(f:Function, period:Number = 0, cycles:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to loop a function for a given number of cycles with a given period.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFFunction</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">f</span>:Function</code> &mdash; 	 Provide a function that will be wrapped as a <code>CFFunction</code> internally.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">period</span>:Number</code> (default = <code>0</code>)<code></code> &mdash; 	 This is the length of a cycle and is specified in seconds.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">cycles</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; 	 This is the number of times to repeat this action.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="nop()"></a><a name="nop(String)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">nop</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function nop(tag:String = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this "No OPeration" method to add a default CFAction that will do nothing other than run for a single frame. 
+		 There's very little reason for calling this method as a one off. It should be used to start a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFAction</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">tag</span>:String</code> (default = <code>null</code>)<code></code> &mdash; 	 For convenience, a tag may be specified here.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 
+		 </td></tr></table></div><a name="send()"></a><a name="send(String,String,restParam)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">send</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function send(receiverTag:String, messageName:String, ... data):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to send a message from within a sequence tree.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFFunction</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">receiverTag</span>:String</code> &mdash; 	 The message will be delivered to all tagged objects registered with this tag.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">messageName</span>:String</code> &mdash; 	 In many cases, the message name is the name of a method that will be called on a tagged object
+		 if the method exists.  If it doesn't exist, the message will be ignored.
+		 If the tagged object is an <code>ICFMessageInterceptor</code> then a named method is not required;
+		 the message will be delivered and processed.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code>... <span class="label">data</span></code> &mdash; 	 If the message is delivered in the form of a method call, then the data items will be treated as parameters.
+		 If the message is delivered in the form of a <code>CFMessage</code>, then the data will be packaged in an array.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="sleep()"></a><a name="sleep(Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">sleep</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function sleep(period:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to sleep for a period of time measured in seconds.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFSleep</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">period</span>:Number</code> &mdash; 	 This is the length of a cycle and is specified in seconds.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="tween()"></a><a name="tween(Object,String,Number,Number,Number,Number,Function,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">tween</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function tween(target:Object, propertyName:String, a:Number, b:Number, period:Number = 0, cycles:Number = 1, bias:Function = null, mapFunc:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to interpolate an object's property from one value to another.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFInterpolate</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">target</span>:Object</code> &mdash; 	 This is the target object which contains a property of interest.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">propertyName</span>:String</code> &mdash; 	 This is the target property that will be interpolated.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">a</span>:Number</code> &mdash; 	 This is the value to interpolate from.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">b</span>:Number</code> &mdash; 	 This is the value to interpolate to.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">period</span>:Number</code> (default = <code>0</code>)<code></code> &mdash; 	 This is the length of a cycle and is specified in seconds.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">cycles</span>:Number</code> (default = <code>1</code>)<code></code> &mdash; 	 This is the number of times to repeat this action.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">bias</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 This is the f(t) function used to bias (aka ease) the interpolated value.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">mapFunc</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 This is the f(o) function used to map the interpolated numerical value to any other type or value.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 
+		 </td></tr></table></div><a name="waitForEvent()"></a><a name="waitForEvent(any,String,Number,Number,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">waitForEvent</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function waitForEvent(target:*, eventType:String, timeout:Number, cycles:Number = 1, listener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to wait for an event before continuing to process a sequence tree of actions.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFWaitForEvent</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">target</span>:*</code> &mdash; 	 The target is the event dispatcher.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">eventType</span>:String</code> &mdash; 	 This can be an event type such as ENTER_FRAME.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">timeout</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; 	 Period in seconds to wait before timing out and continuing the sequence tree.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">cycles</span>:Number</code> (default = <code>1</code>)<code></code> &mdash; 	 This is the number of times to repeat this action.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">listener</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 An event listener function f(e) can be added that will execute immediately after the event is received.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="waitForMessage()"></a><a name="waitForMessage(String,String,Number,Number,Function,Function)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">waitForMessage</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function waitForMessage(receiverTag:String, messageName:String, timeout:Number, cycles:Number = 1, messageListener:Function = null, timeoutListener:Function = null):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to wait for a message within a sequence tree before continuing.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFWaitForMessage</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">receiverTag</span>:String</code> &mdash; 	 The message will be delivered to all tagged objects that were registered with this tag.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">messageName</span>:String</code> &mdash; 	 In many cases, the message name is the name of a method that will be called on a tagged object
+		 if the method exists.  If it doesn't exist, the message will be ignored.
+		 If the tagged object is an <code>ICFMessageInterceptor</code> then a named method is not required;
+		 the message will be delivered and processed.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">timeout</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; 	 Period in seconds to wait before timing out and continuing the sequence tree.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">cycles</span>:Number</code> (default = <code>1</code>)<code></code> &mdash; 	 This is the number of times to repeat this action.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">messageListener</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 This is a function <code>f(msg:CFMessage)</code> that will be called if and when the message is received.
+		 It's similar to an event listener, except that it processes a message instead.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">timeoutListener</span>:Function</code> (default = <code>null</code>)<code></code> &mdash; 	 This is a function <code>f()</code> that will be called if and when the action times out before receiving a message.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><a name="waitUntil()"></a><a name="waitUntil(Function,Number)"></a><table class="detailHeader" cellpadding="0" cellspacing="0"><tr><td class="detailHeaderName">waitUntil</td><td class="detailHeaderParens">()</td><td class="detailHeaderType">method</td><td class="detailHeaderRule">&nbsp;</td></tr></table><div class="detailBody"><code> public function waitUntil(predicate:Function, timeout:Number):<a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code><p></p><p></p><p>
+		 <p>Use this to wait for a predicate to return true from within a sequence tree.
+		 This method is capable of starting a sequence.</p>
+		 <p>Note: This is a syntactic sugar method.
+		 This action can be achieved manually by using <code>CFWaitUntil</code>.</p>
+		 
+		 </p><p><span class="label"> Parameters </span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20px"></td><td><code><span class="label">predicate</span>:Function</code> &mdash; 	 The predicate is a function <code>f():Boolean</code>.
+		 If and when it returns <code>true</code>, the action will stop and subsequent actions will start.
+		 
+		 </td></tr><tr><td class="paramSpacer">&nbsp;</td></tr><tr><td width="20px"></td><td><code><span class="label">timeout</span>:Number</code> (default = <code>NaN</code>)<code></code> &mdash; 	 Period in seconds to wait before timing out and continuing the sequence tree.
+		 
+		 </td></tr></table></p><p></p><span class="label">Returns</span><table cellpadding="0" cellspacing="0" border="0"><tr><td width="20"></td><td><code><a href="../../../org/cyclopsframework/core/CFAction.html">CFAction</a></code> &mdash; 
+		 The returned action can be used to build a sequence tree of actions.
+		 </td></tr></table></div><br/><br/><hr><br/><p></p><center class="copyright"><footer></footer><br/>Tue May 1 2012, 12:29 PM -07:00  </center></div></body></html><!--<br/>Tue May 1 2012, 12:29 PM -07:00  -->

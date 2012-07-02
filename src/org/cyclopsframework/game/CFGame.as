@@ -75,6 +75,8 @@ package org.cyclopsframework.game
 			
 			console.scriptingContext["find"] = scene.find;
 			
+			console.importConsoleCommands(this);
+			
 			CFLog.logger = console;
 			
 			bootstrap();
@@ -95,6 +97,12 @@ package org.cyclopsframework.game
 		protected function bootstrap():void
 		{
 			console.println("Override bootstrap in CFGame to begin writing your game.");
+		}
+		
+		[ConsoleCommand(help="display scene status")]
+		public function status():void
+		{
+			console.println(scene.status());
 		}
 	}
 }

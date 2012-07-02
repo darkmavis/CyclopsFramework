@@ -130,14 +130,14 @@ package org.cyclopsframework.utils.math
 		{
 			var d:Number = upperBound - lowerBound;
 			
-			return n / d;
+			return (n - lowerBound) / d;
 		}
 		
 		public static function normalizeClamped01(n:Number, lowerBound:Number, upperBound:Number):Number
 		{
 			var d:Number = upperBound - lowerBound;
 			
-			return clamp(n / d, 0, 1);
+			return clamp((n - lowerBound) / d, 0, 1);
 		}
 		
 		public static function normalizeUnclampedObject2(o:Object, containerRect:Rectangle, nx:Number, ny:Number):void
