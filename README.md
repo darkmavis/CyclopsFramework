@@ -3,6 +3,10 @@
 ## CYCLOPS FRAMEWORK - LESS CODE. MORE GAME.
 ### Tweening, psuedo-threading, cascading tags and so much more.
 
+Update from the future, regarding the use of the term psuedo-threading:
+
+I've been using coroutines with properties overlapping async/await and state machines since 2007.  I didn't learn the term coroutine until several years later.  That's probably the term I should have used, but just not something most developers were aware of at the time.  I did ask around a bit though and nobody I knew was familiar with this style of coding.  I think async/await took even longer to catch on, slightly later in the 2010s.  Before that though, I used this framework to achieve the exact same style of code when dealing with RESTful web APIs and other types of remote procedure calls.
+
 Welcome to the Cyclops Framework!  This is an active AS3 based
 project that I use in my professional life as a game developer
 and would like to share with the community.  The purpose of
